@@ -1,0 +1,190 @@
+/* ===== MoneyNeko Trainer — Модуль 3 ===== */
+#mn-trainer-m3 {
+    font-family: 'Nunito', 'Rubik', sans-serif;
+    color: #2d3748;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.mn-trainer__title { font-size: 26px; font-weight: 800; text-align: center; margin-bottom: 10px; color: #1a202c; }
+.mn-trainer__subtitle { font-size: 16px; color: #718096; text-align: center; margin-bottom: 25px; }
+
+.mn-m3-screen { display: none; animation: mn-fade-in 0.4s ease; }
+.mn-m3-screen--active { display: block; }
+@keyframes mn-fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Интро */
+.mn-m3-intro-content { text-align: center; padding: 40px 20px; }
+.mn-m3-icon-wrap { font-size: 60px; margin-bottom: 20px; animation: bounce 2s infinite; }
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+/* Общие кнопки */
+.mn-btn-start {
+    background: #5b67f8; color: #fff; border: none; padding: 16px 40px;
+    font-size: 18px; font-weight: bold; border-radius: 100px; cursor: pointer;
+    margin-top: 10px; transition: all 0.2s; box-shadow: 0 4px 15px rgba(91, 103, 248, 0.4);
+}
+.mn-btn-start:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(91, 103, 248, 0.5); }
+.mn-btn-locked { opacity: 0.5 !important; pointer-events: none !important; box-shadow: none !important; background: #a0aec0 !important; cursor: not-allowed !important; }
+
+/* --- ЭКРАН КИОСКА --- */
+.mn-shop-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px 25px;
+    background: #f8fafc;
+    border-radius: 16px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.mn-shop-header .mn-trainer__title, .mn-shop-header .mn-trainer__subtitle { text-align: left; margin: 0; }
+.mn-cart-summary {
+    font-size: 18px;
+    font-weight: bold;
+    background: #fff;
+    padding: 10px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    color: #5b67f8;
+    margin-left: auto;
+}
+
+.mn-products-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px;
+}
+.mn-product-card {
+    background: #fff; border: 2px solid #e2e8f0; border-radius: 16px; padding: 20px 15px;
+    text-align: center; cursor: pointer; transition: 0.2s; position: relative; user-select: none;
+}
+.mn-product-card:hover { border-color: #5b67f8; transform: translateY(-5px); box-shadow: 0 8px 20px rgba(91,103,248,0.15); }
+.mn-product-card.selected { border-color: #48bb78; background: #f0fdf4; }
+.mn-product-card.selected::after {
+    content: '✓'; position: absolute; top: 10px; right: 10px; background: #48bb78; color: #fff;
+    width: 24px; height: 24px; border-radius: 50%; font-size: 14px; line-height: 24px; font-weight: bold;
+}
+.mn-prod-emoji { font-size: 40px; margin-bottom: 10px; }
+.mn-prod-name { font-weight: 800; color: #2d3748; margin-bottom: 5px; }
+.mn-prod-price { color: #718096; font-size: 14px; font-weight: bold; }
+.mn-shop-footer { text-align: center; }
+
+/* --- ЭКРАН ТАБЛИЦЫ --- */
+.mn-excel-layout {
+    display: flex;
+    flex-wrap: wrap; /* Разрешаем перенос блоков друг под друга */
+    gap: 30px;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Чек */
+.mn-receipt-wrap {
+    flex: 1 1 250px;
+    max-width: 350px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+.mn-receipt {
+    background: #fffdf5; border: 1px solid #e2e8f0; padding: 25px 20px;
+    box-shadow: 2px 5px 15px rgba(0,0,0,0.08); font-family: 'Courier New', Courier, monospace;
+    position: relative; border-bottom: 3px dashed #cbd5e1; box-sizing: border-box;
+}
+.mn-receipt-header { text-align: center; font-weight: bold; margin-bottom: 20px; border-bottom: 1px dashed #a0aec0; padding-bottom: 10px; }
+.mn-receipt-items { list-style: none; padding: 0; margin: 0 0 20px 0; }
+.mn-receipt-items li { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 15px; }
+.mn-receipt-total { border-top: 1px dashed #a0aec0; padding-top: 10px; font-weight: bold; font-size: 18px; display: flex; justify-content: space-between; }
+
+/* Эксель */
+.mn-spreadsheet-wrap {
+    flex: 999 1 500px; /* Если места мало, таблица спрыгнет вниз под чек */
+    width: 100%;
+    min-width: 0; /* Железобетонное правило от разрывания экрана */
+    overflow-x: auto; /* Появится горизонтальный ползунок внутри самой таблицы */
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    box-sizing: border-box;
+}
+.mn-spreadsheet {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    min-width: 650px; /* Меньше этой ширины таблица не сожмется, появится скролл */
+    table-layout: fixed;
+}
+.mn-spreadsheet th { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 15px 12px; font-size: 14px; text-transform: uppercase; color: #4a5568; font-weight: 800; }
+.mn-spreadsheet td { border: 1px solid #cbd5e1; padding: 0; position: relative; }
+.mn-spreadsheet td:first-child { text-align: center; padding: 12px; background: #f8fafc; font-weight: bold; color: #a0aec0; }
+
+.mn-col-num { width: 8%; }
+.mn-col-name { width: 35%; }
+.mn-col-cat { width: 35%; }
+.mn-col-sum { width: 22%; }
+
+.mn-cell-input, .mn-cell-select {
+    width: 100%; height: 100%; border: none; padding: 15px 10px; font-family: inherit; font-size: 14px;
+    background: transparent; outline: none; box-sizing: border-box; cursor: pointer; color: #2d3748;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.mn-cell-input:focus, .mn-cell-select:focus { background: #e6fffa; box-shadow: inset 0 0 0 2px #48bb78; }
+.mn-total-input { font-weight: 800; font-size: 16px; color: #5b67f8; }
+.mn-excel-footer { text-align: center; margin-top: 30px; }
+.mn-cell-error { background: #fff5f5 !important; box-shadow: inset 0 0 0 2px #fc8181 !important; color: #c53030 !important; }
+
+/* --- РЕЗУЛЬТАТ --- */
+.mn-trainer__result { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+.mn-result__inner { background: #fff; padding: 40px; border-radius: 24px; text-align: center; max-width: 450px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.2); animation: mn-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes mn-pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.mn-result__icon { font-size: 60px; margin-bottom: 15px; }
+.mn-result__score { font-size: 24px; font-weight: 800; color: #1a202c; margin-bottom: 10px; }
+.mn-result__text { font-size: 16px; color: #718096; line-height: 1.5; margin-bottom: 25px; }
+.mn-result__retry { background: #f56565; color: #fff; border: none; padding: 14px 28px; font-size: 16px; font-weight: bold; border-radius: 100px; cursor: pointer; transition: 0.2s; }
+.mn-result__retry:hover { background: #e53e3e; transform: translateY(-2px); }
+
+/* Адаптивность для мобильных */
+@media (max-width: 600px) {
+    #mn-trainer-m3 { padding: 15px; }
+    .mn-trainer__title { font-size: 22px; }
+    .mn-btn-start { padding: 12px 25px; font-size: 16px; }
+    .mn-shop-header { flex-direction: column; align-items: flex-start; }
+    .mn-cart-summary { margin-left: 0; margin-top: 10px; width: 100%; text-align: center; box-sizing: border-box;}
+}
+
+/* ==============================================================
+   ЖЕСТКОЕ СКРЫТИЕ СИСТЕМНОЙ КНОПКИ "ДАЛЬШЕ" И САЙДБАРА
+   ============================================================== */
+.tutor-course-topic-single-footer .tutor-single-course-content-next,
+.tutor-single-course-content-next,
+#mn-tutor-next-btn {
+    display: none !important;
+}
+
+body.mn-hide-sidebar .tutor-lesson-sidebar,
+body.mn-hide-sidebar .tutor-course-single-sidebar-wrapper,
+body.mn-hide-sidebar .tutor-course-sidebar {
+    display: none !important;
+}
+
+/* Ширина auto спасает от вылезания за рамки шапки */
+body.mn-hide-sidebar .tutor-course-topic-single-body,
+body.mn-hide-sidebar .tutor-course-content-right,
+body.mn-hide-sidebar .tutor-course-single-content {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    max-width: 100% !important;
+}
+
+body.mn-hide-sidebar .tutor-course-topic-single-body {
+    padding: 20px 25px 15px 25px !important;
+    width: auto !important;
+}

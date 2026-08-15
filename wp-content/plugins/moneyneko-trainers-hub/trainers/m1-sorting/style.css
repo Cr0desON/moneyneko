@@ -1,0 +1,444 @@
+/* ===== MoneyNeko Trainer — Модуль 1: Стили ===== */
+
+#mn-trainer-m1 {
+    --mn-mandatory:    #4caf7d;
+    --mn-mandatory-bg: #edfaf3;
+    --mn-discretion:   #f5a623;
+    --mn-discretion-bg:#fff8ed;
+    --mn-wrong:        #e05252;
+    --mn-wrong-bg:     #fdf0f0;
+    --mn-card-bg:      #ffffff;
+    --mn-border:       #e8edf2;
+    --mn-text:         #2d3748;
+    --mn-subtext:      #718096;
+    --mn-primary:      #5b67f8;
+    --mn-radius:       14px;
+    --mn-shadow:       0 2px 12px rgba(0,0,0,.08);
+    --mn-shadow-hover: 0 6px 24px rgba(0,0,0,.13);
+}
+
+/* ── Обёртка ─────────────────────────────────────────────────── */
+#mn-trainer-m1 .mn-trainer {
+    font-family: 'Nunito', 'Rubik', 'Segoe UI', sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+    color: var(--mn-text);
+    position: relative;
+}
+
+/* ── Шапка ───────────────────────────────────────────────────── */
+#mn-trainer-m1 .mn-trainer__header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+#mn-trainer-m1 .mn-trainer__badge {
+    display: inline-block;
+    background: var(--mn-primary);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 100px;
+    margin-bottom: 12px;
+}
+
+#mn-trainer-m1 .mn-trainer__title {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 0 0 8px;
+    line-height: 1.3;
+}
+
+#mn-trainer-m1 .mn-trainer__subtitle {
+    font-size: 14px;
+    color: var(--mn-subtext);
+    margin: 0;
+}
+
+/* ── Тело: две колонки ───────────────────────────────────────── */
+#mn-trainer-m1 .mn-trainer__body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+@media (max-width: 620px) {
+    #mn-trainer-m1 .mn-trainer__body { 
+        grid-template-columns: 1fr; 
+    }
+}
+
+/* ── Список покупок ──────────────────────────────────────────── */
+#mn-trainer-m1 .mn-purchases-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#mn-trainer-m1 .mn-purchase-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--mn-card-bg);
+    border: 2px solid var(--mn-border);
+    border-radius: var(--mn-radius);
+    cursor: pointer;
+    transition: border-color .2s, box-shadow .2s, transform .15s;
+    user-select: none;
+}
+
+#mn-trainer-m1 .mn-purchase-card:hover:not(.mn-purchase-card--correct):not(.mn-purchase-card--wrong) {
+    border-color: var(--mn-primary);
+    box-shadow: var(--mn-shadow-hover);
+    transform: translateY(-2px);
+}
+
+#mn-trainer-m1 .mn-purchase-card__emoji { 
+    font-size: 22px; 
+    flex-shrink: 0; 
+}
+
+#mn-trainer-m1 .mn-purchase-card__name {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+#mn-trainer-m1 .mn-purchase-card__status {
+    font-size: 18px;
+    font-weight: 700;
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+#mn-trainer-m1 .mn-purchase-card--correct {
+    border-color: var(--mn-mandatory);
+    background: var(--mn-mandatory-bg);
+    cursor: default;
+}
+
+#mn-trainer-m1 .mn-purchase-card--correct .mn-purchase-card__status { 
+    color: var(--mn-mandatory); 
+}
+
+#mn-trainer-m1 .mn-purchase-card--wrong {
+    border-color: var(--mn-wrong);
+    background: var(--mn-wrong-bg);
+    cursor: default;
+}
+
+#mn-trainer-m1 .mn-purchase-card--wrong .mn-purchase-card__status { 
+    color: var(--mn-wrong); 
+}
+
+/* ── Категории (правая колонка) ──────────────────────────────── */
+#mn-trainer-m1 .mn-trainer__categories {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#mn-trainer-m1 .mn-category {
+    border-radius: var(--mn-radius);
+    padding: 18px 16px 14px;
+    border: 2px solid transparent;
+    transition: border-color .2s;
+    min-height: 120px;
+}
+
+#mn-trainer-m1 .mn-category--mandatory {
+    background: var(--mn-mandatory-bg);
+    border-color: var(--mn-mandatory);
+}
+
+#mn-trainer-m1 .mn-category--discretionary {
+    background: var(--mn-discretion-bg);
+    border-color: var(--mn-discretion);
+}
+
+#mn-trainer-m1 .mn-category__icon {
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+
+#mn-trainer-m1 .mn-category__label {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+#mn-trainer-m1 .mn-category--mandatory .mn-category__label  { 
+    color: #2d7a55; 
+}
+
+#mn-trainer-m1 .mn-category--discretionary .mn-category__label { 
+    color: #b37a1a; 
+}
+
+#mn-trainer-m1 .mn-category__hint {
+    font-size: 12px;
+    color: var(--mn-subtext);
+    margin-bottom: 10px;
+}
+
+#mn-trainer-m1 .mn-category__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 30px;
+}
+
+/* ── Чипы в зонах ────────────────────────────────────────────── */
+#mn-trainer-m1 .mn-zone-chip {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 100px;
+    animation: mn-pop-in .25s ease;
+}
+
+#mn-trainer-m1 .mn-zone-chip--ok  { 
+    background: var(--mn-mandatory); 
+    color: #fff; 
+}
+
+#mn-trainer-m1 .mn-zone-chip--err { 
+    background: var(--mn-wrong);     
+    color: #fff; 
+}
+
+@keyframes mn-pop-in {
+    from { opacity: 0; transform: scale(.7); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Попап ───────────────────────────────────────────────────── */
+#mn-trainer-m1 .mn-popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    backdrop-filter: blur(3px);
+    animation: mn-fade-in .15s ease;
+}
+
+#mn-trainer-m1 .mn-popup--visible {
+    display: flex;
+}
+
+@keyframes mn-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+#mn-trainer-m1 .mn-popup__card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 32px 28px 24px;
+    max-width: 380px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    position: relative;
+    animation: mn-slide-up .2s ease;
+    text-align: center;
+}
+
+@keyframes mn-slide-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+#mn-trainer-m1 .mn-popup__purchase-name {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+#mn-trainer-m1 .mn-popup__question {
+    font-size: 14px;
+    color: var(--mn-subtext);
+    margin: 0 0 20px;
+}
+
+#mn-trainer-m1 .mn-popup__choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#mn-trainer-m1 .mn-popup__btn {
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+}
+
+#mn-trainer-m1 .mn-popup__btn:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 20px rgba(0,0,0,.12); 
+}
+
+#mn-trainer-m1 .mn-popup__btn:active { 
+    transform: translateY(0); 
+}
+
+#mn-trainer-m1 .mn-popup__btn--mandatory {
+    background: var(--mn-mandatory);
+    color: #fff;
+}
+
+#mn-trainer-m1 .mn-popup__btn--discretionary {
+    background: var(--mn-discretion);
+    color: #fff;
+}
+
+#mn-trainer-m1 .mn-popup__close {
+    position: absolute;
+    top: 12px; 
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--mn-subtext);
+    line-height: 1;
+    padding: 4px;
+    border-radius: 6px;
+    transition: color .15s, background .15s;
+}
+
+#mn-trainer-m1 .mn-popup__close:hover { 
+    color: var(--mn-text); 
+    background: var(--mn-border); 
+}
+
+/* ── Прогресс ────────────────────────────────────────────────── */
+#mn-trainer-m1 .mn-trainer__progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+#mn-trainer-m1 .mn-progress-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--mn-border);
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+#mn-trainer-m1 .mn-progress-bar__fill {
+    height: 100%;
+    background: var(--mn-primary);
+    border-radius: 100px;
+    width: 0%;
+    transition: width .4s ease;
+}
+
+#mn-trainer-m1 .mn-progress-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--mn-subtext);
+    white-space: nowrap;
+}
+
+/* ── Результат ───────────────────────────────────────────────── */
+#mn-trainer-m1 .mn-trainer__result {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+#mn-trainer-m1 .mn-result__inner {
+    background: #fff;
+    border-radius: 24px;
+    padding: 40px 32px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 24px 64px rgba(0,0,0,.22);
+    animation: mn-slide-up .25s ease;
+}
+
+#mn-trainer-m1 .mn-result__icon  { 
+    font-size: 52px; 
+    margin-bottom: 12px; 
+}
+
+#mn-trainer-m1 .mn-result__score { 
+    font-size: 22px; 
+    font-weight: 800; 
+    margin-bottom: 8px; 
+}
+
+#mn-trainer-m1 .mn-result__text  { 
+    font-size: 14px; 
+    color: var(--mn-subtext); 
+    margin-bottom: 24px; 
+}
+
+#mn-trainer-m1 .mn-result__retry {
+    background: var(--mn-primary);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 28px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity .15s, transform .15s;
+}
+
+#mn-trainer-m1 .mn-result__retry:hover { 
+    opacity: .88; 
+    transform: translateY(-2px); 
+}
+
+/* ── Кнопка "Дальше" заблокирована ──────────────────────────── */
+.mn-btn-locked {
+    opacity: .45 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+@keyframes mn-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.mn-btn-shake { 
+    animation: mn-shake .4s ease; 
+}
+
+/* Адаптив для мобильных */
+@media (max-width: 768px) {
+    #mn-trainer-m1 .mn-trainer__body {
+        grid-template-columns: 1fr !important;
+    }
+    
+    #mn-trainer-m1 .mn-category {
+        min-height: auto !important;
+    }
+}

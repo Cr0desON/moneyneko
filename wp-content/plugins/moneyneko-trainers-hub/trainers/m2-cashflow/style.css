@@ -1,0 +1,211 @@
+/* ===== MoneyNeko Trainer — Модуль 2 ===== */
+#mn-trainer-m2 {
+    font-family: 'Nunito', 'Rubik', sans-serif;
+    color: #2d3748;
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.mn-trainer__title { font-size: 26px; font-weight: 800; text-align: center; margin-bottom: 10px; color: #1a202c; }
+.mn-trainer__subtitle { font-size: 16px; color: #718096; text-align: center; margin-bottom: 25px; }
+
+/* Экраны */
+.mn-m2-screen { display: none; animation: mn-fade-in 0.4s ease; }
+.mn-m2-screen--active { display: block; }
+@keyframes mn-fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Интро и Инструкция */
+.mn-m2-intro-content { text-align: center; padding: 20px; }
+.mn-m2-icon-wrap { font-size: 60px; margin-bottom: 10px; animation: bounce 2s infinite; }
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+.mn-m2-instruction {
+    background: #f8fafc;
+    border: 2px dashed #cbd5e1;
+    border-radius: 16px;
+    padding: 20px;
+    margin: 25px auto;
+    max-width: 450px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #4a5568;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+}
+
+/* Кнопки старта */
+.mn-btn-start {
+    background: #5b67f8; color: #fff; border: none; padding: 16px 40px;
+    font-size: 18px; font-weight: bold; border-radius: 100px; cursor: pointer;
+    margin-top: 10px; transition: all 0.2s; box-shadow: 0 4px 15px rgba(91, 103, 248, 0.4);
+}
+.mn-btn-start:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(91, 103, 248, 0.5); }
+.mn-btn-start:active { transform: translateY(0); }
+.mn-btn-locked { opacity: 0.5; pointer-events: none; box-shadow: none; background: #a0aec0; }
+
+/* --- ЭКРАН ЛОВЛИ (ИГРА) --- */
+.mn-catch-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; background: #f7fafc; border-radius: 12px; margin-bottom: 20px; }
+.mn-catch-title { font-weight: bold; font-size: 18px; color: #4a5568; }
+.mn-catch-counter { font-weight: 800; font-size: 20px; color: #5b67f8; background: #fff; padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+
+.mn-catch-area {
+    width: 100%; height: 450px; background: linear-gradient(180deg, #ebf8ff 0%, #fff 100%);
+    border: 3px solid #e2e8f0; border-radius: 20px; position: relative; overflow: hidden;
+}
+.mn-lane { position: absolute; top: 0; bottom: 0; width: 50%; border-right: 2px dashed #cbd5e0; }
+.mn-lane-left { left: 0; }
+.mn-lane-right { right: 0; border: none; }
+
+/* Кот (по умолчанию для ПК) */
+.mn-cat {
+    position: absolute; bottom: 15px; left: 25%; transform: translateX(-50%);
+    width: 90px; height: 90px; transition: left 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 10;
+}
+.mn-cat img { width: 100%; height: 100%; object-fit: contain; }
+
+/* Падающая карточка */
+.mn-falling-card {
+    position: absolute; top: -80px; left: 25%; transform: translateX(-50%);
+    background: #fff; border: 2px solid #5b67f8; padding: 10px 15px; border-radius: 12px;
+    font-weight: bold; box-shadow: 0 8px 20px rgba(91,103,248,0.15);
+    white-space: nowrap; text-align: center; z-index: 5;
+}
+.mn-falling-card span.emoji { font-size: 24px; display: block; margin-bottom: 5px; }
+
+/* Кнопки управления (по умолчанию скрыты для ПК) */
+.mn-controls {
+    display: none;
+}
+
+/* --- ЭКРАН СОРТИРОВКИ (Drag & Drop) --- */
+.mn-sort-layout { display: flex; gap: 30px; margin-top: 30px; align-items: flex-start; }
+@media(max-width: 768px) { .mn-sort-layout { flex-direction: column; } }
+
+.mn-sort-source-wrap { flex: 1; background: #f8fafc; padding: 20px; border-radius: 16px; border: 2px dashed #cbd5e0; }
+.mn-sort-source-wrap h3 { margin: 0 0 15px; font-size: 16px; color: #4a5568; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
+.mn-sort-source { display: flex; flex-wrap: wrap; gap: 12px; min-height: 200px; justify-content: center; align-content: flex-start; }
+
+.mn-sort-zones { flex: 1; display: flex; flex-direction: column; gap: 20px; width: 100%; }
+.mn-sort-zone { padding: 20px; border-radius: 16px; min-height: 180px; display: flex; flex-direction: column; transition: 0.2s; }
+.mn-zone-income { background: #f0fdf4; border: 2px solid #86efac; }
+.mn-zone-expense { background: #fef2f2; border: 2px solid #fca5a5; }
+.mn-zone-title { font-weight: 800; font-size: 16px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+.mn-zone-income .mn-zone-title { color: #166534; }
+.mn-zone-expense .mn-zone-title { color: #991b1b; }
+
+.mn-sort-zone.drag-over { transform: scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+.mn-zone-items { display: flex; flex-wrap: wrap; gap: 10px; flex: 1; align-content: flex-start; }
+
+/* КАРТОЧКА */
+.mn-draggable-card {
+    background: #fff; padding: 12px 16px; border: 2px solid #e2e8f0;
+    border-radius: 12px; cursor: grab; display: flex; align-items: center; gap: 12px;
+    font-weight: bold; font-size: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; user-select: none;
+    background-color: #fff;
+    -webkit-tap-highlight-color: transparent;
+}
+.mn-draggable-card:hover { border-color: #5b67f8; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(91,103,248,0.15); }
+.mn-draggable-card:active { cursor: grabbing; transform: scale(0.95); }
+.mn-draggable-card.dragging { opacity: 0.4; border: 2px dashed #5b67f8; }
+.mn-card-emoji { font-size: 26px; }
+.mn-card-details { display: flex; flex-direction: column; text-align: left;}
+.mn-card-name { color: #2d3748; }
+.mn-card-amount { color: #718096; font-size: 13px; font-weight: 600; margin-top: 2px; }
+
+.mn-sort-footer { text-align: center; margin-top: 30px; }
+
+/* --- ЭКРАН ПОДСЧЕТА --- */
+.mn-calc-layout { margin-top: 30px; }
+.mn-calc-boards { display: flex; gap: 20px; margin-bottom: 40px; justify-content: center; }
+.mn-calc-board { flex: 1; max-width: 250px; background: #fff; padding: 25px 20px; border-radius: 16px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-top: 6px solid; }
+.mn-board-income { border-top-color: #48bb78; }
+.mn-board-expense { border-top-color: #f56565; }
+.mn-board-title { font-size: 16px; color: #718096; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.mn-board-sum { font-size: 32px; font-weight: 800; color: #1a202c; }
+
+.mn-calc-question { text-align: center; font-size: 20px; font-weight: 800; margin-bottom: 25px; color: #2d3748; }
+
+.mn-calc-options { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+.mn-calc-btn {
+    padding: 16px 28px; border-radius: 100px; border: 2px solid #e2e8f0;
+    background: #fff; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.2s; color: #4a5568;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.mn-calc-btn:hover { border-color: #5b67f8; color: #5b67f8; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(91,103,248,0.15); }
+.mn-calc-btn:active { transform: translateY(0); }
+
+/* --- РЕЗУЛЬТАТ --- */
+.mn-trainer__result { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+.mn-result__inner { background: #fff; padding: 40px; border-radius: 24px; text-align: center; max-width: 450px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.2); animation: mn-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes mn-pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.mn-result__icon { font-size: 60px; margin-bottom: 15px; }
+.mn-result__score { font-size: 24px; font-weight: 800; color: #1a202c; margin-bottom: 10px; }
+.mn-result__text { font-size: 16px; color: #718096; line-height: 1.5; margin-bottom: 25px; }
+.mn-result__retry { background: #f56565; color: #fff; border: none; padding: 14px 28px; font-size: 16px; font-weight: bold; border-radius: 100px; cursor: pointer; transition: 0.2s; }
+.mn-result__retry:hover { background: #e53e3e; transform: translateY(-2px); }
+
+/* ==============================================================
+   АДАПТИВНОСТЬ И МОБИЛЬНЫЕ КНОПКИ
+   ============================================================== */
+@media (max-width: 768px) {
+    /* Поднимаем кота на мобилке, чтобы кнопки его не закрывали */
+    .mn-cat {
+        bottom: 80px;
+    }
+
+    /* Выводим полупрозрачные кнопки-контроллеры поверх игры */
+    .mn-controls {
+        display: flex;
+        position: absolute;
+        bottom: 15px;
+        left: 15px;
+        right: 15px;
+        gap: 15px;
+        z-index: 20;
+    }
+    .mn-control-btn {
+        flex: 1; padding: 15px; font-size: 16px; border-radius: 12px; border: none;
+        background: rgba(255, 255, 255, 0.85); color: #2d3748; font-weight: 800;
+        cursor: pointer; transition: 0.2s;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        backdrop-filter: blur(4px);
+        -webkit-tap-highlight-color: transparent;
+    }
+    .mn-control-btn:active { background: #e2e8f0; transform: scale(0.95); }
+}
+
+/* ==============================================================
+   ЖЕСТКОЕ СКРЫТИЕ СИСТЕМНОЙ КНОПКИ "ДАЛЬШЕ" И САЙДБАРА
+   ============================================================== */
+.tutor-course-topic-single-footer .tutor-single-course-content-next,
+.tutor-single-course-content-next,
+#mn-tutor-next-btn {
+    display: none !important;
+}
+
+body.mn-hide-sidebar .tutor-lesson-sidebar,
+body.mn-hide-sidebar .tutor-course-single-sidebar-wrapper,
+body.mn-hide-sidebar .tutor-course-sidebar {
+    display: none !important;
+}
+
+/* Растягиваем правую колонку, но не ломаем сетку */
+body.mn-hide-sidebar .tutor-course-content-right,
+body.mn-hide-sidebar .tutor-course-single-content {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    max-width: 100% !important;
+}
+
+/* Убираем жесткие 100% у самого листа бумаги, чтобы он встал вровень с шапкой */
+body.mn-hide-sidebar .tutor-course-topic-single-body {
+    padding: 20px 25px 15px 25px !important;
+    width: auto !important;
+}

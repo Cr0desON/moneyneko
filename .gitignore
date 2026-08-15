@@ -1,0 +1,91 @@
+# ЯДРО WORDPRESS
+/wp-admin/
+/wp-includes/
+/index.php
+/license.txt
+/readme.html
+/wp-*.php
+/xmlrpc.php
+
+# КОНФИГУРАЦИЯ И ЗАГРУЗКИ
+wp-config.php
+wp-config-sample.php
+wp-content/uploads/
+!wp-content/uploads/.gitkeep
+
+
+# СЛУЖЕБНЫЕ ФАЙЛЫ WP-CONTENT
+
+test.php
+wp-content/index.php
+wp-content/upgrade/
+wp-content/upgrade-temp-backup/
+wp-content/backup-db/
+wp-content/backups/
+wp-content/advanced-cache.php
+wp-content/object-cache.php
+wp-content/db.php
+wp-content/wp-cache-config.php
+
+# ЛОГИ, КЕШ И БАЗЫ ДАННЫХ
+wp-content/cache/
+*.log
+error_log
+database/
+/image/
+
+# СИСТЕМНЫЕ ФАЙЛЫ И IDE
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.sublime-*
+*.swp
+*.swo
+.osp/
+userdata/
+temp/
+/.htaccess
+**/.vs/
+
+# Секреты и окружение
+.env
+.env.*
+
+# Composer/Node
+node_modules/
+vendor/
+
+# Дампы БД и архивы
+*.sql
+*.sql.gz
+*.zip
+
+# Резервные копии
+*.bak
+*~
+
+# ПЛАГИНЫ И ТЕМЫ (Белый список)
+
+#Запрещаем Git отслеживать все плагины и темы
+wp-content/plugins/*
+wp-content/themes/*
+wp-content/mu-plugins/*
+
+#РАЗРЕШАЕМ отслеживать плагин и текущую тему
+!wp-content/plugins/moneyneko-trainers-hub/
+!wp-content/themes/astra/
+
+# ПЕРЕВОДЫ
+
+# Игнорируем автозагружаемые переводы ядра WP и сторонних плагинов —
+# они подтягиваются автоматически с translate.wordpress.org
+wp-content/languages/*
+
+# НО оставляем папку Loco — там наши собственные переводы плагинов без RU-локали
+!wp-content/languages/loco/
+
+# Внутри Loco трекаем .po/.mo/.l10n.php, но игнорируем автогенерируемые
+# бэкап-снэпшоты (файлы с хэшем в имени)
+wp-content/languages/loco/**/*.json
