@@ -75,7 +75,7 @@ wp-content/mu-plugins/*
 
 #РАЗРЕШАЕМ отслеживать плагин и текущую тему
 !wp-content/plugins/moneyneko-trainers-hub/
-!wp-content/themes/astra/
+!wp-content/themes/astra-child/
 
 # ПЕРЕВОДЫ
 
