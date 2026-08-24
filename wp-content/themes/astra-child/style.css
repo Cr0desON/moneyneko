@@ -4,3 +4,82 @@ Template: astra
 Description: Дочерняя тема для проекта MoneyNeko
 Version: 1.0.0
 */
+
+/* ==========================================
+   ШОРТКОД: ДОСКА ЛИДЕРОВ
+   ========================================== */
+.lb-card { background-color: #fffdf5; border: 3px solid #2c3e50; border-radius: 15px 255px 15px 225px / 225px 15px 255px 15px; box-shadow: 8px 12px 30px rgba(0,0,0,0.12); padding: 40px; max-width: 650px; margin: 50px auto; font-family: 'Balsamiq Sans', cursive, sans-serif; position: relative; transform: rotate(-0.5deg); color: #2c3e50; }
+.lb-card::before { content: ""; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 100px; height: 25px; background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(0,0,0,0.1); border-radius: 4px 4px 0 0; z-index: 2; box-shadow: 1px 1px 3px rgba(0,0,0,0.05); }
+.lb-table-wrapper { background-color: #ffffff; border: 2px solid #2c3e50; border-radius: 12px; padding: 5px 15px; box-shadow: inset 0px 3px 10px rgba(0,0,0,0.04), 3px 5px 0px rgba(44,62,80,0.05); margin-bottom: 25px; }
+.lb-table { width: 100%; border-collapse: collapse; }
+.lb-row { border-bottom: 2px dotted rgba(44, 62, 80, 0.3); transition: all 0.2s ease; }
+.lb-row:last-child { border-bottom: none; }
+.lb-row td { padding: 15px 10px; vertical-align: middle; }
+.lb-row:hover { background-color: rgba(52, 152, 219, 0.08); transform: translateX(10px); cursor: pointer; }
+.rank-box { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 2px solid #2c3e50; border-radius: 50% 45% 52% 48%; background: #fff; font-weight: bold; font-size: 1.2em; }
+.rank-1 .rank-box { background: #f1c40f; color: #fff; border-color: #f1c40f; }
+.rank-2 .rank-box { background: #bdc3c7; color: #fff; border-color: #bdc3c7; }
+.rank-3 .rank-box { background: #e67e22; color: #fff; border-color: #e67e22; }
+.user-info { display: flex; align-items: center; gap: 15px; }
+.user-avatar img { border-radius: 50% 40% 50% 40%; border: 2px solid #2c3e50; box-shadow: 1px 2px 5px rgba(0,0,0,0.1); }
+.user-name { font-size: 1.3em; font-weight: bold; color: #1a252f; letter-spacing: 0.5px; }
+.points-display { text-align: right; font-weight: bold; color: #e67e22; font-size: 1.3em; padding-right: 25px !important;}
+.lb-row.is-me { background-color: rgba(255, 242, 0, 0.2) !important; border-bottom: 2px dashed rgba(255, 242, 0, 0.5); }
+.btn-container { text-align: center; margin-top: 35px; }
+.game-btn { display: inline-block; background-color: #3498db; color: #fff !important; padding: 12px 40px; text-decoration: none !important; font-size: 1.2em; font-weight: bold; border: 3px solid #2c3e50; border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; transition: transform 0.1s, box-shadow 0.1s; box-shadow: 3px 6px 0px #2c3e50; cursor: pointer; }
+.game-btn:hover { filter: brightness(1.05); }
+.game-btn:active { transform: translateY(4px); box-shadow: 0px 2px 0px #2c3e50; }
+
+/* ==========================================
+   ШОРТКОД: ПРОФИЛЬ (ГОСТЬ)
+   ========================================== */
+.sketch-profile-unlogged { background-color: #fffdf5; border: 3px solid #2c3e50; border-radius: 15px 255px 15px 225px / 225px 15px 255px 15px; box-shadow: 8px 12px 25px rgba(0,0,0,0.08); padding: 50px 40px; max-width: 500px; margin: 60px auto; font-family: 'Balsamiq Sans', cursive, sans-serif; text-align: center; color: #2c3e50; position: relative; transform: rotate(-0.5deg); }
+.sketch-profile-unlogged::before { content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 24px; height: 24px; background-color: #e74c3c; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 2px solid #c0392b; }
+.sketch-profile-unlogged h2 { font-family: 'Caveat', cursive; font-size: 38px; margin: 0 0 15px 0; color: #1a252f; }
+.sketch-profile-unlogged p { font-size: 16px; line-height: 1.5; margin-bottom: 30px; }
+.unlogged-btn-wrap { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+.unlogged-btn { text-decoration: none !important; padding: 12px 35px; font-size: 18px; font-weight: bold; border: 3px solid #2c3e50; border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; transition: transform 0.1s, box-shadow 0.1s; box-shadow: 3px 6px 0px #2c3e50; display: inline-block; width: 80%; box-sizing: border-box; }
+.unlogged-btn-blue { background: #3498db; color: #fff !important; }
+.unlogged-btn-white { background: #ffffff; color: #2c3e50 !important; }
+.unlogged-btn:active { transform: translateY(4px); box-shadow: 0px 2px 0px #2c3e50; }
+.unlogged-btn:hover { filter: brightness(1.05); }
+
+/* ==========================================
+   ШОРТКОД: ПРОФИЛЬ (АВТОРИЗОВАННЫЙ)
+   ========================================== */
+.sketch-profile { background-color: #fffdf5; border: 3px solid #2c3e50; border-radius: 15px 255px 15px 225px / 225px 15px 255px 15px; box-shadow: 8px 12px 25px rgba(0,0,0,0.08); padding: 50px 40px 40px; max-width: 700px; margin: 40px auto; font-family: 'Balsamiq Sans', cursive, sans-serif; position: relative; color: #2c3e50; transform: rotate(-0.5deg); }
+.sketch-profile::before { content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 24px; height: 24px; background-color: #e74c3c; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 20; border: 2px solid #c0392b; }
+.sketch-avatar-wrap { position: relative; display: inline-block; margin-bottom: 20px; }
+.sketch-avatar-wrap img { border: 5px solid #ffffff; outline: 2px solid #2c3e50; box-shadow: 2px 4px 10px rgba(0,0,0,0.15); transform: rotate(-3deg); display: block; border-radius: 6px; }
+.sketch-avatar-wrap::after { content: ""; position: absolute; top: -10px; right: -15px; width: 50px; height: 20px; background: rgba(255, 255, 255, 0.6); transform: rotate(30deg); box-shadow: 1px 1px 3px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05); }
+.sketch-greeting h1 { font-family: 'Caveat', cursive; font-size: 42px; margin: 0; color: #1a252f; }
+.sketch-subtitle { font-size: 16px; color: #7f8c8d; margin-bottom: 30px; }
+.sketch-section-title { font-family: 'Caveat', cursive; font-size: 32px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: #2c3e50; }
+.points-box { border: 3px solid #2c3e50; padding: 10px 25px; display: inline-block; border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; margin-bottom: 40px; background: transparent; box-shadow: 3px 5px 0px rgba(44, 62, 80, 0.1); font-size: 16px; }
+.points-val { font-size: 26px; font-weight: bold; color: #e67e22; }
+.sketch-mini-lb { background: #fff9c4; padding: 15px 25px; border: 2px solid #2c3e50; border-radius: 2px 15px 3px 15px / 15px 3px 15px 2px; box-shadow: 4px 6px 0px rgba(0,0,0,0.1); transform: rotate(1.5deg); margin-bottom: 40px; position: relative; }
+.sketch-mini-lb::before { content: ""; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 14px; height: 14px; background: #3498db; border-radius: 50%; box-shadow: 1px 2px 3px rgba(0,0,0,0.3); border: 1px solid #2980b9; }
+.lb-mini-table { width: 100%; border-collapse: collapse; color: #2c3e50; }
+.lb-mini-row { border-bottom: 2px dotted rgba(44, 62, 80, 0.2); }
+.lb-mini-row:last-child { border-bottom: none; }
+.lb-mini-row.is-me { background: rgba(52, 152, 219, 0.12); font-weight: bold; }
+.lb-mini-row td { padding: 12px 5px; font-size: 16px; vertical-align: middle; }
+.lb-mini-points { text-align: right; font-weight: bold; color: #e67e22; padding-right: 15px !important; }
+.sketch-actions { display: flex; gap: 20px; flex-wrap: wrap; }
+.action-btn { text-decoration: none !important; padding: 14px 30px; font-size: 18px; font-weight: bold; border: 3px solid #2c3e50; border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; transition: transform 0.1s, box-shadow 0.1s; box-shadow: 3px 6px 0px #2c3e50; display: inline-block; }
+.btn-blue { background: #3498db; color: #fff !important; }
+.btn-white { background: #ffffff; color: #2c3e50 !important; }
+.action-btn:active { transform: translateY(4px); box-shadow: 0px 2px 0px #2c3e50; }
+.action-btn:hover { filter: brightness(1.05); }
+
+/* АДАПТИВНОСТЬ ЛИДЕРБОРДА И ПРОФИЛЯ */
+@media (max-width: 600px) {
+    .lb-card { padding: 30px 15px; }
+    .lb-row:hover { transform: translateX(5px); }
+    .user-name { font-size: 1.1em; }
+    .points-display { font-size: 1.1em; }
+    .sketch-profile { padding: 40px 20px 30px; }
+    .sketch-greeting h1 { font-size: 32px; }
+    .sketch-actions { flex-direction: column; gap: 15px; }
+    .action-btn { text-align: center; width: 100%; box-sizing: border-box; }
+}
