@@ -224,3 +224,30 @@ Version: 1.0.0
     .mn-header-right { width: 100% !important; justify-content: center !important; flex-wrap: wrap !important; }
     .mn-btn { padding: 8px 20px !important; font-size: 15px !important; }
 }
+
+/* ==========================================
+   ОРИГИНАЛЬНЫЕ СТИЛИ ФОРМ АВТОРИЗАЦИИ
+   ========================================== */
+
+/* Уведомления */
+.custom-auth-success { color: #28a745; background: #e8f5e9; padding: 12px; border-radius: 4px; margin-bottom: 20px; border-left: 3px solid #28a745; }
+.custom-auth-recovery-success { color: #28a745; background: #e8f5e9; padding: 12px; border-radius: 4px; margin-bottom: 20px; }
+.custom-auth-error { color: #dc3232; background: #ffe8e8; padding: 12px; border-radius: 4px; margin-bottom: 20px; border-left: 3px solid #dc3232; }
+.custom-auth-error-text { color: #dc3232; }
+
+/* Отступы для ссылок под формами */
+.custom-auth-link-mt15 { text-align: center; margin-top: 15px; }
+.custom-auth-link-mt20 { text-align: center; margin-top: 20px; }
+
+/* Стили для формы восстановления и сброса пароля */
+.custom-auth-reset-wrapper { max-width: 400px; margin: 50px auto; padding: 30px; background: #fff; border-radius: 8px; }
+.custom-auth-reset-wrapper-center { max-width: 400px; margin: 50px auto; padding: 30px; background: #fff; border-radius: 8px; text-align: center; }
+.custom-auth-desc { color: #666; margin-bottom: 20px; }
+
+/* Поля ввода */
+.custom-auth-input-recovery { width: 100%; padding: 10px; }
+.custom-auth-input-reset { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-top: 5px; }
+
+/* Кнопка сброса пароля */
+.custom-auth-submit-mt25 { margin-top: 25px; }
+.custom-auth-btn-blue { background: #0073aa; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; width: 100%; }
