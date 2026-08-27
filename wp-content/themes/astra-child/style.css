@@ -4,3 +4,260 @@ Template: astra
 Description: Дочерняя тема для проекта MoneyNeko
 Version: 1.0.0
 */
+
+/* ==========================================
+   ШОРТКОД: ДОСКА ЛИДЕРОВ
+   ========================================== */
+.lb-card { background-color: #fffdf5; border: 3px solid #2c3e50; border-radius: 15px 255px 15px 225px / 225px 15px 255px 15px; box-shadow: 8px 12px 30px rgba(0,0,0,0.12); padding: 40px; max-width: 650px; margin: 50px auto; font-family: 'Balsamiq Sans', cursive, sans-serif; position: relative; transform: rotate(-0.5deg); color: #2c3e50; }
+.lb-card::before { content: ""; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 100px; height: 25px; background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(0,0,0,0.1); border-radius: 4px 4px 0 0; z-index: 2; box-shadow: 1px 1px 3px rgba(0,0,0,0.05); }
+.lb-table-wrapper { background-color: #ffffff; border: 2px solid #2c3e50; border-radius: 12px; padding: 5px 15px; box-shadow: inset 0px 3px 10px rgba(0,0,0,0.04), 3px 5px 0px rgba(44,62,80,0.05); margin-bottom: 25px; }
+.lb-table { width: 100%; border-collapse: collapse; }
+.lb-row { border-bottom: 2px dotted rgba(44, 62, 80, 0.3); transition: all 0.2s ease; }
+.lb-row:last-child { border-bottom: none; }
+.lb-row td { padding: 15px 10px; vertical-align: middle; }
+.lb-row:hover { background-color: rgba(52, 152, 219, 0.08); transform: translateX(10px); cursor: pointer; }
+.rank-box { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 2px solid #2c3e50; border-radius: 50% 45% 52% 48%; background: #fff; font-weight: bold; font-size: 1.2em; }
+.rank-1 .rank-box { background: #f1c40f; color: #fff; border-color: #f1c40f; }
+.rank-2 .rank-box { background: #bdc3c7; color: #fff; border-color: #bdc3c7; }
+.rank-3 .rank-box { background: #e67e22; color: #fff; border-color: #e67e22; }
+.user-info { display: flex; align-items: center; gap: 15px; }
+.user-avatar img { border-radius: 50% 40% 50% 40%; border: 2px solid #2c3e50; box-shadow: 1px 2px 5px rgba(0,0,0,0.1); }
+.user-name { font-size: 1.3em; font-weight: bold; color: #1a252f; letter-spacing: 0.5px; }
+.points-display { text-align: right; font-weight: bold; color: #e67e22; font-size: 1.3em; padding-right: 25px !important;}
+.lb-row.is-me { background-color: rgba(255, 242, 0, 0.2) !important; border-bottom: 2px dashed rgba(255, 242, 0, 0.5); }
+.btn-container { text-align: center; margin-top: 35px; }
+.game-btn { display: inline-block; background-color: #3498db; color: #fff !important; padding: 12px 40px; text-decoration: none !important; font-size: 1.2em; font-weight: bold; border: 3px solid #2c3e50; border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; transition: transform 0.1s, box-shadow 0.1s; box-shadow: 3px 6px 0px #2c3e50; cursor: pointer; }
+.game-btn:hover { filter: brightness(1.05); }
+.game-btn:active { transform: translateY(4px); box-shadow: 0px 2px 0px #2c3e50; }
+
+/* ==========================================
+   ШОРТКОД: ПРОФИЛЬ (ГОСТЬ)
+   ========================================== */
+.sketch-profile-unlogged { background-color: #fffdf5; border: 3px solid #2c3e50; border-radius: 15px 255px 15px 225px / 225px 15px 255px 15px; box-shadow: 8px 12px 25px rgba(0,0,0,0.08); padding: 50px 40px; max-width: 500px; margin: 60px auto; font-family: 'Balsamiq Sans', cursive, sans-serif; text-align: center; color: #2c3e50; position: relative; transform: rotate(-0.5deg); }
+.sketch-profile-unlogged::before { content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 24px; height: 24px; background-color: #e74c3c; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 2px solid #c0392b; }
+.sketch-profile-unlogged h2 { font-family: 'Caveat', cursive; font-size: 38px; margin: 0 0 15px 0; color: #1a252f; }
+.sketch-profile-unlogged p { font-size: 16px; line-height: 1.5; margin-bottom: 30px; }
+.unlogged-btn-wrap { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+.unlogged-btn { text-decoration: none !important; padding: 12px 35px; font-size: 18px; font-weight: bold; border: 3px solid #2c3e50; border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; transition: transform 0.1s, box-shadow 0.1s; box-shadow: 3px 6px 0px #2c3e50; display: inline-block; width: 80%; box-sizing: border-box; }
+.unlogged-btn-blue { background: #3498db; color: #fff !important; }
+.unlogged-btn-white { background: #ffffff; color: #2c3e50 !important; }
+.unlogged-btn:active { transform: translateY(4px); box-shadow: 0px 2px 0px #2c3e50; }
+.unlogged-btn:hover { filter: brightness(1.05); }
+
+/* ==========================================
+   ШОРТКОД: ПРОФИЛЬ (АВТОРИЗОВАННЫЙ)
+   ========================================== */
+.sketch-profile { background-color: #fffdf5; border: 3px solid #2c3e50; border-radius: 15px 255px 15px 225px / 225px 15px 255px 15px; box-shadow: 8px 12px 25px rgba(0,0,0,0.08); padding: 50px 40px 40px; max-width: 700px; margin: 40px auto; font-family: 'Balsamiq Sans', cursive, sans-serif; position: relative; color: #2c3e50; transform: rotate(-0.5deg); }
+.sketch-profile::before { content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 24px; height: 24px; background-color: #e74c3c; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 20; border: 2px solid #c0392b; }
+.sketch-avatar-wrap { position: relative; display: inline-block; margin-bottom: 20px; }
+.sketch-avatar-wrap img { border: 5px solid #ffffff; outline: 2px solid #2c3e50; box-shadow: 2px 4px 10px rgba(0,0,0,0.15); transform: rotate(-3deg); display: block; border-radius: 6px; }
+.sketch-avatar-wrap::after { content: ""; position: absolute; top: -10px; right: -15px; width: 50px; height: 20px; background: rgba(255, 255, 255, 0.6); transform: rotate(30deg); box-shadow: 1px 1px 3px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05); }
+.sketch-greeting h1 { font-family: 'Caveat', cursive; font-size: 42px; margin: 0; color: #1a252f; }
+.sketch-subtitle { font-size: 16px; color: #7f8c8d; margin-bottom: 30px; }
+.sketch-section-title { font-family: 'Caveat', cursive; font-size: 32px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: #2c3e50; }
+.points-box { border: 3px solid #2c3e50; padding: 10px 25px; display: inline-block; border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; margin-bottom: 40px; background: transparent; box-shadow: 3px 5px 0px rgba(44, 62, 80, 0.1); font-size: 16px; }
+.points-val { font-size: 26px; font-weight: bold; color: #e67e22; }
+.sketch-mini-lb { background: #fff9c4; padding: 15px 25px; border: 2px solid #2c3e50; border-radius: 2px 15px 3px 15px / 15px 3px 15px 2px; box-shadow: 4px 6px 0px rgba(0,0,0,0.1); transform: rotate(1.5deg); margin-bottom: 40px; position: relative; }
+.sketch-mini-lb::before { content: ""; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 14px; height: 14px; background: #3498db; border-radius: 50%; box-shadow: 1px 2px 3px rgba(0,0,0,0.3); border: 1px solid #2980b9; }
+.lb-mini-table { width: 100%; border-collapse: collapse; color: #2c3e50; }
+.lb-mini-row { border-bottom: 2px dotted rgba(44, 62, 80, 0.2); }
+.lb-mini-row:last-child { border-bottom: none; }
+.lb-mini-row.is-me { background: rgba(52, 152, 219, 0.12); font-weight: bold; }
+.lb-mini-row td { padding: 12px 5px; font-size: 16px; vertical-align: middle; }
+.lb-mini-points { text-align: right; font-weight: bold; color: #e67e22; padding-right: 15px !important; }
+.sketch-actions { display: flex; gap: 20px; flex-wrap: wrap; }
+.action-btn { text-decoration: none !important; padding: 14px 30px; font-size: 18px; font-weight: bold; border: 3px solid #2c3e50; border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; transition: transform 0.1s, box-shadow 0.1s; box-shadow: 3px 6px 0px #2c3e50; display: inline-block; }
+.btn-blue { background: #3498db; color: #fff !important; }
+.btn-white { background: #ffffff; color: #2c3e50 !important; }
+.action-btn:active { transform: translateY(4px); box-shadow: 0px 2px 0px #2c3e50; }
+.action-btn:hover { filter: brightness(1.05); }
+
+/* АДАПТИВНОСТЬ ЛИДЕРБОРДА И ПРОФИЛЯ */
+@media (max-width: 600px) {
+    .lb-card { padding: 30px 15px; }
+    .lb-row:hover { transform: translateX(5px); }
+    .user-name { font-size: 1.1em; }
+    .points-display { font-size: 1.1em; }
+    .sketch-profile { padding: 40px 20px 30px; }
+    .sketch-greeting h1 { font-size: 32px; }
+    .sketch-actions { flex-direction: column; gap: 15px; }
+    .action-btn { text-align: center; width: 100%; box-sizing: border-box; }
+}
+
+/* ==========================================
+   1. ИГРОВОЙ ДАШБОРД (Страница с маскотом: [custom_homepage])
+   ========================================== */
+.sketch-landing-wrapper { position: relative; background-color: #fffdf5; border: 2px solid #333; border-radius: 15px 255px 15px 225px / 225px 15px 255px 15px; box-shadow: 8px 12px 25px rgba(0,0,0,0.08); padding: 60px 20px 80px; font-family: 'Balsamiq Sans', cursive, sans-serif; box-sizing: border-box; overflow: visible; max-width: 1100px; margin: 40px auto; z-index: 1; }
+.sketch-landing-wrapper::before { content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 24px; height: 24px; background-color: #e74c3c; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.3), inset 0 3px 6px rgba(255,255,255,0.3), inset 0 -3px 6px rgba(0,0,0,0.2); z-index: 20; border: 2px solid #c0392b; }
+
+/* Навигация дашборда */
+.sketch-btn-profile, .sketch-btn-leaderboard { position: absolute; top: 30px; background-color: #fff; color: #2c3e50 !important; font-size: 18px; font-weight: bold; text-decoration: none !important; padding: 10px 25px; border: 2px solid #2c3e50; border-radius: 6px; box-shadow: 2px 4px 0px #2c3e50; transition: transform 0.1s, box-shadow 0.1s; z-index: 10; }
+.sketch-btn-profile { left: 30px; } .sketch-btn-leaderboard { right: 30px; }
+.sketch-btn-profile:active, .sketch-btn-leaderboard:active { transform: translateY(4px); box-shadow: 0px 0px 0px #2c3e50; }
+.sketch-btn-profile:hover, .sketch-btn-leaderboard:hover { background-color: #f0f8ff; }
+
+/* Декоративные элементы фона */
+.sketch-bg-deco { position: absolute; z-index: 1; pointer-events: none; opacity: 0.8; }
+.deco-left { top: 110px; left: 5%; font-size: 60px; line-height: 1.2; transform: rotate(-5deg); }
+.deco-right { top: 110px; right: 5%; font-size: 55px; line-height: 1.4; text-align: right; }
+
+/* Центральный блок с маскотом */
+.sketch-hero-section { position: relative; z-index: 2; text-align: center; margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
+.cat-container { position: relative; display: inline-block; }
+.cat-image { width: 200px; height: auto; filter: drop-shadow(0px 5px 15px rgba(0,0,0,0.1)); }
+
+/* Шкала настроения */
+.mood-progress-wrapper { text-align: center; margin-bottom: 15px; width: 100%; }
+.mood-progress-text { font-size: 18px; font-weight: bold; color: #555; margin-bottom: 5px; }
+.mood-progress-container { width: 200px; height: 16px; border: 2px solid #2c3e50; border-radius: 10px; background-color: #ffffff; box-shadow: 2px 2px 0px #2c3e50; overflow: hidden; position: relative; margin: 0 auto; }
+.mood-progress-fill { height: 100%; background: linear-gradient(90deg, #e74c3c 0%, #f1c40f 50%, #2ecc71 100%); background-size: 200px 100%; transition: width 0.5s ease-in-out; }
+
+/* Бейджи статистики */
+.right-bottom-badges { position: absolute; top: 80px; right: -120px; display: flex; flex-direction: column; align-items: center; transform: rotate(-3deg); }
+.streak-badge, .progress-xp-badge { font-weight: bold; display: flex; align-items: baseline; gap: 5px; text-shadow: 2px 2px 0px rgba(255,255,255,0.9); white-space: nowrap; }
+.badge-label { font-size: 20px; color: #555; }
+.streak-badge { font-size: 30px; color: #e74c3c; }
+.progress-xp-badge { font-size: 24px; color: #2980b9; margin-top: 5px; }
+
+/* Кнопка старта обучения */
+.sketch-btn-start { display: inline-block; background-color: #aed6dc; color: #2c3e50 !important; font-size: 22px; font-weight: bold; text-decoration: none !important; padding: 14px 50px; border: 3px solid #2c3e50; border-radius: 6px; margin: 40px 0 60px; box-shadow: 0px 6px 0px #2c3e50, inset 0px -4px 0px rgba(0,0,0,0.1); transition: transform 0.1s, box-shadow 0.1s; cursor: pointer; }
+.sketch-btn-start:active { transform: translateY(6px); box-shadow: 0px 0px 0px #2c3e50, inset 0px -2px 0px rgba(0,0,0,0.1); }
+.sketch-btn-start:hover { filter: brightness(1.05); }
+
+/* Сетка обучающих модулей */
+.sketch-modules-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; position: relative; z-index: 2; width: 100%; }
+.sketch-module { display: flex; flex-direction: column; align-items: center; text-decoration: none !important; color: #111 !important; width: calc(20% - 15px); min-width: 160px; border: 2px solid #2c3e50; border-radius: 4px; padding: 25px 10px; text-align: center; box-sizing: border-box; box-shadow: 4px 6px 12px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; background-image: linear-gradient(#2c3e50, #2c3e50), linear-gradient(#2c3e50, #2c3e50), linear-gradient(#2c3e50, #2c3e50), linear-gradient(#2c3e50, #2c3e50); background-repeat: no-repeat; background-size: 8px 2px, 2px 8px, 8px 2px, 2px 8px; background-position: 5px 5px, 5px 5px, calc(100% - 5px) calc(100% - 5px), calc(100% - 5px) calc(100% - 5px); }
+.sketch-module:hover { transform: translateY(-8px); box-shadow: 6px 12px 20px rgba(0,0,0,0.15); }
+.mod-1 { background-color: #dceada; } .mod-2 { background-color: #e0f2f1; } .mod-3 { background-color: #e8f4f8; } .mod-4 { background-color: #e5f5e0; } .mod-5 { background-color: #e3f2fd; }
+.module-title { font-weight: bold; font-size: 16px; margin-bottom: 8px; }
+.module-desc { font-size: 13px; color: #333; line-height: 1.3; margin-bottom: 25px; flex-grow: 1; }
+.module-icon { font-size: 45px; }
+
+
+/* ==========================================
+   2. ВСТУПИТЕЛЬНАЯ СТРАНИЦА / ЛЕНДИНГ ([custom_main_page])
+   ========================================== */
+.sketch-main-wrapper { position: relative; background-color: #fffdf5; border: 2px solid #2c3e50; border-radius: 15px 255px 15px 225px / 225px 15px 255px 15px; box-shadow: 8px 12px 25px rgba(0,0,0,0.08); padding: 60px 40px; font-family: 'Balsamiq Sans', cursive, sans-serif; color: #2c3e50; box-sizing: border-box; overflow: hidden; max-width: 1100px; margin: 40px auto; }
+
+/* Приветственный блок */
+.sketch-hero-block { display: flex; align-items: center; justify-content: space-between; gap: 40px; margin-bottom: 60px; }
+.hero-image-wrap { flex: 1; position: relative; }
+.hero-image-wrap img { width: 100%; border-radius: 50% / 40%; border: 6px solid #fff; box-shadow: 3px 5px 15px rgba(0,0,0,0.15); transform: rotate(-2deg); object-fit: cover; }
+.hero-text-wrap { flex: 1; text-align: center; }
+.hero-title { font-size: 38px; font-weight: bold; line-height: 1.3; margin-bottom: 30px; color: #1a252f; }
+
+/* Кнопка на лендинге */
+.sketch-btn-primary { display: inline-block; background-color: #3498db; color: #fff !important; font-size: 24px; font-weight: bold; text-decoration: none !important; padding: 15px 50px; border: 3px solid #2c3e50; border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; box-shadow: 3px 6px 0px #2c3e50; transition: transform 0.1s, box-shadow 0.1s; cursor: pointer; }
+.sketch-btn-primary:active { transform: translateY(4px); box-shadow: 0px 2px 0px #2c3e50; }
+.sketch-btn-primary:hover { filter: brightness(1.1); }
+
+/* Информационные блоки */
+.sketch-about-block { text-align: center; margin-bottom: 50px; }
+.about-text { font-size: 22px; line-height: 1.5; margin-bottom: 40px; max-width: 900px; margin-left: auto; margin-right: auto; background: rgba(255, 255, 255, 0.7); padding: 15px 30px; border-radius: 10px; border: 2px dashed #bdc3c7; }
+.about-image-wrap img { max-width: 700px; width: 100%; border-radius: 40% / 50%; border: 6px solid #fff; box-shadow: 3px 5px 15px rgba(0,0,0,0.15); transform: rotate(1deg); margin-bottom: 20px; }
+
+/* Секции новостей и фактов */
+.sketch-news-section, .sketch-fact-section { margin-bottom: 50px; width: 100%; }
+.sketch-section-title { font-size: 28px; font-weight: bold; margin-bottom: 20px; text-align: center; font-family: 'Caveat', cursive; }
+.sketch-news-container { display: flex; gap: 20px; width: 100%; }
+.sketch-news-card { flex: 1; background: #e8f4f8; padding: 20px; border: 2px solid #2c3e50; border-radius: 5px 15px 5px 15px; box-shadow: 4px 6px 0px #2c3e50; position: relative; transition: transform 0.2s; text-align: left; }
+.sketch-news-card:nth-child(even) { background: #fce4ec; transform: rotate(1.5deg); }
+.sketch-news-card:nth-child(odd) { transform: rotate(-1deg); }
+.sketch-news-card:hover { transform: translateY(-5px) rotate(0); }
+.sketch-news-card::before { content: ''; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 12px; height: 12px; background-color: #7f8c8d; border-radius: 50%; border: 2px solid #2c3e50; }
+.news-date { font-size: 14px; color: #7f8c8d; font-weight: bold; margin-bottom: 8px; }
+.news-title { font-size: 18px; font-weight: bold; margin-bottom: 8px; color: #2c3e50; }
+.news-text { font-size: 15px; line-height: 1.4; color: #34495e; }
+
+.sketch-fact-card { background: #ebf5df; padding: 25px 30px; border: 2px dashed #2ecc71; border-radius: 15px; max-width: 650px; margin: 0 auto; transform: rotate(0.5deg); box-sizing: border-box; }
+.fact-icon { font-size: 40px; margin-bottom: 10px; }
+.fact-text { font-size: 17px; line-height: 1.5; font-weight: bold; color: #27ae60; }
+
+/* Блок с цитатой */
+.sketch-quote-block { margin-top: 40px; padding: 30px; background-color: #fff9c4; border: 1px solid #e2c02c; border-radius: 2px 15px 3px 15px; box-shadow: 2px 4px 10px rgba(0,0,0,0.05); transform: rotate(-1deg); position: relative; }
+.sketch-quote-block::before { content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 16px; height: 16px; background-color: #e74c3c; border-radius: 50%; box-shadow: 1px 2px 3px rgba(0,0,0,0.3); }
+.quote-text { font-size: 22px; font-style: italic; line-height: 1.4; margin-bottom: 15px; color: #2c3e50; }
+.quote-author { text-align: right; font-size: 18px; font-weight: bold; color: #7f8c8d; }
+
+/* Адаптивность для обеих страниц */
+@media (max-width: 900px) { 
+    .sketch-module { width: calc(33.333% - 15px); } 
+    .deco-left, .deco-right { display: none; } 
+}
+@media (max-width: 800px) { 
+    .sketch-hero-block { flex-direction: column-reverse; text-align: center; } 
+    .sketch-news-container { flex-direction: column; } 
+    .hero-title { font-size: 32px; } 
+    .about-text, .quote-text { font-size: 18px; } 
+    .sketch-main-wrapper { padding: 30px 15px; } 
+}
+@media (max-width: 600px) { 
+    .sketch-module { width: calc(50% - 15px); } 
+    .sketch-btn-start { padding: 12px 30px; font-size: 20px; } 
+    .right-bottom-badges { right: -60px; top: 60px; } 
+    .streak-badge { font-size: 24px; } 
+    .progress-xp-badge { font-size: 20px; } 
+    .badge-label { font-size: 14px; } 
+    .sketch-btn-profile, .sketch-btn-leaderboard { position: static; display: inline-block; margin: 5px; } 
+    .top-buttons-container { text-align: center; margin-bottom: 20px; } 
+}
+
+
+/* ==========================================
+   3. КАСТОМНАЯ ШАПКА САЙТА ([custom_header])
+   ========================================== */
+.mn-header-wrapper { background-color: #2c3e50; display: flex; justify-content: space-between; align-items: center; padding: 10px 30px; font-family: 'Balsamiq Sans', cursive, sans-serif; color: #ffffff; width: 100vw; max-width: 100vw; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); box-sizing: border-box; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); border-radius: 0px 0px 15px 30px / 0px 0px 30px 15px !important; }
+.mn-header-left { display: flex; align-items: center; gap: 15px; text-decoration: none !important; }
+.mn-header-logo { width: 50px; height: auto; object-fit: contain; }
+.mn-header-title { font-size: 26px; font-weight: bold; color: #ffffff; text-decoration: none !important; margin: 0; letter-spacing: 0.5px; }
+.mn-header-right { display: flex; align-items: center; gap: 15px; }
+.mn-btn { padding: 8px 25px; border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; font-size: 16px; font-weight: bold; text-decoration: none !important; transition: transform 0.1s, box-shadow 0.1s; cursor: pointer; display: inline-block; box-shadow: 2px 4px 0px rgba(0,0,0,0.3); }
+.mn-btn:active { transform: translateY(2px); box-shadow: 0px 2px 0px rgba(0,0,0,0.3); }
+.mn-btn-blue { background-color: #3498db; color: #ffffff !important; border: 2px solid #2c3e50; }
+.mn-btn-blue:hover { filter: brightness(1.1); }
+.mn-btn-outline { background-color: #fffdf5; color: #2c3e50 !important; border: 2px solid #2c3e50; }
+.mn-btn-outline:hover { background-color: #f0f8ff; }
+.mn-header-avatar { width: 45px; height: 45px; border-radius: 50% 40% 50% 40%; object-fit: cover; background-color: #fffdf5; border: 2px solid #ffffff; }
+
+@media (max-width: 768px) {
+    .mn-header-wrapper { width: 100% !important; max-width: 100% !important; margin-left: 0 !important; margin-right: 0 !important; flex-direction: column !important; gap: 15px !important; padding: 20px 15px !important; border-radius: 0px 0px 10px 20px / 0px 0px 20px 10px !important; }
+    .mn-header-right { width: 100% !important; justify-content: center !important; flex-wrap: wrap !important; }
+    .mn-btn { padding: 8px 20px !important; font-size: 15px !important; }
+}
+
+/* ==========================================
+   ОРИГИНАЛЬНЫЕ СТИЛИ ФОРМ АВТОРИЗАЦИИ
+   ========================================== */
+
+/* Уведомления */
+.custom-auth-success { color: #28a745; background: #e8f5e9; padding: 12px; border-radius: 4px; margin-bottom: 20px; border-left: 3px solid #28a745; }
+.custom-auth-recovery-success { color: #28a745; background: #e8f5e9; padding: 12px; border-radius: 4px; margin-bottom: 20px; }
+.custom-auth-error { color: #dc3232; background: #ffe8e8; padding: 12px; border-radius: 4px; margin-bottom: 20px; border-left: 3px solid #dc3232; }
+.custom-auth-error-text { color: #dc3232; }
+
+/* Отступы для ссылок под формами */
+.custom-auth-link-mt15 { text-align: center; margin-top: 15px; }
+.custom-auth-link-mt20 { text-align: center; margin-top: 20px; }
+
+/* Стили для формы восстановления и сброса пароля */
+.custom-auth-reset-wrapper { max-width: 400px; margin: 50px auto; padding: 30px; background: #fff; border-radius: 8px; }
+.custom-auth-reset-wrapper-center { max-width: 400px; margin: 50px auto; padding: 30px; background: #fff; border-radius: 8px; text-align: center; }
+.custom-auth-desc { color: #666; margin-bottom: 20px; }
+
+/* Поля ввода */
+.custom-auth-input-recovery { width: 100%; padding: 10px; }
+.custom-auth-input-reset { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-top: 5px; }
+
+/* Кнопка сброса пароля */
+.custom-auth-submit-mt25 { margin-top: 25px; }
+.custom-auth-btn-blue { background: #0073aa; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; width: 100%; }
+
+/* ==========================================
+   СКРЫТИЕ СТАНДАРТНЫХ КНОПОК TUTOR LMS
+   ========================================== */
+body form.tutor-topbar-mark-btn,
+body .tutor-topbar-mark-btn,
+body .tutor-course-finish-btn-container,
+body .tutor-course-lesson-single-footer .tutor-btn-done {
+    display: none !important;
+}
