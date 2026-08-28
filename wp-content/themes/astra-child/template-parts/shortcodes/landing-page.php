@@ -15,7 +15,7 @@
             Хотим представить вашему вниманию интерактивную игру, которая спешит помочь вам стать профи в сфере финансов
         </div>
         <div class="about-image-wrap">
-            <img src="/image/catinstreett.png" alt="Кот на улице">
+            <img src="/image/cat.png" alt="Кот на улице">
         </div>
     </div>
 

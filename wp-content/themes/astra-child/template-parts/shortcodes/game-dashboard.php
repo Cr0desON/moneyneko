@@ -1,7 +1,7 @@
 <?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?>
 <div class="sketch-landing-wrapper">
     <div class="top-buttons-container">
-        <a href="<?php echo esc_url( home_url( '/profile-2/' ) ); ?>" class="sketch-btn-profile">Профиль</a>
+        <a href="<?php echo esc_url( home_url( '/profile/' ) ); ?>" class="sketch-btn-profile">Профиль</a>
         <a href="<?php echo esc_url( home_url( '/доска-лидеров/' ) ); ?>" class="sketch-btn-leaderboard">Доска лидеров</a>
     </div>
 
@@ -18,6 +18,14 @@
                 </div>
             </div>
 
+            <?php
+            // ДИНАМИЧЕСКИЙ ВЫВОД КОТА
+            $cat_image_url = '/image/funcat.png';
+            if ( is_user_logged_in() && function_exists('moneyneko_get_dynamic_cat_image') ) {
+                // Передаем настроение кота, чтобы получить нужную эмоцию
+                $cat_image_url = moneyneko_get_dynamic_cat_image( $mood_points );
+            }
+            ?>
             <img src="<?php echo esc_url( $cat_image_url ); ?>" alt="Манеки-нэко" class="cat-image">
 
             <?php if ( is_user_logged_in() ) : ?>
