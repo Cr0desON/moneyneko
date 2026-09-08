@@ -6,6 +6,7 @@
     </a>
 
     <div class="mn-header-right">
+
         <?php if ( ! $is_logged_in ) : ?>
             <a href="<?php echo esc_url( home_url( '/student-registration-page/' ) ); ?>" class="mn-btn mn-btn-blue">Регистрация</a>
             <a href="<?php echo esc_url( home_url( '/login/' ) ); ?>" class="mn-btn mn-btn-blue">Войти</a>
