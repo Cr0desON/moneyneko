@@ -25,3 +25,6 @@ require_once get_stylesheet_directory() . '/inc/tutor-lms-custom.php';
 
 // 6. Интеграция и хуки для GamiPress (Очки, Стрики, Кот)
 require_once get_stylesheet_directory() . '/inc/gamipress-hooks.php';
+
+// 7. Подключение Яндекс Метрики
+require_once get_stylesheet_directory() . '/inc/analytics.php';
