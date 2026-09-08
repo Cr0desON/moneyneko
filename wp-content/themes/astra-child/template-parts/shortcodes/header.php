@@ -12,9 +12,7 @@
             <a href="<?php echo esc_url( home_url( '/login/' ) ); ?>" class="mn-btn mn-btn-blue">Войти</a>
         <?php else : ?>
             <a href="<?php echo esc_url( home_url( '/profile/' ) ); ?>" class="mn-btn mn-btn-outline">Профиль</a>
-            <?php
-            echo get_avatar( $current_user->ID, 45, '', '', array( 'class' => 'mn-header-avatar' ) );
-            ?>
+            <?php echo get_avatar( $current_user->ID, 45, '', '', array( 'class' => 'mn-header-avatar' ) ); ?>
         <?php endif; ?>
     </div>
 </div>
