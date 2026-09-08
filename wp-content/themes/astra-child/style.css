@@ -4,6 +4,743 @@ Template: astra
 Description: Дочерняя тема для проекта MoneyNeko
 Version: 1.0.0
 */
+/* 1. Подключение внешних шрифтов */
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
+
+/* =========================================
+   СТИЛИ ИЗ АДМИНКИ (ASTRA)
+   ========================================= */
+
+/* Скрываем стандартную шапку темы Astra */
+.main-header-bar, #ast-desktop-header, #ast-mobile-header, .site-header {
+    display: none !important;
+}
+
+/* Глобальный фон: тетрадная клетка */
+body.tutor-lms, .tutor-wrap, .tutor-course-lesson-wrap,
+#tutor-single-entry-content, .tutor-course-single-content-wrapper,
+.tutor-single-lesson-wrap {
+    background-color: #fcfbf7 !important; /* Цвет бумаги */
+    background-image:
+            linear-gradient(#e0e0e0 1px, transparent 1px),
+            linear-gradient(90deg, #e0e0e0 1px, transparent 1px) !important;
+    background-size: 24px 24px !important;
+    background-position: center top !important;
+}
+
+/* =========================================
+   2. СТИЛИЗАЦИЯ БЛОКОВ (Скетч / Листы бумаги)
+   ========================================= */
+
+/* ОСНОВНОЙ ЛИСТ С ТЕКСТОМ УРОКА */
+.tutor-course-topic-single-body {
+    background-color: #ffffff !important;
+    border: 2px solid #2b2b2b !important;
+    border-radius: 8px !important;
+    padding: 40px 50px !important;
+    margin: 20px !important;
+    box-shadow: 2px 2px 0px #2b2b2b !important;
+    position: relative !important;
+    z-index: 1;
+}
+
+/* Декоративные канцелярские кнопки по углам листа (только для лекций) */
+.tutor-course-topic-single-body::before,
+.tutor-course-topic-single-body::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    width: 14px;
+    height: 14px;
+    background-color: #ff4757;
+    border-radius: 50%;
+    border: 2px solid #2b2b2b;
+    box-shadow: inset -2px -2px 0px rgba(0,0,0,0.2), 2px 2px 0px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+.tutor-course-topic-single-body::before { left: 20px; }
+.tutor-course-topic-single-body::after { right: 20px; }
+
+/* Убираем конфликтующие фоны внутри теста */
+.tutor-quiz-wrap div,
+.tutor-quiz-wrap form {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Убираем конфликтующие фоны внутри листа (лекции и тесты) */
+div.tutor-lesson-content-area,
+.tutor-course-topic-single-body .tutor-lesson-content,
+.tutor-course-single-sidebar-wrapper,
+    /* Добавляем внутренние блоки теста, чтобы они стали прозрачными на белом листе */
+.tutor-quiz-wrap div,
+.tutor-quiz-wrap form,
+.tutor-quiz-intro-wrap div {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    /* Убираем жесткие отступы только для общих блоков,
+       внутри теста оставляем стандартные, чтобы не ломать верстку */
+}
+
+/* Боковое меню (список уроков) */
+.tutor-lesson-sidebar {
+    background: white !important;
+    border: 2px solid #2b2b2b !important;
+    border-radius: 5px 20px 5px 15px / 15px 5px 15px 5px !important;
+    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.05) !important;
+    position: relative;
+    padding: 20px !important;
+    margin: 20px 0 20px 20px !important;
+}
+
+/* Декоративный скотч на боковом меню */
+.tutor-lesson-sidebar::before {
+    content: "";
+    position: absolute;
+    top: -15px; left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    width: 100px; height: 30px;
+    background: rgba(255, 255, 200, 0.8);
+    border-left: 2px dotted rgba(0,0,0,0.15);
+    border-right: 2px dotted rgba(0,0,0,0.15);
+    z-index: 10;
+}
+
+/* Активный урок в меню */
+.tutor-lesson-sidebar-item.is-active {
+    background: #eef5ff !important;
+    border: 1.5px solid #4a90e2 !important;
+    transform: scale(1.02) rotate(-1deg);
+    transition: all 0.3s ease;
+}
+
+.tutor-lesson-sidebar-item .tutor-icon-checkbox-checked {
+    color: #2ecc71 !important;
+}
+
+/* Декоративные канцелярские кнопки по углам листа */
+.tutor-course-topic-single-body::before,
+.tutor-course-topic-single-body::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    width: 14px;
+    height: 14px;
+    background-color: #ff4757; /* Красный цвет кнопок */
+    border-radius: 50%;
+    border: 2px solid #2b2b2b; /* Темная обводка */
+    box-shadow: inset -2px -2px 0px rgba(0,0,0,0.2), 2px 2px 0px rgba(0,0,0,0.1); /* Объем кнопок */
+    z-index: 10;
+}
+.tutor-course-topic-single-body::before {
+    left: 20px; /* Левая кнопка */
+}
+.tutor-course-topic-single-body::after {
+    right: 20px; /* Правая кнопка */
+}
+
+/* =========================================
+   3. ТИПОГРАФИКА И ВЕРХНИЕ ПАНЕЛИ
+   ========================================= */
+
+/* Рукописный шрифт Caveat */
+.tutor-lesson-sidebar .tutor-course-title,
+.tutor-topbar a, .tutor-topbar span, .tutor-topbar .tutor-topbar-title,
+.tutor-topbar .tutor-topbar-close, .tutor-topbar a i {
+    font-family: 'Caveat', cursive !important;
+    color: #2b2b2b !important;
+    font-size: 22px !important;
+}
+
+/* Исправляем шрифт названия курса в шапке (убираем Kelly Slab) */
+.tutor-single-page-top-bar .tutor-course-topic-single-header-title {
+    font-family: system-ui, -apple-system, sans-serif !important; /* Чистый стандартный шрифт */
+    color: #2b2b2b !important;
+    font-weight: 700 !important;
+    font-size: 20px !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase;
+}
+
+/* === ПЛАВАЮЩАЯ ШАПКА === */
+.tutor-topbar, .tutor-lesson-topbar, .tutor-course-top-sidebar,
+.tutor-topbar-wrapper, .tutor-single-page-top-bar {
+    background-color: #ffffff !important; /* Выделяем белым фоном, как лист бумаги */
+    border: 2px solid #2b2b2b !important; /* Темная обводка */
+    border-radius: 8px !important; /* Скругляем углы */
+    margin: 20px 20px 0 20px !important; /* Отступаем от краев экрана и спускаем вниз */
+    padding: 10px 20px !important;
+    box-shadow: 2px 2px 0px #2b2b2b !important; /* Небольшая тень в тон листа */
+    position: relative !important;
+    width: auto !important; /* Чтобы отступы по бокам сработали корректно */
+}
+.tutor-topbar-progress { display: none !important; }
+
+/* === ВИДИМЫЙ КРЕСТИК === */
+/* Бьем сразу по всем возможным классам крестика в Tutor LMS, чтобы точно сработало */
+.tutor-topbar-close,
+.tutor-single-page-top-bar .tutor-topbar-close,
+.tutor-icon-times {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #2b2b2b !important; /* Делаем иконку темно-серой */
+    font-size: 26px !important; /* Увеличиваем размер */
+    font-weight: bold !important;
+    opacity: 1 !important; /* Убираем стандартную прозрачность Tutor LMS */
+    background-color: #f2f2f2 !important; /* Выделяем светло-серым фоном-кнопкой */
+    border: 2px solid #2b2b2b !important;
+    border-radius: 6px !important;
+    width: 34px !important;
+    height: 34px !important;
+    text-decoration: none !important;
+    transition: all 0.1s ease !important;
+}
+
+/* Цвет самой иконки внутри (на случай если она перекрывает) */
+.tutor-topbar-close i, .tutor-topbar-close::before, .tutor-icon-times::before {
+    color: #2b2b2b !important;
+    opacity: 1 !important;
+}
+
+/* Эффект при наведении на крестик */
+.tutor-topbar-close:hover, .tutor-icon-times:hover {
+    background-color: #e0e0e0 !important;
+    transform: scale(0.95) !important;
+}
+
+/* =========================================
+   4. ИГРОВЫЕ КНОПКИ (С правильными отступами)
+   ========================================= */
+
+/* Контейнер кнопок (добавили боковые отступы) */
+.tutor-course-topic-single-footer {
+    background: transparent !important;
+    border: none !important;
+    margin-top: 30px !important;
+    padding: 10px 20px !important; /* Боковые отступы, чтобы кнопки не прилипали */
+    display: flex !important;
+    justify-content: space-between !important;
+}
+
+/* Стиль кнопок */
+.tutor-btn-secondary, .tutor-next-previous-pagination-wrap a, .tutor-btn-primary {
+    background-color: #4f80ff !important;
+    color: #ffffff !important;
+    border: 2px solid #2b2b2b !important;
+    border-radius: 8px !important;
+    box-shadow: 4px 4px 0px #2b2b2b !important;
+    padding: 12px 30px !important;
+    font-weight: bold !important;
+    font-family: 'Caveat', cursive, sans-serif !important;
+    font-size: 22px !important;
+    transition: all 0.15s ease !important;
+    display: inline-flex !important;
+    align-items: center; justify-content: center; text-align: center;
+}
+
+.tutor-btn-secondary span {
+    color: #ffffff !important;
+    font-size: 20px !important;
+}
+
+/* При наведении — легкое потемнение */
+.tutor-btn-secondary:hover,
+.tutor-next-previous-pagination-wrap a:hover,
+.tutor-btn-primary:hover {
+    background-color: #3b6be8 !important;
+    transform: none !important;
+    box-shadow: 4px 4px 0px #2b2b2b !important;
+}
+
+/* При клике — физическое продавливание */
+.tutor-btn-secondary:active,
+.tutor-next-previous-pagination-wrap a:active,
+.tutor-btn-primary:active {
+    background-color: #3b6be8 !important;
+    transform: translate(4px, 4px) !important;
+    box-shadow: 0px 0px 0px #2b2b2b !important;
+}
+
+/* =========================================
+   5. ТАБЛИЦЫ (Аккуратные, без выделений)
+   ========================================= */
+
+.tutor-lesson-content-area table, .entry-content table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 24px 0 !important;
+    background: #ffffff !important;
+    border: 2px solid #2b2b2b !important;
+    border-radius: 6px !important;
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.05) !important;
+    overflow: hidden !important;
+}
+
+.tutor-lesson-content-area table thead, .entry-content table thead {
+    background: #4f80ff !important;
+    color: #ffffff !important;
+    border-bottom: 2px solid #2b2b2b !important;
+}
+
+.tutor-lesson-content-area table th, .tutor-lesson-content-area table td {
+    padding: 14px 20px !important;
+    text-align: left !important;
+    border: none !important;
+}
+
+.tutor-lesson-content-area table tbody tr {
+    border-bottom: 1px dashed #cccccc !important;
+}
+
+.tutor-lesson-content-area table tbody tr:last-child {
+    border-bottom: none !important;
+}
+
+
+
+/* =========================================
+   6. АДАПТИВ ДЛЯ ТЕЛЕФОНОВ (КРИТИЧНО)
+   ========================================= */
+@media (max-width: 768px) {
+    /* Выстраиваем блоки друг под другом, чтобы текст не сплющивало */
+    .tutor-course-lesson-wrap {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* Убираем жесткие отступы у листа с текстом */
+    .tutor-course-topic-single-body {
+        padding: 25px 20px !important;
+        margin: 10px !important;
+        box-shadow: 4px 4px 0px #2b2b2b !important; /* Уменьшаем тень */
+        width: auto !important;
+    }
+
+    /* Растягиваем меню на всю ширину экрана */
+    .tutor-course-single-sidebar-wrapper, .tutor-lesson-sidebar {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 10px 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Настраиваем кнопки внизу для пальцев */
+    .tutor-course-topic-single-footer {
+        padding: 10px 0 !important;
+        flex-direction: column !important; /* Кнопки друг над другом */
+        gap: 15px !important; /* Расстояние между кнопками */
+    }
+
+    .tutor-btn-secondary, .tutor-next-previous-pagination-wrap a {
+        width: 100% !important; /* Кнопки на всю ширину */
+    }
+}
+
+/* Полностью скрываем мобильный футер Tutor LMS */
+.tutor-course-single-mobile-footer,
+#tutor-course-single-mobile-footer,
+.tutor-mobile-course-footer {
+    display: none !important;
+}
+
+/* Убираем лишний отступ внизу, который плагин добавляет для этого футера */
+body.tutor-lms {
+    padding-bottom: 20px !important;
+}
+
+/* =========================================
+   7. СТИЛИЗАЦИЯ ТЕСТОВ (QUIZ)
+   ========================================= */
+
+/* Главный лист для тестов */
+.tutor-quiz-wrapper,
+.tutor-single-quiz-wrapper,
+.tutor-quiz-header-wrap,
+#tutor-quiz-content {
+    background-color: #ffffff !important;
+    border: 2px solid #2b2b2b !important;
+    border-radius: 8px !important;
+    padding: 40px 50px !important;
+    margin: 20px !important;
+    box-shadow: 2px 2px 0px #2b2b2b !important;
+    position: relative !important;
+    z-index: 1;
+    box-sizing: border-box !important;
+}
+
+/* Канцелярские кнопки для тестов */
+.tutor-quiz-wrapper::before, .tutor-quiz-wrapper::after,
+.tutor-single-quiz-wrapper::before, .tutor-single-quiz-wrapper::after,
+.tutor-quiz-header-wrap::before, .tutor-quiz-header-wrap::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    width: 14px;
+    height: 14px;
+    background-color: #ff4757;
+    border-radius: 50%;
+    border: 2px solid #2b2b2b;
+    box-shadow: inset -2px -2px 0px rgba(0,0,0,0.2), 2px 2px 0px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+.tutor-quiz-wrapper::before, .tutor-single-quiz-wrapper::before, .tutor-quiz-header-wrap::before { left: 20px; }
+.tutor-quiz-wrapper::after, .tutor-single-quiz-wrapper::after, .tutor-quiz-header-wrap::after { right: 20px; }
+
+/* Убираем лишние рамки и фоны внутри самого теста (чтобы не было "квадрата в квадрате") */
+.tutor-quiz-wrapper div,
+.tutor-single-quiz-wrapper div {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* =========================================
+   8. ФОРМЫ ВХОДА, РЕГИСТРАЦИИ И СБРОСА ПАРОЛЯ (ОБНОВЛЕННЫЙ СТИЛЬ)
+   ========================================= */
+
+/* Делаем родительские контейнеры видимыми для скотча */
+.tutor-wrap,
+.tutor-page-wrap,
+.entry-content {
+    overflow: visible !important;
+}
+
+/* ГЛАВНАЯ ОБЕРТКА ДЛЯ ВСЕХ ФОРМ (Стиль листа бумаги как на странице Игры) */
+#tutor-registration-wrap,
+.wp-login-form,
+.password-recovery-form,
+div[style*="max-width: 400px"] {
+    background-color: #fffdf5 !important;
+    border: 3px solid #2c3e50 !important;
+    border-radius: 15px 255px 15px 225px / 225px 15px 255px 15px !important;
+    padding: 50px 40px !important;
+    box-shadow: 8px 12px 25px rgba(0,0,0,0.08) !important;
+    max-width: 600px !important;
+    margin: 60px auto !important;
+    position: relative !important;
+    overflow: visible !important;
+    z-index: 10 !important;
+}
+
+/* Декоративный красный скотч сверху ВСЕХ форм */
+#tutor-registration-wrap::before,
+.wp-login-form::before,
+.password-recovery-form::before,
+div[style*="max-width: 400px"]::before {
+    content: "" !important;
+    position: absolute !important;
+    top: -16px !important;
+    left: 50% !important;
+    transform: translateX(-50%) rotate(-2deg) !important;
+    width: 130px !important;
+    height: 36px !important;
+    background-color: #ff6b6b !important;
+    border-left: 3px dotted rgba(0,0,0,0.3) !important;
+    border-right: 3px dotted rgba(0,0,0,0.3) !important;
+    display: block !important;
+    z-index: 99 !important;
+}
+
+/* Заголовки внутри форм (Оставляем красивый курсив) */
+#tutor-registration-wrap h2,
+.wp-login-form h2,
+.password-recovery-form h2,
+div[style*="max-width: 400px"] h2 {
+    text-align: center !important;
+    font-family: 'Caveat', cursive !important;
+    font-size: 42px !important;
+    margin-bottom: 25px !important;
+    color: #1a252f !important;
+}
+
+/* Подписи к полям (Labels) - Читаемый шрифт */
+.wp-login-form label,
+.password-recovery-form label,
+div[style*="max-width: 400px"] label,
+#tutor-registration-wrap label {
+    font-family: 'Balsamiq Sans', cursive, sans-serif !important;
+    color: #2c3e50 !important;
+    font-weight: bold !important;
+    font-size: 18px !important;
+}
+
+/* Стилизация всех полей ввода (Inputs) - Читаемый шрифт */
+#tutor-registration-wrap input[type="text"],
+#tutor-registration-wrap input[type="email"],
+#tutor-registration-wrap input[type="password"],
+.wp-login-form input[type="text"],
+.wp-login-form input[type="password"],
+.password-recovery-form input[type="text"],
+div[style*="max-width: 400px"] input[type="password"] {
+    background-color: #ffffff !important;
+    border: 2px solid #2c3e50 !important;
+    border-radius: 6px !important;
+    box-shadow: inset 2px 2px 0px rgba(0,0,0,0.05) !important;
+    padding: 14px 15px !important;
+    color: #2c3e50 !important;
+    font-family: 'Balsamiq Sans', cursive, sans-serif !important;
+    font-size: 18px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin-top: 5px !important;
+}
+
+/* Главные кнопки отправки форм (Стиль кнопок со страницы Игры) */
+#tutor-registration-wrap button[type="submit"],
+.wp-login-form input[type="submit"],
+.password-recovery-form input[type="submit"],
+div[style*="max-width: 400px"] input[type="submit"] {
+    background-color: #3498db !important;
+    color: #ffffff !important;
+    border: 3px solid #2c3e50 !important;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px !important;
+    box-shadow: 3px 6px 0px #2c3e50 !important;
+    padding: 14px 30px !important;
+    font-weight: bold !important;
+    font-family: 'Balsamiq Sans', cursive, sans-serif !important;
+    font-size: 22px !important;
+    width: 100% !important;
+    transition: transform 0.1s, box-shadow 0.1s !important;
+    margin-top: 25px !important;
+    display: block !important;
+    cursor: pointer !important;
+}
+
+/* Эффект нажатия на кнопки */
+#tutor-registration-wrap button[type="submit"]:active,
+.wp-login-form input[type="submit"]:active,
+.password-recovery-form input[type="submit"]:active,
+div[style*="max-width: 400px"] input[type="submit"]:active {
+    transform: translateY(4px) !important;
+    box-shadow: 0px 2px 0px #2c3e50 !important;
+}
+#tutor-registration-wrap button[type="submit"]:hover,
+.wp-login-form input[type="submit"]:hover,
+.password-recovery-form input[type="submit"]:hover,
+div[style*="max-width: 400px"] input[type="submit"]:hover {
+    filter: brightness(1.1) !important;
+}
+
+/* Ссылки внутри форм (Забыли пароль, назад ко входу и т.д.) */
+.wp-login-form a,
+#tutor-registration-wrap a,
+.password-recovery-form a,
+div[style*="max-width: 400px"] a {
+    color: #3498db !important;
+    font-family: 'Balsamiq Sans', cursive, sans-serif !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    text-decoration: none !important;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+.wp-login-form a:hover,
+#tutor-registration-wrap a:hover,
+.password-recovery-form a:hover,
+div[style*="max-width: 400px"] a:hover {
+    color: #2980b9 !important;
+    border-bottom: 2px solid #2980b9;
+}
+
+/* Кастомные уведомления об ошибках и успехе */
+.password-recovery-form div[style*="#28a745"],
+div[style*="max-width: 400px"] div[style*="#dc3232"],
+.wp-login-form .login-error,
+.wp-login-form .reset-success {
+    padding: 15px !important;
+    border: 2px solid #2c3e50 !important;
+    border-radius: 6px !important;
+    margin-bottom: 20px !important;
+    font-family: 'Balsamiq Sans', cursive, sans-serif !important;
+    font-size: 16px !important;
+    text-align: center !important;
+    box-shadow: 3px 3px 0px rgba(0,0,0,0.1) !important;
+}
+
+/* Ошибка (красная рамка) */
+div[style*="max-width: 400px"] div[style*="#dc3232"],
+.wp-login-form .login-error {
+    background-color: #ffe8e8 !important;
+    border-left: 6px solid #e74c3c !important;
+    color: #c0392b !important;
+}
+
+/* Успех (зеленая рамка) */
+.password-recovery-form div[style*="#28a745"],
+.wp-login-form .reset-success {
+    background-color: #e8f5e9 !important;
+    border-left: 6px solid #2ecc71 !important;
+    color: #27ae60 !important;
+}
+
+/* =========================================
+   ВТОРИЧНЫЕ КНОПКИ (например, "Да, покинуть тест")
+   ========================================= */
+.tutor-btn-outline-primary,
+.tutor-modal-btn-cancel,
+.tutor-btn-ghost {
+    background-color: #ffffff !important; /* Белый фон */
+    color: #2b2b2b !important; /* Темный текст */
+    border: 2px solid #2b2b2b !important; /* Темная обводка */
+    border-radius: 8px !important;
+    box-shadow: 4px 4px 0px #2b2b2b !important; /* Скетч-тень */
+    padding: 12px 30px !important;
+    font-weight: bold !important;
+    font-family: 'Caveat', cursive, sans-serif !important;
+    font-size: 22px !important;
+    transition: all 0.15s ease !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Цвет текста внутри вторичной кнопки */
+.tutor-btn-outline-primary span,
+.tutor-modal-btn-cancel span,
+.tutor-btn-ghost span {
+    color: #2b2b2b !important;
+}
+
+/* При наведении — слегка сереет */
+.tutor-btn-outline-primary:hover,
+.tutor-modal-btn-cancel:hover,
+.tutor-btn-ghost:hover {
+    background-color: #f2f2f2 !important;
+    transform: none !important;
+    box-shadow: 4px 4px 0px #2b2b2b !important;
+}
+
+/* При клике — физическое продавливание */
+.tutor-btn-outline-primary:active,
+.tutor-modal-btn-cancel:active,
+.tutor-btn-ghost:active {
+    background-color: #e0e0e0 !important;
+    transform: translate(4px, 4px) !important;
+    box-shadow: 0px 0px 0px #2b2b2b !important;
+}
+
+/* =========================================
+   10. ТАБЛИЦЫ В ЛЕКЦИЯХ (Единые границы)
+   ========================================= */
+
+/* Ограничиваем область только лекциями */
+.tutor-course-topic-single-body table,
+.tutor-lesson-content-area table {
+    width: 100% !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    margin: 25px 0 !important;
+    background-color: #ffffff !important;
+    border: 1px solid #2c3e50 !important; /* Уменьшили внешнюю рамку до 1px */
+    border-radius: 8px !important;
+    box-shadow: 3px 4px 0px rgba(44, 62, 80, 0.05) !important;
+    font-family: 'Balsamiq Sans', cursive, sans-serif !important;
+    color: #2c3e50 !important;
+    overflow: hidden !important;
+}
+
+/* Шапка таблицы */
+.tutor-course-topic-single-body table thead tr td,
+.tutor-course-topic-single-body table thead tr th,
+.tutor-lesson-content-area table thead tr td,
+.tutor-lesson-content-area table thead tr th {
+    background-color: #eef5ff !important;
+    color: #2c3e50 !important;
+    font-weight: bold !important;
+    font-size: 18px !important;
+    padding: 12px 15px !important;
+    text-align: left !important;
+    border-bottom: 1px solid #2c3e50 !important; /* Единая толщина и цвет */
+    border-right: 1px solid #2c3e50 !important; /* Единая толщина и цвет */
+}
+
+/* Убираем границу справа у последней ячейки шапки */
+.tutor-course-topic-single-body table thead tr td:last-child,
+.tutor-course-topic-single-body table thead tr th:last-child,
+.tutor-lesson-content-area table thead tr td:last-child,
+.tutor-lesson-content-area table thead tr th:last-child {
+    border-right: none !important;
+}
+
+/* Обычные ячейки данных */
+.tutor-course-topic-single-body table tbody tr td,
+.tutor-lesson-content-area table tbody tr td {
+    padding: 12px 15px !important;
+    font-size: 16px !important;
+    line-height: 1.5 !important;
+    border-bottom: 1px solid #2c3e50 !important; /* Единая толщина и цвет */
+    border-right: 1px solid #2c3e50 !important; /* Единая толщина и цвет */
+    vertical-align: top !important;
+}
+
+/* Убираем границу справа у последней колонки */
+.tutor-course-topic-single-body table tbody tr td:last-child,
+.tutor-lesson-content-area table tbody tr td:last-child {
+    border-right: none !important;
+}
+
+/* Убираем нижнюю границу у последней строки */
+.tutor-course-topic-single-body table tbody tr:last-child td,
+.tutor-lesson-content-area table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+/* Легкий и ненавязчивый эффект при наведении */
+.tutor-course-topic-single-body table tbody tr:hover td,
+.tutor-lesson-content-area table tbody tr:hover td {
+    background-color: #fafbfc !important;
+}
+
+/* =========================================
+   11. КНОПКА "НАВЕРХ" (Scroll to Top)
+   ========================================= */
+
+#ast-scroll-top {
+    background-color: #3498db !important; /* Возвращаем фирменный синий цвет */
+    border: 2px solid #2c3e50 !important; /* Темный маркерный контур */
+    border-radius: 50% 40% 50% 40% !important; /* Форма нарисованного кружка */
+    box-shadow: 2px 4px 0px #2c3e50 !important; /* Жесткая скетч-тень */
+    transition: all 0.15s ease !important;
+    width: 45px !important;
+    height: 45px !important;
+
+    /* Центрируем содержимое без использования flex, чтобы не ломать исчезновение кнопки */
+    text-align: center !important;
+    line-height: 42px !important;
+}
+
+/* Внутренняя обертка иконки */
+#ast-scroll-top .ast-icon {
+    display: inline-block !important;
+    line-height: 0 !important;
+}
+
+/* Сама стрелочка */
+#ast-scroll-top .ast-icon svg {
+    color: #ffffff !important; /* Белая стрелка для контраста */
+    fill: #ffffff !important;
+    width: 20px !important;
+    height: 20px !important;
+    position: relative !important;
+    top: -2px !important; /* Немного приподнимаем стрелку для идеального центра */
+}
+
+/* Эффект при наведении курсора */
+#ast-scroll-top:hover {
+    background-color: #2980b9 !important; /* Слегка затемняем синий при наведении */
+    transform: translateY(-2px) !important; /* Слегка приподнимается */
+    box-shadow: 2px 6px 0px #2c3e50 !important; /* Тень увеличивается */
+}
+
+/* Эффект при клике (кнопка "продавливается") */
+#ast-scroll-top:active {
+    transform: translateY(2px) !important; /* Опускается вниз */
+    box-shadow: 0px 1px 0px #2c3e50 !important; /* Тень прячется */
+}
 
 /* ==========================================
    ШОРТКОД: ДОСКА ЛИДЕРОВ
