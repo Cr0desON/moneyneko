@@ -178,27 +178,6 @@ div.tutor-lesson-content-area,
 }
 .tutor-topbar-progress { display: none !important; }
 
-/* === ВИДИМЫЙ КРЕСТИК === */
-/* Бьем сразу по всем возможным классам крестика в Tutor LMS, чтобы точно сработало */
-.tutor-topbar-close,
-.tutor-single-page-top-bar .tutor-topbar-close,
-.tutor-icon-times {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    color: #2b2b2b !important; /* Делаем иконку темно-серой */
-    font-size: 26px !important; /* Увеличиваем размер */
-    font-weight: bold !important;
-    opacity: 1 !important; /* Убираем стандартную прозрачность Tutor LMS */
-    background-color: #f2f2f2 !important; /* Выделяем светло-серым фоном-кнопкой */
-    border: 2px solid #2b2b2b !important;
-    border-radius: 6px !important;
-    width: 34px !important;
-    height: 34px !important;
-    text-decoration: none !important;
-    transition: all 0.1s ease !important;
-}
-
 /* Цвет самой иконки внутри (на случай если она перекрывает) */
 .tutor-topbar-close i, .tutor-topbar-close::before, .tutor-icon-times::before {
     color: #2b2b2b !important;
@@ -1083,5 +1062,129 @@ html, body {
         inset: 0;
         background: rgba(0,0,0,0.4);
         z-index: 9997;
+    }
+}
+
+/* ==============================================================
+   ЕДИНЫЙ СТИЛЬ КНОПОК В ШАПКЕ УРОКА (выход + содержание)
+   ============================================================== */
+
+/* === КНОПКА-КРЕСТИК "ВЫХОД" === */
+.tutor-course-topics-sidebar-toggler,
+.tutor-topbar-close,
+.tutor-single-page-top-bar .tutor-topbar-close,
+.tutor-icon-times {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #2b2b2b !important;
+    font-size: 26px !important;
+    font-weight: bold !important;
+    opacity: 1 !important;
+    background-color: #f2f2f2 !important;
+    border: 2px solid #2b2b2b !important;
+    border-radius: 6px !important;
+    width: 34px !important;
+    height: 34px !important;
+    text-decoration: none !important;
+    transition: all 0.1s ease !important;
+    cursor: pointer;
+}
+
+.tutor-topbar-close:hover,
+.tutor-icon-times:hover {
+    background-color: #e0e0e0 !important;
+    transform: scale(0.95) !important;
+}
+
+/* === КНОПКА "СОДЕРЖАНИЕ" — только косметика, display НЕ трогаем,
+   его контролирует сам Tutor через свои tutor-d-* классы === */
+.tutor-course-topics-sidebar-offcanvas-toggler,
+[tutor-course-topics-sidebar-offcanvas-toggler] {
+    align-items: center !important;
+    justify-content: center !important;
+    color: #2b2b2b !important;
+    background-color: #f2f2f2 !important;
+    border: 2px solid #2b2b2b !important;
+    border-radius: 6px !important;
+    width: 34px !important;
+    height: 34px !important;
+    text-decoration: none !important;
+    transition: all 0.1s ease !important;
+    cursor: pointer;
+}
+.tutor-course-topics-sidebar-offcanvas-toggler:hover,
+[tutor-course-topics-sidebar-offcanvas-toggler]:hover {
+    background-color: #e0e0e0 !important;
+    transform: scale(0.95) !important;
+}
+.tutor-course-topics-sidebar-offcanvas-toggler::before,
+[tutor-course-topics-sidebar-offcanvas-toggler]::before {
+    font-size: 18px;
+    line-height: 1;
+}
+
+/* Ссылка "на курс" больше не нужна нигде — прячем насовсем */
+.tutor-course-topic-single-header a[href*="/courses/"] {
+    display: none !important;
+}
+
+/* Скрываем надпись прогресса полностью */
+.tutor-fs-7.tutor-mr-20 {
+    display: none !important;
+}
+
+/* === ПАНЕЛЬ "СОДЕРЖАНИЕ" — плавно выезжает справа, ничего не ломая === */
+@media (max-width: 768px) {
+    .tutor-lesson-sidebar,
+    .tutor-course-single-sidebar-wrapper,
+    .tutor-course-sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 85% !important;
+        max-width: 340px !important;
+        margin: 0 !important;
+        z-index: 99999 !important;
+        overflow-y: auto !important;
+        transform: translateX(100%) !important;
+        transition: transform 0.3s ease !important;
+        box-shadow: -6px 0 20px rgba(0,0,0,0.25) !important;
+    }
+
+    body.mn-toc-open .tutor-lesson-sidebar,
+    body.mn-toc-open .tutor-course-single-sidebar-wrapper {
+        transform: translateX(0) !important;
+    }
+
+    body.mn-toc-open::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 9997;
+    }
+
+    .tutor-iconic-btn.tutor-d-flex{
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: #2b2b2b !important;
+        font-size: 26px !important;
+        font-weight: bold !important;
+        opacity: 1 !important;
+        background-color: #f2f2f2 !important;
+        border: 2px solid #2b2b2b !important;
+        border-radius: 6px !important;
+        width: 34px !important;
+        height: 34px !important;
+        text-decoration: none !important;
+        transition: all 0.1s ease !important;
+        cursor: pointer;
+    }
+
+    .tutor-course-topics-sidebar-toggler {
+        display: none !important;
     }
 }
