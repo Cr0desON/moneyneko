@@ -299,8 +299,6 @@ div.tutor-lesson-content-area,
     border-bottom: none !important;
 }
 
-
-
 /* =========================================
    6. АДАПТИВ ДЛЯ ТЕЛЕФОНОВ (КРИТИЧНО)
    ========================================= */
@@ -997,4 +995,93 @@ body .tutor-topbar-mark-btn,
 body .tutor-course-finish-btn-container,
 body .tutor-course-lesson-single-footer .tutor-btn-done {
     display: none !important;
+}
+
+/* ==============================================================
+   ИСПРАВЛЕНИЕ МОБИЛЬНОЙ ВЕРСТКИ СТРАНИЦ ОБУЧЕНИЯ (Tutor LMS)
+   ============================================================== */
+
+/* 1. Убираем родной мобильный прогресс-бар Tutor снизу */
+[class*="tutor-spotlight-mobile-progress"] {
+    display: none !important;
+}
+
+/* Страховка от горизонтального скролла в принципе */
+html, body {
+    overflow-x: hidden !important;
+}
+
+@media (max-width: 768px) {
+
+    /* 2. Любой враппер урока/тренажёра — в колонку, без бокового сжатия */
+    .tutor-course-single-wrap,
+    .tutor-course-lesson-wrap,
+    .tutor-course-single-content-wrapper,
+    .tutor-course-topic-single-content {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* 3. Сайдбар с содержанием курса — скрыт по умолчанию на телефоне */
+    .tutor-lesson-sidebar,
+    .tutor-course-single-sidebar-wrapper,
+    .tutor-course-sidebar {
+        display: none !important;
+    }
+
+    /* 4. Контент урока — всегда занимает всю ширину экрана */
+    .tutor-course-content-right,
+    .tutor-course-topic-single-body,
+    .tutor-lesson-content-area {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 1 auto !important;
+        box-sizing: border-box !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    /* ---- Кнопка "Содержание курса" и выезжающая панель ---- */
+
+    .mn-toc-toggle {
+        position: fixed;
+        bottom: 16px;
+        right: 16px;
+        z-index: 9998;
+        background: #4f80ff;
+        color: #fff;
+        border: 2px solid #2b2b2b;
+        border-radius: 50px;
+        box-shadow: 3px 3px 0 #2b2b2b;
+        padding: 10px 18px;
+        font-family: 'Caveat', cursive, sans-serif;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    body.mn-toc-open .tutor-lesson-sidebar,
+    body.mn-toc-open .tutor-course-single-sidebar-wrapper {
+        display: block !important;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 85%;
+        max-width: 340px;
+        margin: 0 !important;
+        z-index: 99999;
+        overflow-y: auto;
+        box-shadow: -6px 0 20px rgba(0,0,0,0.25) !important;
+    }
+
+    body.mn-toc-open::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 9997;
+    }
 }
