@@ -1003,13 +1003,6 @@ html, body {
         max-width: 100% !important;
     }
 
-    /* 3. Сайдбар с содержанием курса — скрыт по умолчанию на телефоне */
-    .tutor-lesson-sidebar,
-    .tutor-course-single-sidebar-wrapper,
-    .tutor-course-sidebar {
-        display: none !important;
-    }
-
     /* 4. Контент урока — всегда занимает всю ширину экрана */
     .tutor-course-content-right,
     .tutor-course-topic-single-body,
@@ -1020,48 +1013,6 @@ html, body {
         box-sizing: border-box !important;
         margin-left: 0 !important;
         margin-right: 0 !important;
-    }
-
-    /* ---- Кнопка "Содержание курса" и выезжающая панель ---- */
-
-    .mn-toc-toggle {
-        position: fixed;
-        bottom: 16px;
-        right: 16px;
-        z-index: 9998;
-        background: #4f80ff;
-        color: #fff;
-        border: 2px solid #2b2b2b;
-        border-radius: 50px;
-        box-shadow: 3px 3px 0 #2b2b2b;
-        padding: 10px 18px;
-        font-family: 'Caveat', cursive, sans-serif;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    body.mn-toc-open .tutor-lesson-sidebar,
-    body.mn-toc-open .tutor-course-single-sidebar-wrapper {
-        display: block !important;
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 85%;
-        max-width: 340px;
-        margin: 0 !important;
-        z-index: 99999;
-        overflow-y: auto;
-        box-shadow: -6px 0 20px rgba(0,0,0,0.25) !important;
-    }
-
-    body.mn-toc-open::after {
-        content: '';
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.4);
-        z-index: 9997;
     }
 }
 
@@ -1149,6 +1100,7 @@ html, body {
         z-index: 99999 !important;
         overflow-y: auto !important;
         transform: translateX(100%) !important;
+        visibility: hidden !important;
         transition: transform 0.3s ease !important;
         box-shadow: -6px 0 20px rgba(0,0,0,0.25) !important;
     }
@@ -1156,6 +1108,7 @@ html, body {
     body.mn-toc-open .tutor-lesson-sidebar,
     body.mn-toc-open .tutor-course-single-sidebar-wrapper {
         transform: translateX(0) !important;
+        visibility: visible !important;
     }
 
     body.mn-toc-open::after {
@@ -1186,5 +1139,30 @@ html, body {
 
     .tutor-course-topics-sidebar-toggler {
         display: none !important;
+    }
+
+    /* "Материалы курса" — закреплённая шапка панели, список уроков скроллится под ней */
+    .tutor-lesson-sidebar,
+    .tutor-course-single-sidebar-wrapper {
+        display: flex !important;
+        flex-direction: column !important;
+        padding-top: 0 !important;
+    }
+
+    .tutor-lesson-sidebar > *:first-child,
+    .tutor-course-single-sidebar-wrapper > *:first-child {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 5 !important;
+        background: #ffffff !important;
+        flex-shrink: 0 !important;
+        padding-top: 25px !important;
+    }
+
+    /* Декоративный скотч теперь тоже "прилипает" сверху вместе с шапкой */
+    .tutor-lesson-sidebar::before {
+        position: sticky !important;
+        top: 10px !important;
+        z-index: 6 !important;
     }
 }
