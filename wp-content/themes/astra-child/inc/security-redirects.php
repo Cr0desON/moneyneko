@@ -36,3 +36,46 @@ add_action( 'template_redirect', function() {
         exit;
     }
 } );
+
+//Редирект на нашу страницу логина
+add_action( 'template_redirect', function () {
+    if ( is_user_logged_in() ) {
+        return;
+    }
+
+    $protected_types = apply_filters( 'mn_protected_content_types', array() );
+
+    // Если список пуст — значит фильтр не сработал, ничего не блокируем
+    if ( empty( $protected_types ) ) {
+        return;
+    }
+
+    $is_protected     = is_singular( $protected_types );
+    $is_protected     = apply_filters( 'mn_is_protected_request', $is_protected );
+
+    if ( $is_protected ) {
+        $current_url = home_url( add_query_arg( null, null ) );
+        wp_safe_redirect( home_url( '/login/?redirect_to=' . urlencode( $current_url ) ) );
+        exit;
+    }
+}, 1 );
+
+add_filter( 'login_url', function ( $login_url, $redirect ) {
+    // Не трогаем поведение админки — пусть работает как штатный WordPress
+    if ( is_admin() ) {
+        return $login_url;
+    }
+
+    $login_url = home_url( '/login/' );
+    if ( ! empty( $redirect ) ) {
+        $login_url = add_query_arg( 'redirect_to', urlencode( $redirect ), $login_url );
+    }
+    return $login_url;
+}, 10, 2 );
+
+add_filter( 'mn_is_protected_request', function ( $is_protected ) {
+    if ( is_page( mn_get_protected_pages() ) ) {
+        $is_protected = true;
+    }
+    return $is_protected;
+} );
