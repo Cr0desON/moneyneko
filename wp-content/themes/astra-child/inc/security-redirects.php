@@ -61,8 +61,11 @@ add_action( 'template_redirect', function () {
 }, 1 );
 
 add_filter( 'login_url', function ( $login_url, $redirect ) {
-    // Не трогаем поведение админки — пусть работает как штатный WordPress
-    if ( is_admin() ) {
+    global $pagenow;
+
+    // Не трогаем ссылки, которые формирует сам wp-login.php
+    // (подтверждение почты администратора, сброс пароля и т.п.)
+    if ( is_admin() || ( isset( $pagenow ) && $pagenow === 'wp-login.php' ) ) {
         return $login_url;
     }
 
@@ -78,4 +81,26 @@ add_filter( 'mn_is_protected_request', function ( $is_protected ) {
         $is_protected = true;
     }
     return $is_protected;
+} );
+
+// Если через форму /wp-admin/ вошёл НЕ администратор — сразу кидаем на игру
+add_filter( 'login_redirect', function ( $redirect_to, $request, $user ) {
+    if ( isset( $user->roles ) && is_array( $user->roles ) ) {
+        if ( ! in_array( 'administrator', $user->roles, true ) ) {
+            return home_url( '/game' );
+        }
+    }
+    return $redirect_to;
+}, 10, 3 );
+
+// Если НЕ администратор уже залогинен и вручную открывает /wp-admin/ — тоже на игру
+add_action( 'admin_init', function () {
+    // Пропускаем ajax-запросы (wp-admin/admin-ajax.php), чтобы не сломать работу сайта
+    if ( wp_doing_ajax() ) {
+        return;
+    }
+    if ( ! current_user_can( 'administrator' ) ) {
+        wp_redirect( home_url( '/game' ) );
+        exit;
+    }
 } );
