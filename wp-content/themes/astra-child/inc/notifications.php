@@ -15,8 +15,14 @@ function moneyneko_send_onesignal_push( $user_id, $heading, $message ) {
     $fields = array(
         'app_id' => $app_id,
         'include_external_user_ids' => array( strval($user_id) ), 
-        'contents' => array( "ru" => $message ),
-        'headings' => array( "ru" => $heading )
+        'contents' => array( 
+            "en" => $message, 
+            "ru" => $message 
+        ),
+        'headings' => array( 
+            "en" => $heading, 
+            "ru" => $heading 
+        )
     );
 
     $ch = curl_init();
