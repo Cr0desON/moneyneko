@@ -5,10 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * 1. Базовая функция отправки Push-уведомлений через API OneSignal
  */
 function moneyneko_send_onesignal_push( $user_id, $heading, $message ) {
-    // Автоматически берем ключи из настроек плагина в админке
-    $onesignal_settings = get_option('OnesignalWPSettings');
-    $app_id = isset($onesignal_settings['app_id']) ? $onesignal_settings['app_id'] : '';
-    $rest_api_key = isset($onesignal_settings['app_rest_api_key']) ? $onesignal_settings['app_rest_api_key'] : '';
+    // Безопасно берем ключи из wp-config.php (без хардкода в Git)
+    $app_id = defined('MONEYNEKO_ONESIGNAL_APP_ID') ? MONEYNEKO_ONESIGNAL_APP_ID : '';
+    $rest_api_key = defined('MONEYNEKO_ONESIGNAL_REST_KEY') ? MONEYNEKO_ONESIGNAL_REST_KEY : '';
 
     if ( empty($app_id) || empty($rest_api_key) ) return false;
 
