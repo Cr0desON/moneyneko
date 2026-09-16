@@ -28,7 +28,9 @@ function custom_login_form_shortcode() {
             if ( is_wp_error($user) ) {
                 $login_error = 'Неверный логин или пароль. Попробуйте ещё раз.';
             } else {
-                $redirect_to = isset($_POST['redirect_to']) ? $_POST['redirect_to'] : home_url('/game');
+                $redirect_to = isset( $_GET['redirect_to'] )
+                    ? esc_url_raw( $_GET['redirect_to'] )
+                    : home_url( '/game' );
                 wp_redirect($redirect_to);
                 exit;
             }
