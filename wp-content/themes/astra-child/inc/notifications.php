@@ -38,6 +38,7 @@ function moneyneko_send_onesignal_push( $user_id, $heading, $message ) {
  * 2. Событийные пуши: Падение настроения (Срабатывает мгновенно)
  */
 add_action( 'gamipress_deduct_points_to_user', 'moneyneko_mood_drop_push', 10, 3 );
+add_action( 'gamipress_revoke_points_to_user', 'moneyneko_mood_drop_push', 10, 3 );
 function moneyneko_mood_drop_push( $user_id, $points, $points_type ) {
     if ( $points_type !== 'mood-points' ) return;
 
