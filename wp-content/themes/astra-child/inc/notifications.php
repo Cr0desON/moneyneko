@@ -148,3 +148,27 @@ function moneyneko_process_streak_reminders() {
         }
     }
 }
+
+/**
+ * 4. Связываем ID пользователя WordPress с его подпиской в OneSignal
+ */
+add_action('wp_head', 'moneyneko_onesignal_link_user');
+function moneyneko_onesignal_link_user() {
+    // Выводим скрипт только если пользователь авторизован
+    if ( is_user_logged_in() ) {
+        $user_id = get_current_user_id();
+        ?>
+        <script>
+            window.OneSignalDeferred = window.OneSignalDeferred || [];
+            window.OneSignalDeferred.push(function(OneSignal) {
+                // Привязываем WP ID к OneSignal (работает и для новых, и для старых версий API)
+                if (typeof OneSignal.login === 'function') {
+                    OneSignal.login("<?php echo esc_js($user_id); ?>");
+                } else if (typeof OneSignal.setExternalUserId === 'function') {
+                    OneSignal.setExternalUserId("<?php echo esc_js($user_id); ?>");
+                }
+            });
+        </script>
+        <?php
+    }
+}
