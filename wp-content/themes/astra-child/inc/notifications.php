@@ -11,15 +11,23 @@ function moneyneko_send_onesignal_push( $user_id, $heading, $message ) {
 
     if ( empty($app_id) || empty($rest_api_key) ) return false;
 
+    // Достаем имя пользователя
+    $user_info = get_userdata( $user_id );
+    $user_name = !empty($user_info->first_name) ? $user_info->first_name : $user_info->display_name;
+
+    // Склеиваем имя и исходное сообщение. 
+    // Получится: "Имя! Исходный текст сообщения"
+    $personalized_message = $user_name . '! ' . $message;
+
     $fields = array(
         'app_id' => $app_id,
         'include_external_user_ids' => array( strval($user_id) ), 
         'contents' => array( 
-            "en" => $message, 
-            "ru" => $message 
+            "en" => $personalized_message, 
+            "ru" => $personalized_message 
         ),
         'headings' => array( 
-            "en" => $heading, 
+            "en" => $heading,
             "ru" => $heading 
         )
     );
@@ -156,18 +164,17 @@ function moneyneko_process_streak_reminders() {
 }
 
 /**
- * 4. Связываем ID пользователя WordPress с его подпиской в OneSignal
+ * 4. Связываем ID пользователя WordPress с его подпиской (БЕЗ администраторов)
  */
 add_action('wp_head', 'moneyneko_onesignal_link_user');
 function moneyneko_onesignal_link_user() {
-    // Выводим скрипт только если пользователь авторизован
-    if ( is_user_logged_in() ) {
+    // Привязываем скрипт ТОЛЬКО если юзер авторизован И он НЕ администратор
+    if ( is_user_logged_in() && ! current_user_can( 'manage_options' ) ) {
         $user_id = get_current_user_id();
         ?>
         <script>
             window.OneSignalDeferred = window.OneSignalDeferred || [];
             window.OneSignalDeferred.push(function(OneSignal) {
-                // Привязываем WP ID к OneSignal (работает и для новых, и для старых версий API)
                 if (typeof OneSignal.login === 'function') {
                     OneSignal.login("<?php echo esc_js($user_id); ?>");
                 } else if (typeof OneSignal.setExternalUserId === 'function') {
