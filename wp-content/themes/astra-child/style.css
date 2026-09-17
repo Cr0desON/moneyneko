@@ -1166,3 +1166,119 @@ html, body {
         z-index: 6 !important;
     }
 }
+
+/* ==============================================================
+   Стили для профиля пользователя и графиков активности
+   ============================================================== */
+
+.sketch-profile-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+.sketch-profile-left { flex: 0 0 auto; }
+.sketch-profile-right { flex: 1 1 320px; max-width: 420px; }
+
+.mn-heatmap {
+    background: #fff;
+    border: 2px solid #2c3e50;
+    border-radius: 12px;
+    padding: 16px 18px;
+    box-shadow: 3px 5px 0px rgba(44,62,80,0.08);
+    font-family: 'Balsamiq Sans', cursive, sans-serif;
+    overflow-x: auto;
+}
+.mn-heatmap-title {
+    font-family: 'Caveat', cursive; font-size: 32px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: #2c3e50;
+}
+.mn-heatmap-months {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 14px;
+    gap: 3px;
+    margin: 0 0 4px 26px;
+    font-size: 11px;
+    color: #7f8c8d;
+    font-weight: bold;
+    white-space: nowrap;
+}
+.mn-heatmap-month--empty { visibility: hidden; }
+.mn-heatmap-body { display: flex; gap: 4px; }
+.mn-heatmap-daylabels {
+    display: grid;
+    grid-template-rows: repeat(7, 12px);
+    gap: 3px;
+    font-size: 10px;
+    color: #7f8c8d;
+    text-align: right;
+    width: 22px;
+    line-height: 12px;
+}
+.mn-heatmap-grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 14px;
+    gap: 3px;
+}
+.mn-heatmap-col {
+    display: grid;
+    grid-template-rows: repeat(7, 12px);
+    gap: 3px;
+}
+.mn-heatmap-cell {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+    border: 1px solid rgba(44,62,80,0.08);
+}
+.mn-heatmap-cell--future { background: transparent; border: none; }
+.mn-heatmap-cell--lvl0 { background: #ebedf0; }
+.mn-heatmap-cell--lvl1 { background: #c6e9d2; }
+.mn-heatmap-cell--lvl2 { background: #86efac; }
+.mn-heatmap-cell--lvl3 { background: #4caf7d; }
+.mn-heatmap-cell--lvl4 { background: #217a46; }
+.mn-heatmap-legend {
+    display: flex; align-items: center; gap: 4px;
+    margin-top: 8px; font-size: 11px; color: #7f8c8d;
+}
+.mn-heatmap-legend .mn-heatmap-cell { width: 10px; height: 10px; }
+
+@media (max-width: 768px) {
+    .sketch-profile-top { flex-direction: column; align-items: center; text-align: center;  gap: 10px !important; margin-bottom: 0 !important;}
+    .sketch-profile-right { max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+    .mn-heatmap-months {
+        grid-auto-columns: 11px;
+        gap: 2px;
+        margin-left: 18px;
+        font-size: 9px;
+    }
+    .mn-heatmap-daylabels {
+        grid-template-rows: repeat(7, 9px);
+        gap: 2px;
+        width: 16px;
+        font-size: 8px;
+        line-height: 9px;
+    }
+    .mn-heatmap-grid {
+        grid-auto-columns: 11px;
+        gap: 2px;
+    }
+    .mn-heatmap-col {
+        grid-template-rows: repeat(7, 9px);
+        gap: 2px;
+    }
+    .mn-heatmap-cell {
+        width: 9px;
+        height: 9px;
+        border-radius: 2px;
+    }
+    .mn-heatmap-legend {
+        font-size: 10px;
+        flex-wrap: wrap;
+    }
+}
