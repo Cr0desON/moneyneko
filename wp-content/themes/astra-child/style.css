@@ -1246,8 +1246,43 @@ html, body {
 .mn-heatmap-legend .mn-heatmap-cell { width: 10px; height: 10px; }
 
 @media (max-width: 768px) {
-    .sketch-profile-top { flex-direction: column; align-items: center; text-align: center;  gap: 10px !important; margin-bottom: 0 !important;}
-    .sketch-profile-right { max-width: 100%; }
+    .sketch-profile-top {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 15px !important;
+        margin-bottom: 0 !important;
+        height: auto !important;
+    }
+
+    .sketch-profile-left {
+        flex: none !important;
+        width: 100%;
+        margin-bottom: 0 !important;
+    }
+
+    .sketch-profile-right {
+        max-width: 100%;
+        width: 100%;
+        flex: none !important; /* Сбрасывает flex-basis: 320px, убирая растяжение по высоте */
+        height: auto !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Контролируемый отступ перед заголовком "Ваши очки" */
+    .sketch-profile > .sketch-section-title {
+        margin-top: 35px !important;
+    }
+
+    /* Уменьшаем отступ под блоком очков (было 40px), притягивая "Топ игроков" выше */
+    .points-box {
+        margin-bottom: 15px;
+    }
+
+    /* Оптимизируем отступ под таблицей "Топ игроков" перед кнопками */
+    .sketch-mini-lb {
+        margin-bottom: 65px; /* Оставляем комфортное место до кнопок */
+    }
 }
 
 @media (max-width: 480px) {
