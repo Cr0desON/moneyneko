@@ -37,22 +37,49 @@ if ( ! function_exists( 'mn_log_activity' ) ) {
 }
 
 // ==========================================
-// СБОР ДАННЫХ: факт визита на сайт
+// СБОР ДАННЫХ
 // ==========================================
-// Раз в день для авторизованного юзера. Надёжнее, чем wp_login —
-// сработает, даже если человек не разлогинивался.
+// 1) Факт визита — +1 за первый заход в день.
+// 2) Реальный прогресс — сверяем баланс "очков прохождения" (progress-points)
+//    с тем, что было при прошлой загрузке страницы. Разница = сколько XP
+//    пользователь заработал (урок, тренажёр, тест, стрик-бонус — не важно откуда).
+//    Это надёжнее, чем ловить конкретный хук GamiPress: баланс очков точно
+//    актуален всегда, его же показывает блок "Ваши очки" в профиле.
 add_action( 'init', function () {
     if ( is_admin() || ! is_user_logged_in() ) return;
 
     $user_id = get_current_user_id();
     $today   = current_time( 'Y-m-d' );
-    $already = get_user_meta( $user_id, '_mn_last_activity_date', true );
 
-    if ( $already !== $today ) {
+    // Визит
+    $last_visit = get_user_meta( $user_id, '_mn_last_activity_date', true );
+    if ( $last_visit !== $today ) {
         mn_log_activity( $user_id, 1 );
         update_user_meta( $user_id, '_mn_last_activity_date', $today );
     }
-} );
+
+    // Реальный прогресс по очкам
+    if ( class_exists( 'GamiPress' ) ) {
+        $current_points = (int) gamipress_get_user_points( $user_id, 'progress-points' );
+        $snapshot_raw   = get_user_meta( $user_id, '_mn_points_snapshot', true );
+
+        if ( $snapshot_raw === '' ) {
+            // Первый запуск для этого пользователя — просто фиксируем точку
+            // отсчёта, дельту не считаем (истории до этого момента нет)
+            update_user_meta( $user_id, '_mn_points_snapshot', $current_points );
+        } else {
+            $last_points = (int) $snapshot_raw;
+            $delta = $current_points - $last_points;
+
+            if ( $delta > 0 ) {
+                mn_log_activity( $user_id, $delta );
+            }
+            if ( $delta !== 0 ) {
+                update_user_meta( $user_id, '_mn_points_snapshot', $current_points );
+            }
+        }
+    }
+}, 20 );
 
 // ==========================================
 // РЕНДЕР ТЕПЛОВОЙ КАРТЫ
@@ -60,11 +87,11 @@ add_action( 'init', function () {
 
 if ( ! function_exists( 'mn_activity_level' ) ) {
     function mn_activity_level( $count ) {
-        if ( $count <= 0 ) return 0;
-        if ( $count == 1 ) return 1;
-        if ( $count <= 3 ) return 2;
-        if ( $count <= 6 ) return 3;
-        return 4;
+        if ( $count <= 0 )  return 0;
+        if ( $count <= 1 )  return 1; // просто зашёл, без очков
+        if ( $count <= 9 )  return 2; // небольшая активность (частично прошёл)
+        if ( $count <= 24 ) return 3; // урок целиком и больше
+        return 4;                    // урок + тренажёр + тест и подобное
     }
 }
 
@@ -78,8 +105,8 @@ if ( ! function_exists( 'mn_render_activity_heatmap' ) ) {
 
         // Короткие названия месяцев на русском — не полагаемся на локаль сервера
         $months_ru = array(
-            1 => 'Янв', 2 => 'Фев', 3 => 'Мар', 4 => 'Апр', 5 => 'Май', 6 => 'Июн',
-            7 => 'Июл', 8 => 'Авг', 9 => 'Сен', 10 => 'Окт', 11 => 'Ноя', 12 => 'Дек',
+                1 => 'Янв', 2 => 'Фев', 3 => 'Мар', 4 => 'Апр', 5 => 'Май', 6 => 'Июн',
+                7 => 'Июл', 8 => 'Авг', 9 => 'Сен', 10 => 'Окт', 11 => 'Ноя', 12 => 'Дек',
         );
 
         $today = new DateTime( current_time( 'Y-m-d' ) );
@@ -97,9 +124,9 @@ if ( ! function_exists( 'mn_render_activity_heatmap' ) ) {
                 $date_str = $cursor->format( 'Y-m-d' );
                 $count    = isset( $log[ $date_str ] ) ? (int) $log[ $date_str ] : 0;
                 $week[]   = array(
-                    'date'  => $date_str,
-                    'count' => $count,
-                    'level' => ( $cursor > $today ) ? -1 : mn_activity_level( $count ),
+                        'date'  => $date_str,
+                        'count' => $count,
+                        'level' => ( $cursor > $today ) ? -1 : mn_activity_level( $count ),
                 );
                 $cursor->modify( '+1 day' );
             }
@@ -138,7 +165,7 @@ if ( ! function_exists( 'mn_render_activity_heatmap' ) ) {
                                 }
                                 ?>
                                 <span class="mn-heatmap-cell mn-heatmap-cell--lvl<?php echo (int) $day['level']; ?>"
-                                      title="<?php echo esc_attr( $day['count'] . ' активностей — ' . date( 'd.m.Y', strtotime( $day['date'] ) ) ); ?>"></span>
+                                      title="<?php echo esc_attr( $day['count'] . ' очков активности — ' . date( 'd.m.Y', strtotime( $day['date'] ) ) ); ?>"></span>
                             <?php endforeach; ?>
                         </div>
                     <?php endforeach; ?>

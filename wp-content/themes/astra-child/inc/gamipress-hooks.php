@@ -154,17 +154,3 @@ function moneyneko_get_dynamic_cat_image( $mood_points ) {
     }
     return '/image/funcat.png';
 }
-
-// ==========================================
-// 2.4 УЧЁТ АКТИВНОСТИ ДЛЯ ТЕПЛОВОЙ КАРТЫ ПРОФИЛЯ
-// ==========================================
-// Увеличивает "вес" дня в inc/activity-heatmap.php, когда пользователь
-// реально прошёл тренажёр/урок (получил progress-points), а не просто зашёл.
-if ( ! function_exists( 'moneyneko_log_activity_on_progress_points' ) ) {
-    function moneyneko_log_activity_on_progress_points( $user_id, $points, $points_type, $reason, $log_id ) {
-        if ( $points_type === 'progress-points' && function_exists( 'mn_log_activity' ) ) {
-            mn_log_activity( $user_id, 2 );
-        }
-    }
-    add_action( 'gamipress_awarded_points', 'moneyneko_log_activity_on_progress_points', 10, 5 );
-}
