@@ -3,6 +3,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 add_action( 'wp_head', 'moneyneko_yandex_metrika', 20 );
 function moneyneko_yandex_metrika() {
+    // 1. Мета-тег для Вебмастера
+    echo '<meta name="yandex-verification" content="7f91f2a128cfaace" />' . "\n";
+
     // Не выводим метрику для администраторов, чтобы не портить статистику своими же заходами
     if ( current_user_can( 'manage_options' ) ) return; 
     
