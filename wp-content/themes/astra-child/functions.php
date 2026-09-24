@@ -34,3 +34,14 @@ require_once get_stylesheet_directory() . '/inc/activity-heatmap.php';
 
 // 9. Подключение уведомлений
 require_once get_stylesheet_directory() . '/inc/notifications.php';
+
+// 10. Подключение PWA-манифеста и иконок для iOS/Android
+add_action( 'wp_head', 'moneyneko_add_pwa_manifest' );
+function moneyneko_add_pwa_manifest() {
+    // Ссылка на манифест
+    echo '<link rel="manifest" href="/manifest.json">' . "\n";
+    // Цвет шторки браузера на мобильных
+    echo '<meta name="theme-color" content="#ffffff">' . "\n";
+    // Специальная иконка для рабочего стола iPhone 
+    echo '<link rel="apple-touch-icon" href="/image/icon-192.png">' . "\n";
+}
