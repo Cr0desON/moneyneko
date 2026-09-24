@@ -1,12 +1,22 @@
 <?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?>
 <div class="sketch-profile">
-    <div class="sketch-avatar-wrap">
-        <?php echo get_avatar( $user_id, 120 ); ?>
+    <div class="sketch-profile-top">
+        <div class="sketch-profile-left">
+            <div class="sketch-avatar-wrap">
+                <?php echo get_avatar( $user_id, 120 ); ?>
+            </div>
+            <div class="sketch-greeting">
+                <h1>Привет, <?php echo esc_html( $current_user->display_name ); ?>! 👋</h1>
+                <p class="sketch-subtitle">Добро пожаловать в ваш личный кабинет</p>
+            </div>
+        </div>
+
+        <div class="sketch-profile-right">
+            <div class="sketch-section-title mn-heatmap-title">📈 График активности</div>
+            <?php echo mn_render_activity_heatmap( $user_id ); ?>
+        </div>
     </div>
-    <div class="sketch-greeting">
-        <h1>Привет, <?php echo esc_html( $current_user->display_name ); ?>! 👋</h1>
-        <p class="sketch-subtitle">Добро пожаловать в ваш личный кабинет</p>
-    </div>
+
     <div class="sketch-section-title">🏆 Ваши очки</div>
     <div class="points-box">
         <span class="points-val"><?php echo $user_points; ?></span> XP
