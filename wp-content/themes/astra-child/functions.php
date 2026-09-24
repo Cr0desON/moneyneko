@@ -29,5 +29,8 @@ require_once get_stylesheet_directory() . '/inc/gamipress-hooks.php';
 // 7. Подключение Яндекс Метрики
 require_once get_stylesheet_directory() . '/inc/analytics.php';
 
-// 8. Подключение уведомлений
+// 8. Подключение графиков активности пользователя
+require_once get_stylesheet_directory() . '/inc/activity-heatmap.php';
+
+// 9. Подключение уведомлений
 require_once get_stylesheet_directory() . '/inc/notifications.php';
