@@ -160,17 +160,11 @@
             $('mn2-summary-box').style.display = 'block'; 
             
             retryBtn.textContent = 'Перейти дальше ➔';
-            retryBtn.style.background = '#4caf50'; 
-            
-            retryBtn.onclick = function() {
-                const nativeNextBtn = document.querySelector('.tutor-course-topic-single-footer .tutor-single-course-content-next a, .tutor-course-topic-single-footer .tutor-single-course-content-next button, .tutor-topbar-mark-btn');
-                
-                if (nativeNextBtn) {
-                    nativeNextBtn.click();
-                } else {
-                    alert('Отличная работа! Теперь нажмите кнопку завершения урока в верхней или нижней части экрана.');
-                    $('mn2-result-popup').style.display = 'none'; 
-                }
+            retryBtn.style.background = '#4caf50';
+
+            retryBtn.onclick = function () {
+                retryBtn.textContent = 'Сохраняем… ⏳';
+                window.MNFinish.go();
             };
         } else {
             $('mn2-result-emoji').textContent = '🤔';

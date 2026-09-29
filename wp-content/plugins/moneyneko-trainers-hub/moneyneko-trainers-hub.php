@@ -146,3 +146,21 @@ add_shortcode( 'mn_trainer_m4', function () {
     include MN_HUB_PATH . 'trainers/m4-hidden-object/widget.php';
     return ob_get_clean();
 } );
+
+// 9. Правильный редирект после прохождения урока
+add_action( 'wp_enqueue_scripts', function () {
+    if ( ! is_singular( [ 'lesson', 'mn_trainer' ] ) ) return;
+
+    $id      = get_the_ID();
+    $next_id = 0;
+    if ( function_exists( 'tutor_utils' ) ) {
+        $c       = tutor_utils()->get_course_prev_next_contents_by_id( $id );
+        $next_id = $c->next_id ?? 0;
+    }
+
+    wp_register_script( 'mn-finish', MN_HUB_URL . 'assets/mn-finish.js', [], MN_HUB_VERSION, true );
+    wp_localize_script( 'mn-finish', 'mnFinishData', [
+        'nextUrl' => $next_id ? get_permalink( $next_id ) : '',
+    ] );
+    wp_enqueue_script( 'mn-finish' );
+}, 20 );

@@ -211,15 +211,9 @@
             // КНОПКА "ПЕРЕЙТИ ДАЛЬШЕ"
             retryBtn.textContent = 'Перейти дальше ➔';
             retryBtn.style.backgroundColor = '#48bb78';
-            retryBtn.onclick = function() {
-                const nativeNextBtn = document.querySelector('.tutor-course-topic-single-footer .tutor-single-course-content-next a, .tutor-course-topic-single-footer .tutor-single-course-content-next button, .tutor-topbar-mark-btn');
-
-                if (nativeNextBtn) {
-                    nativeNextBtn.click();
-                } else {
-                    alert('Отличная работа! Теперь нажмите кнопку завершения урока в верхней или нижней части экрана.');
-                    resultBlock.style.display = 'none';
-                }
+            retryBtn.onclick = function () {
+                retryBtn.textContent = 'Сохраняем… ⏳';
+                window.MNFinish.go();
             };
         }
 

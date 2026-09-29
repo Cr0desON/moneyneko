@@ -248,10 +248,14 @@
 
                 retryBtn.textContent = 'Перейти дальше ➔';
                 retryBtn.style.backgroundColor = '#48bb78';
-                retryBtn.onclick = function() {
-                    const nativeNextBtn = document.querySelector('.tutor-course-topic-single-footer .tutor-single-course-content-next a, .tutor-course-topic-single-footer .tutor-single-course-content-next button, .tutor-topbar-mark-btn');
-                    if (nativeNextBtn) {
-                        nativeNextBtn.click();
+                retryBtn.onclick = function () {
+                    const nextLink = document.querySelector('.tutor-single-course-content-next a');
+                    const markBtn  = document.querySelector('.tutor-topbar-mark-btn');
+
+                    if (nextLink) {
+                        nextLink.click();
+                    } else if (markBtn) {
+                        markBtn.click();
                     } else {
                         alert('Отличная работа! Теперь нажмите кнопку завершения урока в верхней или нижней части экрана.');
                         $('mn-m2-result').style.display = 'none';
