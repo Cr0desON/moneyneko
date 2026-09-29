@@ -2,20 +2,25 @@
 
 <div class="mn2-wrapper" id="mn-trainer-m4">
 
-    <div id="mn2-phase-intro" class="mn2-card mn2-active-phase">
-        <div class="mn2-badge">Задание</div>
-        <h2 class="mn2-title">В поисках потерянного чека</h2>
-        <p class="mn2-text" style="text-align: left;">
-            Студент Ваня решил взять финансы под контроль. Для начала нужно найти все его чеки в комнате и разделить их на три категории:
-            <br><br>
-            <b>1. Обязательные:</b> Базовые нужды для жизни и учебы.<br>
-            <b>2. Необязательные:</b> Комфорт, без которого можно обойтись.<br>
-            <b>3. Желательные:</b> Развлечения и "хотелки".
-        </p>
-        <p class="mn2-text">
-            Помоги найти все чеки. Но чем быстрее ты найдешь, тем лучше. Таймер запустится, как только ты нажмешь кнопку ниже!
-        </p>
-        <button class="mn2-btn mn2-btn-primary" id="mn2-btn-start">Начать поиск 🔍</button>
+    <div id="mn2-phase-intro" class="mn2-card mn2-active-phase mn4-intro">
+        <div class="mn4-intro-content">
+            <div class="mn4-icon-wrap">🧾</div>
+            <h2 class="mn4-title">В поисках потерянного чека</h2>
+            <p class="mn4-subtitle">
+                Студент Ваня решил взять финансы под контроль. Найди все его чеки в комнате и раздели их на три категории!
+            </p>
+
+            <div class="mn4-instruction">
+                <strong>Категории трат:</strong><br>
+                1. 🏠 <b>Обязательные</b> — базовые нужды для жизни и учебы.<br>
+                2. ☕ <b>Необязательные</b> — комфорт, без которого можно обойтись.<br>
+                3. 🎮 <b>Желательные</b> — развлечения и «хотелки».<br>
+                <br>
+                ⏱ Чем быстрее найдёшь чеки, тем лучше. Таймер запустится после нажатия кнопки!
+            </div>
+
+            <button class="mn4-btn-start" id="mn2-btn-start">Начать поиск 🔍</button>
+        </div>
     </div>
 
     <div id="mn2-phase-search" class="mn2-phase-hidden mn2-card">
