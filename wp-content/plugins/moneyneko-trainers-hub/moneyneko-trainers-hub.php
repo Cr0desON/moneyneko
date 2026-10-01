@@ -65,9 +65,9 @@ add_action( 'wp_enqueue_scripts', function () {
     // Регистрируем ресурсы Тренажера 2
     wp_register_style( 'mn-m2-style', MN_HUB_URL . 'trainers/m2-kiosk/style.css', [], MN_HUB_VERSION );
     wp_register_script( 'mn-m2-script', MN_HUB_URL . 'trainers/m2-kiosk/script.js', [], MN_HUB_VERSION, true );
-    // Регистрируем ресурсы тренажера 4
-    wp_register_style( 'mn-m4-style', MN_HUB_URL . 'trainers/m4-hidden-object/style.css', [], MN_HUB_VERSION );
-    wp_register_script( 'mn-m4-script', MN_HUB_URL . 'trainers/m4-hidden-object/script.js', [], MN_HUB_VERSION, true );
+    // Регистрируем ресурсы Тренажера 3
+    wp_register_style( 'mn-m3-style', MN_HUB_URL . 'trainers/m3-hidden-object/style.css', [], MN_HUB_VERSION );
+    wp_register_script( 'mn-m3-script', MN_HUB_URL . 'trainers/m3-hidden-object/script.js', [], MN_HUB_VERSION, true );
 } );
 
 // 4. ПОДКЛЮЧЕНИЕ ШАБЛОНА ДЛЯ СТРАНИЦ ТРЕНАЖЕРОВ
@@ -110,22 +110,23 @@ add_shortcode( 'mn_trainer_m2', function () {
     return ob_get_clean();
 } );
 
-
-// 7. ШОРТКОД ДЛЯ ТРЕНАЖЕРА : [mn_trainer_m4]
-add_shortcode( 'mn_trainer_m4', function () {
+// ==========================================
+// 7. ШОРТКОД ДЛЯ 3 ТРЕНАЖЕРА : [mn_trainer_m3]
+// ==========================================
+add_shortcode( 'mn_trainer_m3', function () {
     if ( ! is_singular( [ 'lesson', 'mn_trainer' ] ) ) return '';
 
     // Включаем ресурсы только при вызове шорткода
-    wp_enqueue_style( 'mn-m4-style' );
-    wp_enqueue_script( 'mn-m4-script' );
+    wp_enqueue_style( 'mn-m3-style' );
+    wp_enqueue_script( 'mn-m3-script' );
 
     // Передаем путь к картинке комнаты в JS
-    wp_localize_script( 'mn-m4-script', 'mnTrainerM4Data', [
-        'bgUrl' => MN_HUB_URL . 'trainers/m4-hidden-object/room-bg.jpg'
+    wp_localize_script( 'mn-m3-script', 'mnTrainerm3Data', [
+        'bgUrl' => MN_HUB_URL . 'trainers/m3-hidden-object/room-bg.jpg'
     ] );
 
     ob_start();
-    include MN_HUB_PATH . 'trainers/m4-hidden-object/widget.php';
+    include MN_HUB_PATH . 'trainers/m3-hidden-object/widget.php';
     return ob_get_clean();
 } );
 
