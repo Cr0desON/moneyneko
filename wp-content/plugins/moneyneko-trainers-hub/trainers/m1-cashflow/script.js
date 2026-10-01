@@ -269,7 +269,7 @@
                 retryBtn.textContent = 'Попробовать ещё раз';
                 retryBtn.style.backgroundColor = '#f56565';
                 retryBtn.onclick = function() {
-                    $('mn--result').style.display = 'none';
+                    resultBlock.style.display = 'none';
                 };
             }
             resultBlock.style.display = 'flex';
