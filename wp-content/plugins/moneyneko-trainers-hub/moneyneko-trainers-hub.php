@@ -62,9 +62,9 @@ add_action( 'wp_enqueue_scripts', function () {
     // Регистрируем ресурсы Тренажера 1
     wp_register_style( 'mn-m1-style', MN_HUB_URL . 'trainers/m1-cashflow/style.css', [], MN_HUB_VERSION );
     wp_register_script( 'mn-m1-script', MN_HUB_URL . 'trainers/m1-cashflow/script.js', [], MN_HUB_VERSION, true );
-    // Регистрируем ресурсы Модуля 3 
-    wp_register_style( 'mn-m3-style', MN_HUB_URL . 'trainers/m3-kiosk/style.css', [], MN_HUB_VERSION );
-    wp_register_script( 'mn-m3-script', MN_HUB_URL . 'trainers/m3-kiosk/script.js', [], MN_HUB_VERSION, true );
+    // Регистрируем ресурсы Тренажера 2
+    wp_register_style( 'mn-m2-style', MN_HUB_URL . 'trainers/m2-kiosk/style.css', [], MN_HUB_VERSION );
+    wp_register_script( 'mn-m2-script', MN_HUB_URL . 'trainers/m2-kiosk/script.js', [], MN_HUB_VERSION, true );
     // Регистрируем ресурсы тренажера 4
     wp_register_style( 'mn-m4-style', MN_HUB_URL . 'trainers/m4-hidden-object/style.css', [], MN_HUB_VERSION );
     wp_register_script( 'mn-m4-script', MN_HUB_URL . 'trainers/m4-hidden-object/script.js', [], MN_HUB_VERSION, true );
@@ -97,16 +97,16 @@ add_shortcode( 'mn_trainer_m1', function () {
 
 
 // ==========================================
-// 6. ШОРТКОД ДЛЯ ТРЕНАЖЕРА МОДУЛЯ 3: [mn_trainer_m3]
+// 6. ШОРТКОД ДЛЯ 2 ТРЕНАЖЕРА : [mn_trainer_m2]
 // ==========================================
-add_shortcode( 'mn_trainer_m3', function () {
+add_shortcode( 'mn_trainer_m2', function () {
     if ( ! is_singular( [ 'lesson', 'mn_trainer' ] ) ) return '';
 
-    wp_enqueue_style( 'mn-m3-style' );
-    wp_enqueue_script( 'mn-m3-script' );
+    wp_enqueue_style( 'mn-m2-style' );
+    wp_enqueue_script( 'mn-m2-script' );
 
     ob_start();
-    include MN_HUB_PATH . 'trainers/m3-kiosk/widget.php';
+    include MN_HUB_PATH . 'trainers/m2-kiosk/widget.php';
     return ob_get_clean();
 } );
 
