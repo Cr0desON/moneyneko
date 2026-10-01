@@ -59,12 +59,9 @@ add_filter( 'tutor_course_content_icon', function( $icon, $post_type ) {
 
 // 3. РЕГИСТРАЦИЯ ВСЕХ РЕСУРСОВ (БЕЗ ИХ АВТОМАТИЧЕСКОЙ ЗАГРУЗКИ)
 add_action( 'wp_enqueue_scripts', function () {
-    // Регистрируем ресурсы Модуля 1
-    wp_register_style( 'mn-m1-style', MN_HUB_URL . 'trainers/m1-sorting/style.css', [], MN_HUB_VERSION );
-    wp_register_script( 'mn-m1-script', MN_HUB_URL . 'trainers/m1-sorting/script.js', [], MN_HUB_VERSION, true );
-    // Регистрируем ресурсы Модуля 2
-    wp_register_style( 'mn-m2-style', MN_HUB_URL . 'trainers/m2-cashflow/style.css', [], MN_HUB_VERSION );
-    wp_register_script( 'mn-m2-script', MN_HUB_URL . 'trainers/m2-cashflow/script.js', [], MN_HUB_VERSION, true );
+    // Регистрируем ресурсы Тренажера 1
+    wp_register_style( 'mn-m1-style', MN_HUB_URL . 'trainers/m1-cashflow/style.css', [], MN_HUB_VERSION );
+    wp_register_script( 'mn-m1-script', MN_HUB_URL . 'trainers/m1-cashflow/script.js', [], MN_HUB_VERSION, true );
     // Регистрируем ресурсы Модуля 3 
     wp_register_style( 'mn-m3-style', MN_HUB_URL . 'trainers/m3-kiosk/style.css', [], MN_HUB_VERSION );
     wp_register_script( 'mn-m3-script', MN_HUB_URL . 'trainers/m3-kiosk/script.js', [], MN_HUB_VERSION, true );
@@ -73,22 +70,7 @@ add_action( 'wp_enqueue_scripts', function () {
     wp_register_script( 'mn-m4-script', MN_HUB_URL . 'trainers/m4-hidden-object/script.js', [], MN_HUB_VERSION, true );
 } );
 
-
-// 4. ШОРТКОД ДЛЯ ТРЕНАЖЕРА МОДУЛЯ 1: [mn_trainer_m1]
-add_shortcode( 'mn_trainer_m1', function () {
-    if ( ! is_singular( [ 'lesson', 'mn_trainer' ] ) ) return '';
-
-    // Подключаем ресурсы только при вызове шорткода (Защита скорости сайта)
-    wp_enqueue_style( 'mn-m1-style' );
-    wp_enqueue_script( 'mn-m1-script' );
-
-    ob_start();
-    include MN_HUB_PATH . 'trainers/m1-sorting/widget.php';
-    return ob_get_clean();
-} );
-
-
-// 5. ПОДКЛЮЧЕНИЕ ШАБЛОНА ДЛЯ СТРАНИЦ ТРЕНАЖЕРОВ
+// 4. ПОДКЛЮЧЕНИЕ ШАБЛОНА ДЛЯ СТРАНИЦ ТРЕНАЖЕРОВ
 add_filter( 'template_include', function ( $template ) {
     if ( is_singular( 'mn_trainer' ) ) {
         // Код использует единый файл шаблона для красивого вывода внутри интерфейса TutorLMS
@@ -99,23 +81,23 @@ add_filter( 'template_include', function ( $template ) {
 }, 99 );
 
 // ==========================================
-// 6. ШОРТКОД ДЛЯ ТРЕНАЖЕРА МОДУЛЯ 2: [mn_trainer_m2]
+// 5. ШОРТКОД ДЛЯ 1 ТРЕНАЖЕРА: [mn_trainer_m1]
 // ==========================================
-add_shortcode( 'mn_trainer_m2', function () {
+add_shortcode( 'mn_trainer_m1', function () {
     if ( ! is_singular( [ 'lesson', 'mn_trainer' ] ) ) return '';
 
     // Подключаем ресурсы
-    wp_enqueue_style( 'mn-m2-style' );
-    wp_enqueue_script( 'mn-m2-script' );
+    wp_enqueue_style( 'mn-m1-style' );
+    wp_enqueue_script( 'mn-m1-script' );
 
     ob_start();
-    include MN_HUB_PATH . 'trainers/m2-cashflow/widget.php';
+    include MN_HUB_PATH . 'trainers/m1-cashflow/widget.php';
     return ob_get_clean();
 } );
 
 
 // ==========================================
-// 7. ШОРТКОД ДЛЯ ТРЕНАЖЕРА МОДУЛЯ 3: [mn_trainer_m3]
+// 6. ШОРТКОД ДЛЯ ТРЕНАЖЕРА МОДУЛЯ 3: [mn_trainer_m3]
 // ==========================================
 add_shortcode( 'mn_trainer_m3', function () {
     if ( ! is_singular( [ 'lesson', 'mn_trainer' ] ) ) return '';
@@ -129,7 +111,7 @@ add_shortcode( 'mn_trainer_m3', function () {
 } );
 
 
-// 8. ШОРТКОД ДЛЯ ТРЕНАЖЕРА : [mn_trainer_m2]
+// 7. ШОРТКОД ДЛЯ ТРЕНАЖЕРА : [mn_trainer_m4]
 add_shortcode( 'mn_trainer_m4', function () {
     if ( ! is_singular( [ 'lesson', 'mn_trainer' ] ) ) return '';
 
@@ -147,7 +129,7 @@ add_shortcode( 'mn_trainer_m4', function () {
     return ob_get_clean();
 } );
 
-// 9. Правильный редирект после прохождения урока
+// 8. Правильный редирект после прохождения урока
 add_action( 'wp_enqueue_scripts', function () {
     if ( ! is_singular( [ 'lesson', 'mn_trainer' ] ) ) return;
 
