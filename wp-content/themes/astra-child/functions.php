@@ -35,7 +35,10 @@ require_once get_stylesheet_directory() . '/inc/activity-heatmap.php';
 // 9. Подключение уведомлений
 require_once get_stylesheet_directory() . '/inc/notifications.php';
 
-// 10. Подключение PWA-манифеста и иконок для iOS/Android
+// 10. Туториал для новых пользователей (Driver.js)
+require_once get_stylesheet_directory() . '/inc/tutorial.php';
+
+// 11. Подключение PWA-манифеста и иконок для iOS/Android
 add_action( 'wp_head', 'moneyneko_add_pwa_manifest' );
 function moneyneko_add_pwa_manifest() {
     // Ссылка на манифест
