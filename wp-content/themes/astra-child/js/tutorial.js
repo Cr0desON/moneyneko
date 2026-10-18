@@ -8,6 +8,11 @@
  *  2) Повторный показ по кнопке «?» (replay = true) — в базу НИЧЕГО не пишет.
  *     Включается на всю вкладку (sessionStorage), поэтому тур идёт по страницам цепочкой
  *     (игра → урок → лидерборд → профиль), в том числе у «старых» пользователей.
+ *
+ * Шаги-переходы (см. js/tutorial-steps.js):
+ *  - go: true            — подсвеченная ссылка кликабельна, тур продолжится на странице, куда она ведёт;
+ *  - go: true, back: true — то же, но после тура той страницы пользователь автоматически возвращается
+ *                           и тур продолжается со следующего шага (дальше — с части game2, game3 …).
  */
 (function () {
     'use strict';
@@ -29,6 +34,9 @@
 
     var PAGES      = ['game', 'leaderboard', 'module', 'profile'];
     var REPLAY_KEY = 'mn_tutorial_replay'; // sessionStorage: JSON-массив страниц, где повтор уже показан
+    var FLOW_KEY   = 'mn_tutorial_flow';   // sessionStorage: «ушли показывать другую страницу и вернёмся»
+    var FLOW_TTL   = 30 * 60 * 1000;       // забываем незавершённый переход через 30 минут
+    var BACK_BTN   = 'Вернуться к игре!';  // подпись последней кнопки на странице, после которой вернёмся назад
     var CAT_TITLE  = '<span class="mn-tour-cat" aria-hidden="true">🐱</span> Грош';
     var current    = null; // активный экземпляр тура
 
@@ -55,6 +63,36 @@
         if (list.indexOf(page) === -1) { list.push(page); }
         var allDone = PAGES.every(function (p) { return list.indexOf(p) !== -1; });
         setReplay(allDone ? null : list);
+    }
+
+    // ---------- Переход «показать другую страницу и вернуться» ----------
+    // Состояние: { phase: 'out' | 'back', page, key, index, url, replay, t }
+    //   out  — ушли со страницы page (часть тура key, шаг index) показывать другую страницу
+    //   back — тур той страницы закончен, вернулись на url и продолжаем с шага index + 1
+
+    function getFlow() {
+        try {
+            var raw = sessionStorage.getItem(FLOW_KEY);
+            var f = raw ? JSON.parse(raw) : null;
+            if (f && Date.now() - f.t > FLOW_TTL) { f = null; sessionStorage.removeItem(FLOW_KEY); }
+            return f;
+        } catch (e) { return null; }
+    }
+
+    function setFlow(f) {
+        try {
+            if (f === null) { sessionStorage.removeItem(FLOW_KEY); }
+            else { sessionStorage.setItem(FLOW_KEY, JSON.stringify(f)); }
+        } catch (e) {}
+    }
+
+    // 'game2' → 'game' (страница, к которой относится часть тура)
+    function pageOf(key) { return key.replace(/\d+$/, ''); }
+
+    // 'game' → 'game2', 'game2' → 'game3'
+    function nextKey(key) {
+        var m = key.match(/^(.*?)(\d*)$/);
+        return m[1] + ((parseInt(m[2], 10) || 1) + 1);
     }
 
     // ---------- Определение страницы ----------
@@ -107,15 +145,23 @@
         } catch (e) { /* без сети просто покажем туториал в следующий раз */ }
     }
 
+    // Страница пройдена: у нового пользователя пишем в базу, в режиме повтора — только в sessionStorage
+    function markPageDone(page, replay) {
+        if (replay) { replayMarkDone(page); } else { saveSeen(page); }
+    }
+
     // ---------- Сборка и запуск ----------
 
-    // beforeLeave вызывается перед переходом по ссылке на шаге с go: true
-    function buildSteps(page, beforeLeave) {
-        var defs = allSteps[page] || [];
+    // leave(def, index) вызывается перед переходом по ссылке на шаге с go: true
+    // opts.from — с какого шага начинать; opts.returning — после этого тура вернёмся назад (кнопка «Вернуться»)
+    function buildSteps(key, leave, opts) {
+        var defs = allSteps[key] || [];
+        var from = opts.from || 0;
         var ctx  = getContext();
         var out  = [];
 
-        defs.forEach(function (def) {
+        defs.forEach(function (def, index) {
+            if (index < from) { return; }
             var step = {
                 popover: {
                     title: CAT_TITLE,
@@ -135,32 +181,56 @@
 
                 // Шаг-переход: подсвеченная ссылка кликабельна, кнопка в окошке ведёт по ней же
                 if (def.go && el.href) {
+                    var onLeave = function () { leave(def, index); };
                     step.popover.onNextClick = function () {
-                        beforeLeave();
+                        onLeave();
                         window.location.href = el.href;
                     };
                     step.onHighlighted = function () {
                         // Driver.js блокирует клики по подсвеченному элементу (глобальная опция) — снимаем блок с этой ссылки
                         el.classList.remove('driver-no-interaction');
-                        el.addEventListener('click', beforeLeave, { once: true });
+                        el.addEventListener('click', onLeave, { once: true });
                     };
                 }
             }
             out.push(step);
         });
 
+        // Тур страницы, после которого вернёмся назад: подписываем последнюю кнопку понятно
+        if (opts.returning && out.length) {
+            var last = out[out.length - 1].popover;
+            last.nextBtnText = BACK_BTN;
+            last.doneBtnText = BACK_BTN;
+        }
+
         return out;
     }
 
-    function startTour(page, replay) {
+    // key — ключ тура: 'game', 'game2', 'leaderboard' …; opts: { from, returning, resumed }
+    function startTour(key, replay, opts) {
+        opts = opts || {};
+        var page    = pageOf(key);
         var skipped = false;
         var tour;
 
-        function beforeLeave() {
-            if (replay) { replayMarkDone(page); } else { saveSeen(page); }
+        // Перед уходом по ссылке-шагу: либо запоминаем, где вернуться, либо отмечаем страницу пройденной
+        function leave(def, index) {
+            var flow = getFlow();
+            if (opts.returning && flow && flow.phase === 'out') {
+                // мы на странице, куда ушли «в гости»: ссылка ведёт обратно — тур игры продолжится с шага после ухода
+                markPageDone(page, replay);
+                flow.phase = 'back';
+                setFlow(flow);
+            } else if (def.back) {
+                setFlow({ phase: 'out', page: page, key: key, index: index,
+                    url: window.location.href, replay: !!replay, t: Date.now() });
+            } else {
+                setFlow(null);
+                markPageDone(page, replay);
+            }
         }
 
-        var steps = buildSteps(page, beforeLeave);
+        var steps = buildSteps(key, leave, opts);
         if (!steps.length) {
             if (replay) { alert('Не удалось показать обучение: на странице не найдены нужные элементы.'); }
             return;
@@ -170,6 +240,7 @@
 
         function skip() {
             skipped = true;
+            setFlow(null);
             if (replay) { setReplay(null); }   // «Закрыть» в повторном показе выключает весь повтор
             else { saveSeen('all'); }          // «Пропустить» у нового пользователя — навсегда и везде
             tour.destroy();
@@ -178,7 +249,7 @@
         tour = driverLib({
             steps: steps,
             popoverClass: 'mn-tour-popover',
-            showProgress: steps.length > 1,
+            showProgress: steps.length > 1 && !opts.resumed, // после возврата считать «1 / 2» не имеет смысла
             progressText: '{{current}} / {{total}}',
             allowClose: false,                // выход только через «Пропустить» / «Закрыть»
             disableActiveInteraction: true,   // клики по подсвеченным ссылкам не уводят со страницы
@@ -199,13 +270,35 @@
             onDestroyed: function () {
                 current = null;
                 if (skipped) { return; }
+
                 // дошёл до конца → запоминаем страницу
-                if (replay) { replayMarkDone(page); } else { saveSeen(page); }
+                markPageDone(page, replay);
+
+                // это была страница, куда мы ходили «в гости» — возвращаемся и продолжаем тур
+                var flow = getFlow();
+                if (opts.returning && flow && flow.phase === 'out') {
+                    flow.phase = 'back';
+                    setFlow(flow);
+                    window.location.href = flow.url;
+                }
             }
         });
 
         current = tour;
         tour.drive();
+    }
+
+    // Продолжаем тур после возврата: со следующего шага, а если часть закончилась — со следующей части
+    function resumeFlow(flow) {
+        var key  = flow.key;
+        var from = flow.index + 1;
+
+        if (from >= (allSteps[key] || []).length) {
+            var next = nextKey(key);
+            if (allSteps[next]) { key = next; from = 0; }
+            else { markPageDone(flow.page, flow.replay); return; } // шагов больше нет — тур завершён
+        }
+        startTour(key, flow.replay, { from: from, resumed: true });
     }
 
     // ---------- Инициализация ----------
@@ -217,6 +310,7 @@
         var helpBtn = document.getElementById('mn-tutorial-help');
         if (helpBtn) {
             helpBtn.addEventListener('click', function () {
+                setFlow(null);
                 setReplay([]);
                 startTour('game', true);
             });
@@ -224,6 +318,23 @@
 
         if (!page) { return; }
 
+        // 1) Идёт переход «показать другую страницу и вернуться»
+        var flow = getFlow();
+        if (flow && flow.phase === 'back' && flow.page === page) {
+            setFlow(null);
+            setTimeout(function () { resumeFlow(flow); }, 500);        // вернулись — продолжаем
+            return;
+        }
+        if (flow && flow.phase === 'out') {
+            if (flow.page !== page && allSteps[page]) {
+                // пришли по ссылке из тура — показываем тур этой страницы, после него вернёмся
+                setTimeout(function () { startTour(page, flow.replay, { returning: true }); }, 500);
+                return;
+            }
+            setFlow(null); // вернулись другим путём или страница без тура — переход отменяем
+        }
+
+        // 2) Обычный запуск
         var replayList = getReplay();
         var shouldRun = replayList
             ? replayList.indexOf(page) === -1                  // идёт повтор: на этой странице он ещё не показан
