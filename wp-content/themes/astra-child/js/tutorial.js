@@ -1,24 +1,29 @@
 /**
  * Логика туториала MoneyNeko (Driver.js).
  * Тексты и шаги — в js/tutorial-steps.js, настройки и состояние — из inc/tutorial.php (mnTutorial).
+ *
+ * Два независимых режима:
+ *  1) Автопоказ (replay = false) — только новым пользователям (cfg.enabled).
+ *     Прогресс пишется в user_meta: страница пройдена / пропущена.
+ *  2) Повторный показ по кнопке «?» (replay = true) — в базу НИЧЕГО не пишет.
+ *     Включается на всю вкладку (sessionStorage), поэтому тур идёт по страницам цепочкой
+ *     (игра → урок → лидерборд → профиль), в том числе у «старых» пользователей.
+ *
+ * Шаги-переходы (см. js/tutorial-steps.js):
+ *  - go: true            — подсвеченная ссылка кликабельна, тур продолжится на странице, куда она ведёт;
+ *  - go: true, back: true — то же, но после тура той страницы пользователь автоматически возвращается
+ *                           и тур продолжается со следующего шага (дальше — с части game2, game3 …).
  */
 (function () {
     'use strict';
 
     var cfg       = window.mnTutorial;
-    // Если в tutorial-steps.js вместо window.mnTutorialSteps = {...} написано const/let mnTutorialSteps = {...},
-    // переменная не попадает в window, но видна как глобальная — подхватываем и такой вариант
-    var allSteps  = window.mnTutorialSteps || (typeof mnTutorialSteps !== 'undefined' ? mnTutorialSteps : undefined);
+    var allSteps  = window.mnTutorialSteps;
     // IIFE-сборка Driver.js кладёт функцию в window.driver.js.driver
     var driverLib = window.driver && window.driver.js && window.driver.js.driver;
 
-    // Диагностика: если туториал «молчит», причина будет в консоли браузера (F12)
+    // Если что-то не загрузилось — кнопка «?» хотя бы скажет об этом, а не будет «мёртвой»
     if (!cfg || !allSteps || !driverLib) {
-        console.warn('[MoneyNeko tutorial] не запущен. Не найдено:',
-            !cfg ? 'window.mnTutorial (inc/tutorial.php не подключён в functions.php или пользователь не авторизован)' : '',
-            !allSteps ? 'window.mnTutorialSteps (js/tutorial-steps.js не загрузился)' : '',
-            !driverLib ? 'window.driver (js/vendor/driver.js.iife.js не загрузился или его «склеил/задержал» плагин оптимизации)' : '');
-        // Кнопка «?» не должна быть «мёртвой»: скажем пользователю, что что-то не так
         document.addEventListener('click', function (e) {
             if (e.target.closest && e.target.closest('#mn-tutorial-help')) {
                 alert('Обучение не загрузилось. Обновите страницу (Ctrl+F5) и попробуйте ещё раз.');
@@ -27,8 +32,68 @@
         return;
     }
 
-    var CAT_TITLE = '<span class="mn-tour-cat" aria-hidden="true">🐱</span> Грош';
-    var current   = null; // активный экземпляр тура
+    var PAGES      = ['game', 'leaderboard', 'module', 'profile'];
+    var REPLAY_KEY = 'mn_tutorial_replay'; // sessionStorage: JSON-массив страниц, где повтор уже показан
+    var FLOW_KEY   = 'mn_tutorial_flow';   // sessionStorage: «ушли показывать другую страницу и вернёмся»
+    var FLOW_TTL   = 30 * 60 * 1000;       // забываем незавершённый переход через 30 минут
+    var BACK_BTN   = 'Вернуться к игре!';  // подпись последней кнопки на странице, после которой вернёмся назад
+    var CAT_TITLE  = '<span class="mn-tour-cat" aria-hidden="true">🐱</span> Грош';
+    var current    = null; // активный экземпляр тура
+
+    // ---------- Режим повторного показа (живёт в sessionStorage, в базу не пишет) ----------
+
+    function getReplay() {
+        try {
+            var raw = sessionStorage.getItem(REPLAY_KEY);
+            return raw ? JSON.parse(raw) : null; // null = режим выключен
+        } catch (e) { return null; }
+    }
+
+    function setReplay(list) {
+        try {
+            if (list === null) { sessionStorage.removeItem(REPLAY_KEY); }
+            else { sessionStorage.setItem(REPLAY_KEY, JSON.stringify(list)); }
+        } catch (e) { /* нет sessionStorage — повтор будет работать только на текущей странице */ }
+    }
+
+    // Отмечаем страницу как «повтор показан»; когда прошли все страницы — режим выключается сам
+    function replayMarkDone(page) {
+        var list = getReplay();
+        if (!list) { return; }
+        if (list.indexOf(page) === -1) { list.push(page); }
+        var allDone = PAGES.every(function (p) { return list.indexOf(p) !== -1; });
+        setReplay(allDone ? null : list);
+    }
+
+    // ---------- Переход «показать другую страницу и вернуться» ----------
+    // Состояние: { phase: 'out' | 'back', page, key, index, url, replay, t }
+    //   out  — ушли со страницы page (часть тура key, шаг index) показывать другую страницу
+    //   back — тур той страницы закончен, вернулись на url и продолжаем с шага index + 1
+
+    function getFlow() {
+        try {
+            var raw = sessionStorage.getItem(FLOW_KEY);
+            var f = raw ? JSON.parse(raw) : null;
+            if (f && Date.now() - f.t > FLOW_TTL) { f = null; sessionStorage.removeItem(FLOW_KEY); }
+            return f;
+        } catch (e) { return null; }
+    }
+
+    function setFlow(f) {
+        try {
+            if (f === null) { sessionStorage.removeItem(FLOW_KEY); }
+            else { sessionStorage.setItem(FLOW_KEY, JSON.stringify(f)); }
+        } catch (e) {}
+    }
+
+    // 'game2' → 'game' (страница, к которой относится часть тура)
+    function pageOf(key) { return key.replace(/\d+$/, ''); }
+
+    // 'game' → 'game2', 'game2' → 'game3'
+    function nextKey(key) {
+        var m = key.match(/^(.*?)(\d*)$/);
+        return m[1] + ((parseInt(m[2], 10) || 1) + 1);
+    }
 
     // ---------- Определение страницы ----------
 
@@ -65,7 +130,7 @@
 
     // Сохраняем прогресс в user_meta (работает и с телефона, и с ПК)
     function saveSeen(pages) {
-        var list = pages === 'all' ? ['game', 'leaderboard', 'module', 'profile'] : [pages];
+        var list = pages === 'all' ? PAGES : [pages];
         list.forEach(function (p) {
             if (cfg.seen.indexOf(p) === -1) { cfg.seen.push(p); }
         });
@@ -80,14 +145,23 @@
         } catch (e) { /* без сети просто покажем туториал в следующий раз */ }
     }
 
+    // Страница пройдена: у нового пользователя пишем в базу, в режиме повтора — только в sessionStorage
+    function markPageDone(page, replay) {
+        if (replay) { replayMarkDone(page); } else { saveSeen(page); }
+    }
+
     // ---------- Сборка и запуск ----------
 
-    function buildSteps(page) {
-        var defs = allSteps[page] || [];
+    // leave(def, index) вызывается перед переходом по ссылке на шаге с go: true
+    // opts.from — с какого шага начинать; opts.returning — после этого тура вернёмся назад (кнопка «Вернуться»)
+    function buildSteps(key, leave, opts) {
+        var defs = allSteps[key] || [];
+        var from = opts.from || 0;
         var ctx  = getContext();
         var out  = [];
 
-        defs.forEach(function (def) {
+        defs.forEach(function (def, index) {
+            if (index < from) { return; }
             var step = {
                 popover: {
                     title: CAT_TITLE,
@@ -102,43 +176,82 @@
 
             if (def.selector) {
                 var el = findElement(def.selector);
-                if (!el) { // элемента нет на этой версии страницы — пропускаем шаг
-                    console.warn('[MoneyNeko tutorial] шаг пропущен, элемент не найден или скрыт:', def.selector);
-                    return;
-                }
+                if (!el) { return; } // элемента нет на этой версии страницы — пропускаем шаг
                 step.element = el;
+
+                // Шаг-переход: подсвеченная ссылка кликабельна, кнопка в окошке ведёт по ней же
+                if (def.go && el.href) {
+                    var onLeave = function () { leave(def, index); };
+                    step.popover.onNextClick = function () {
+                        onLeave();
+                        window.location.href = el.href;
+                    };
+                    step.onHighlighted = function () {
+                        // Driver.js блокирует клики по подсвеченному элементу (глобальная опция) — снимаем блок с этой ссылки
+                        el.classList.remove('driver-no-interaction');
+                        el.addEventListener('click', onLeave, { once: true });
+                    };
+                }
             }
             out.push(step);
         });
 
+        // Тур страницы, после которого вернёмся назад: подписываем последнюю кнопку понятно
+        if (opts.returning && out.length) {
+            var last = out[out.length - 1].popover;
+            last.nextBtnText = BACK_BTN;
+            last.doneBtnText = BACK_BTN;
+        }
+
         return out;
     }
 
-    function startTour(page, replay) {
-        if (current) { current.destroy(); current = null; }
+    // key — ключ тура: 'game', 'game2', 'leaderboard' …; opts: { from, returning, resumed }
+    function startTour(key, replay, opts) {
+        opts = opts || {};
+        var page    = pageOf(key);
+        var skipped = false;
+        var tour;
 
-        var steps = buildSteps(page);
+        // Перед уходом по ссылке-шагу: либо запоминаем, где вернуться, либо отмечаем страницу пройденной
+        function leave(def, index) {
+            var flow = getFlow();
+            if (opts.returning && flow && flow.phase === 'out') {
+                // мы на странице, куда ушли «в гости»: ссылка ведёт обратно — тур игры продолжится с шага после ухода
+                markPageDone(page, replay);
+                flow.phase = 'back';
+                setFlow(flow);
+            } else if (def.back) {
+                setFlow({ phase: 'out', page: page, key: key, index: index,
+                    url: window.location.href, replay: !!replay, t: Date.now() });
+            } else {
+                setFlow(null);
+                markPageDone(page, replay);
+            }
+        }
+
+        var steps = buildSteps(key, leave, opts);
         if (!steps.length) {
-            console.warn('[MoneyNeko tutorial] для страницы «' + page + '» нет ни одного шага — на странице не найдены нужные элементы.');
             if (replay) { alert('Не удалось показать обучение: на странице не найдены нужные элементы.'); }
             return;
         }
 
-        var skipped = false;
-        var tour;
+        if (current) { current.destroy(); }
 
         function skip() {
             skipped = true;
-            if (!replay) { saveSeen('all'); }
+            setFlow(null);
+            if (replay) { setReplay(null); }   // «Закрыть» в повторном показе выключает весь повтор
+            else { saveSeen('all'); }          // «Пропустить» у нового пользователя — навсегда и везде
             tour.destroy();
         }
 
         tour = driverLib({
             steps: steps,
             popoverClass: 'mn-tour-popover',
-            showProgress: steps.length > 1,
+            showProgress: steps.length > 1 && !opts.resumed, // после возврата считать «1 / 2» не имеет смысла
             progressText: '{{current}} / {{total}}',
-            allowClose: false,                // выход только через «Пропустить»
+            allowClose: false,                // выход только через «Пропустить» / «Закрыть»
             disableActiveInteraction: true,   // клики по подсвеченным ссылкам не уводят со страницы
             overlayColor: '#2c3e50',
             overlayOpacity: 0.65,
@@ -156,8 +269,18 @@
             },
             onDestroyed: function () {
                 current = null;
-                // дошёл до конца → запоминаем страницу (при повторном просмотре и пропуске не нужно)
-                if (!replay && !skipped) { saveSeen(page); }
+                if (skipped) { return; }
+
+                // дошёл до конца → запоминаем страницу
+                markPageDone(page, replay);
+
+                // это была страница, куда мы ходили «в гости» — возвращаемся и продолжаем тур
+                var flow = getFlow();
+                if (opts.returning && flow && flow.phase === 'out') {
+                    flow.phase = 'back';
+                    setFlow(flow);
+                    window.location.href = flow.url;
+                }
             }
         });
 
@@ -165,22 +288,60 @@
         tour.drive();
     }
 
+    // Продолжаем тур после возврата: со следующего шага, а если часть закончилась — со следующей части
+    function resumeFlow(flow) {
+        var key  = flow.key;
+        var from = flow.index + 1;
+
+        if (from >= (allSteps[key] || []).length) {
+            var next = nextKey(key);
+            if (allSteps[next]) { key = next; from = 0; }
+            else { markPageDone(flow.page, flow.replay); return; } // шагов больше нет — тур завершён
+        }
+        startTour(key, flow.replay, { from: from, resumed: true });
+    }
+
     // ---------- Инициализация ----------
 
     function init() {
         var page = detectPage();
-        console.info('[MoneyNeko tutorial] страница:', page || '(не определена)',
-            '| включён для пользователя:', cfg.enabled, '| уже просмотрено:', cfg.seen);
 
-        // Кнопка «?» на странице игры — показывает весь туториал заново
+        // Кнопка «?» на странице игры: включаем повторный показ на всю вкладку и запускаем тур
         var helpBtn = document.getElementById('mn-tutorial-help');
         if (helpBtn) {
-            helpBtn.addEventListener('click', function () { startTour('game', true); });
+            helpBtn.addEventListener('click', function () {
+                setFlow(null);
+                setReplay([]);
+                startTour('game', true);
+            });
         }
 
-        // Автозапуск: только новым пользователям и только на ещё не просмотренных страницах
-        if (page && cfg.enabled && cfg.seen.indexOf(page) === -1) {
-            setTimeout(function () { startTour(page, false); }, 500);
+        if (!page) { return; }
+
+        // 1) Идёт переход «показать другую страницу и вернуться»
+        var flow = getFlow();
+        if (flow && flow.phase === 'back' && flow.page === page) {
+            setFlow(null);
+            setTimeout(function () { resumeFlow(flow); }, 500);        // вернулись — продолжаем
+            return;
+        }
+        if (flow && flow.phase === 'out') {
+            if (flow.page !== page && allSteps[page]) {
+                // пришли по ссылке из тура — показываем тур этой страницы, после него вернёмся
+                setTimeout(function () { startTour(page, flow.replay, { returning: true }); }, 500);
+                return;
+            }
+            setFlow(null); // вернулись другим путём или страница без тура — переход отменяем
+        }
+
+        // 2) Обычный запуск
+        var replayList = getReplay();
+        var shouldRun = replayList
+            ? replayList.indexOf(page) === -1                  // идёт повтор: на этой странице он ещё не показан
+            : (cfg.enabled && cfg.seen.indexOf(page) === -1);  // обычный автопоказ для нового пользователя
+
+        if (shouldRun) {
+            setTimeout(function () { startTour(page, !!replayList); }, 500);
         }
     }
 
@@ -189,4 +350,9 @@
     } else {
         window.addEventListener('load', init);
     }
+
+    // Для разработки: window.mnTutorialDebug('leaderboard') — показать тур страницы вручную
+    window.mnTutorialDebug = function (page) {
+        startTour(page || detectPage(), true);
+    };
 })();
