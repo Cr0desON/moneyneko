@@ -92,3 +92,18 @@ function mn_tutorial_ajax_save() {
 
     wp_send_json_success( $seen );
 }
+
+/** AJAX: сбросить историю просмотров (для повторного прохождения тура). */
+add_action( 'wp_ajax_mn_tutorial_reset', 'mn_tutorial_ajax_reset' );
+function mn_tutorial_ajax_reset() {
+    check_ajax_referer( 'mn_tutorial', 'nonce' );
+
+    $user_id = get_current_user_id();
+    if ( ! $user_id ) {
+        wp_send_json_error( null, 403 );
+    }
+
+    update_user_meta( $user_id, MN_TUTORIAL_SEEN_META, array() );
+
+    wp_send_json_success( array() );
+}
