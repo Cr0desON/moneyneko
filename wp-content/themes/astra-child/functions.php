@@ -48,3 +48,6 @@ function moneyneko_add_pwa_manifest() {
     // Специальная иконка для рабочего стола iPhone 
     echo '<link rel="apple-touch-icon" href="/image/icon-192.png">' . "\n";
 }
+
+//12. Реализация интерактивной карты
+require_once get_stylesheet_directory() . '/inc/map-adapter.php';
