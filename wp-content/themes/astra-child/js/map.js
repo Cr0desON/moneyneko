@@ -50,7 +50,11 @@
         var catToken = document.getElementById('mn-map-cat-token');
 
         if (currentNodeEl) {
-            currentNodeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            var rect = currentNodeEl.getBoundingClientRect();
+            // Скроллим только если активный кружок ушел ниже первого экрана (студент далеко продвинулся)
+            if (rect.top > window.innerHeight * 0.85) {
+                currentNodeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         }
 
         // Если кот сидел на старом узле, а теперь открылся новый — прыгаем!

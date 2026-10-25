@@ -1,4 +1,20 @@
 <?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?>
+
+<?php
+// Собираем данные интерактивной карты через адаптер
+$user_id          = get_current_user_id();
+$map_data         = function_exists( 'mn_get_map_nodes' ) ? mn_get_map_nodes( $user_id ) : array( 'modules' => array(), 'current_node_id' => 0 );
+$current_node     = $map_data['current_node_id'];
+$last_cat_node    = (int) get_user_meta( $user_id, '_mn_cat_node', true );
+
+
+// Если пользователь впервые на карте — ставим кота сразу на текущий узел
+if ( ! $last_cat_node && $current_node && $user_id ) {
+    $last_cat_node = $current_node;
+    update_user_meta( $user_id, '_mn_cat_node', $current_node );
+}
+?>
+
 <div class="sketch-landing-wrapper">
     <div class="top-buttons-container">
         <a href="<?php echo esc_url( home_url( '/profile/' ) ); ?>" class="sketch-btn-profile">Профиль</a>
@@ -39,40 +55,65 @@
                 </div>
             <?php endif; ?>
         </div>
-
-        <a href="<?php echo esc_url( home_url( '/courses/moneyneko-full-course/lessons/твой-первый-шаг-к-финансовой-свободе-2/' ) ); ?>" class="sketch-btn-start">Начать обучение</a>
     </div>
 
-    <div class="sketch-modules-grid">
-        <a href="<?php echo esc_url( home_url( '/courses/moneyneko-full-course/lessons/тема-1-cash-flow-как-отслеживать-притоки-и-отто/' ) ); ?>" class="sketch-module mod-1" id="mn-tour-first-module">
-            <div class="module-title">Модуль 1.</div>
-            <div class="module-desc">Учет денежных<br>потоков</div>
-            <div class="module-icon">💰</div>
-        </a>
+    <!-- ИНТЕРАКТИВНАЯ КАРТА (ЗМЕЙКА ВМЕСТО СЕТКИ МОДУЛЕЙ) -->
+    <div class="mn-map-container" 
+         id="mn-interactive-map"
+         data-current-node="<?php echo esc_attr( $current_node ); ?>"
+         data-last-cat-node="<?php echo esc_attr( $last_cat_node ); ?>"
+         data-ajax-url="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>"
+         data-nonce="<?php echo esc_attr( wp_create_nonce( 'mn_map_nonce' ) ); ?>">
 
-        <a href="<?php echo esc_url( home_url( '/courses/moneyneko-full-course/lessons/тема-1-zero-based-budgeting-бюджет-с-нуля/' ) ); ?>" class="sketch-module mod-2">
-            <div class="module-title">Модуль 2.</div>
-            <div class="module-desc">Гибкое<br>планирование</div>
-            <div class="module-icon">📅</div>
-        </a>
+        <!-- SVG-слой для отрисовки тропинки между кружками -->
+        <svg class="mn-map-svg" id="mn-map-svg"></svg>
 
-        <a href="<?php echo esc_url( home_url( '/courses/moneyneko-full-course/lessons/тема-1-ликвидность-способность-отвеча/' ) ); ?>" class="sketch-module mod-3">
-            <div class="module-title">Модуль 3.</div>
-            <div class="module-desc">Управление<br>ликвидностью и<br>покупкой<br>безопасности</div>
-            <div class="module-icon">🛡️</div>
-        </a>
+        <div class="mn-map-modules">
+            <?php foreach ( $map_data['modules'] as $m_idx => $module ) : ?>
+                <div class="mn-map-module zone-<?php echo esc_attr( $module['zone'] ); ?>" 
+                     <?php echo ( $m_idx === 0 ) ? 'id="mn-tour-first-module"' : ''; ?>>
+                    
+                    <div class="mn-module-banner">
+                        <span class="mn-module-num">Модуль <?php echo esc_html( $module['index'] ); ?>:</span>
+                        <span class="mn-module-name"><?php echo esc_html( $module['title'] ); ?></span>
+                    </div>
 
-        <a href="<?php echo esc_url( home_url( '/courses/moneyneko-full-course/lessons/тема-1-совокупная-стоимость-владения-tco/' ) ); ?>" class="sketch-module mod-4">
-            <div class="module-title">Модуль 4.</div>
-            <div class="module-desc">Рациональное<br>принятие<br>решений</div>
-            <div class="module-icon">💡</div>
-        </a>
+                    <div class="mn-nodes-path">
+                        <?php foreach ( $module['nodes'] as $node ) : 
+                            if ( $node['status'] === 'completed' ) {
+                                $icon = '✅';
+                            } elseif ( $node['status'] === 'locked' ) {
+                                $icon = ( $node['type'] === 'quiz' ) ? '🗄️' : '🔒';
+                            } else {
+                                $icons_map = array( 'lesson' => '🧶', 'trainer' => '🥣', 'quiz' => '🔓' );
+                                $icon = isset( $icons_map[ $node['type'] ] ) ? $icons_map[ $node['type'] ] : '🧶';
+                            }
 
-        <a href="<?php echo esc_url( home_url( '/courses/moneyneko-full-course/lessons/тема-1-налоговый-вычет-за-обучение-и-ле/' ) ); ?>" class="sketch-module mod-5">
-            <div class="module-title">Модуль 5.</div>
-            <div class="module-desc">Инструменты<br>оптимизации<br>и автоматизации</div>
-            <div class="module-icon">⚙️</div>
-        </a>
+                            $is_locked = ( $node['status'] === 'locked' );
+                            $tag       = $is_locked ? 'div' : 'a';
+                            $href_attr = $is_locked ? '' : 'href="' . esc_url( $node['url'] ) . '"';
+                        ?>
+                            <div class="mn-node-row" style="--i: <?php echo esc_attr( $node['global_index'] ); ?>;">
+                                <<?php echo $tag; ?> <?php echo $href_attr; ?> 
+                                    class="mn-node type-<?php echo esc_attr( $node['type'] ); ?> status-<?php echo esc_attr( $node['status'] ); ?>"
+                                    data-node-id="<?php echo esc_attr( $node['id'] ); ?>"
+                                    data-status="<?php echo esc_attr( $node['status'] ); ?>"
+                                    title="<?php echo esc_attr( $node['title'] ); ?>">
+                                    
+                                    <span class="mn-node-icon"><?php echo $icon; ?></span>
+
+                                    <?php if ( $node['id'] === $last_cat_node ) : ?>
+                                        <div class="mn-map-cat-token" id="mn-map-cat-token">🐱</div>
+                                    <?php endif; ?>
+
+                                </<?php echo $tag; ?>>
+                                <div class="mn-node-caption"><?php echo esc_html( $node['title'] ); ?></div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </div>
 </div>
 

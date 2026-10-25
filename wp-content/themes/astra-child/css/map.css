@@ -24,7 +24,7 @@
 .mn-map-modules,
 .mn-nodes-path {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     align-items: center;
     gap: 36px;
     position: relative;
@@ -45,7 +45,7 @@
     border-radius: 15px 25px 15px 20px / 20px 15px 25px 15px;
     box-shadow: 4px 5px 0 #2c3e50;
     padding: 10px 18px;
-    margin-top: 25px;
+    margin-bottom: 10px; /* <-- Вместо margin-top */
     text-align: center;
     font-weight: 700;
     font-size: 18px;
@@ -167,14 +167,14 @@
 }
 
 /* ==========================================================
-   СКРЫВАЕМ САЙДБАР TUTOR LMS ВНУТРИ УРОКОВ
+   СКРЫВАЕМ САЙДБАР И КНОПКУ ЕГО ОТКРЫТИЯ ВНУТРИ УРОКОВ TUTOR LMS
    ========================================================== */
 .tutor-course-single-sidebar-wrapper,
-.tutor-lesson-sidebar {
+.tutor-lesson-sidebar,
+.tutor-topbar-sidebar-toggle,
+.tutor-course-topic-sidebar-toggler,
+[tutor-Toggle-course-sidebar],
+[data-tutor-toggle-course-sidebar],
+.tutor-iconic-btn[tutor-course-topics-sidebar-toggler] {
     display: none !important;
-}
-.tutor-course-single-content-wrapper {
-    width: 100% !important;
-    max-width: 960px !important;
-    margin: 0 auto !important;
 }
