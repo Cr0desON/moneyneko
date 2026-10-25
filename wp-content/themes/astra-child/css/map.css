@@ -1,0 +1,180 @@
+/* ==========================================================
+   ИНТЕРАКТИВНАЯ КАРТА (Duolingo-style в тетрадном скетче)
+   ========================================================== */
+
+.mn-map-container {
+    position: relative;
+    max-width: 540px;
+    margin: 30px auto;
+    padding: 40px 20px;
+}
+
+/* SVG-тропинка на заднем плане */
+.mn-map-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Путь идет СНИЗУ ВВЕРХ (Модуль 1 внизу, финал наверху) */
+.mn-map-modules,
+.mn-nodes-path {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 36px;
+    position: relative;
+    z-index: 2;
+}
+
+.mn-map-module {
+    width: 100%;
+    padding: 25px 15px;
+    border-radius: 20px;
+    position: relative;
+}
+
+/* Плашка названия модуля */
+.mn-module-banner {
+    background: #fffdf5;
+    border: 3px solid #2c3e50;
+    border-radius: 15px 25px 15px 20px / 20px 15px 25px 15px;
+    box-shadow: 4px 5px 0 #2c3e50;
+    padding: 10px 18px;
+    margin-top: 25px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 18px;
+    color: #2c3e50;
+}
+
+/* МАТЕМАТИКА ЗМЕЙКИ: автоматический сдвиг влево-вправо по синусоиде */
+.mn-node-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(calc(sin(var(--i, 0) * 1.15) * 75px));
+}
+
+/* Кружок узла (базовый скетч-стиль) */
+.mn-node {
+    position: relative;
+    width: 74px;
+    height: 74px;
+    border-radius: 50% 45% 52% 48% / 48% 52% 45% 50%;
+    border: 3px solid #2c3e50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    user-select: none;
+}
+
+.mn-node-icon {
+    font-size: 32px;
+    line-height: 1;
+}
+
+/* Сейф (Босс модуля) крупнее и квадратнее */
+.mn-node.type-quiz {
+    width: 86px;
+    height: 80px;
+    border-radius: 14px;
+}
+
+/* Статус 1: Пройден (Зеленый) */
+.mn-node.status-completed {
+    background-color: #6ab04c;
+    box-shadow: 0 6px 0 #2c3e50;
+    cursor: pointer;
+}
+
+/* Статус 2: Текущий активный (Яркий, с пульсацией) */
+.mn-node.status-current {
+    background-color: #badc58;
+    box-shadow: 0 7px 0 #2c3e50, 0 0 0 8px rgba(186, 220, 88, 0.35);
+    cursor: pointer;
+}
+
+/* Статус 3: Закрыт под замок (Серый, некликабельный) */
+.mn-node.status-locked {
+    background-color: #bdc3c7;
+    box-shadow: 0 5px 0 #7f8c8d;
+    cursor: not-allowed;
+    opacity: 0.85;
+}
+
+.mn-node.status-completed:hover,
+.mn-node.status-current:hover {
+    transform: translateY(-2px);
+}
+
+.mn-node.status-completed:active,
+.mn-node.status-current:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #2c3e50;
+}
+
+/* Подпись под кружком */
+.mn-node-caption {
+    margin-top: 8px;
+    max-width: 150px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #2c3e50;
+    background: rgba(255, 253, 245, 0.9);
+    padding: 2px 8px;
+    border-radius: 8px;
+}
+
+/* Фишка кота Гроша на текущем узле */
+.mn-map-cat-token {
+    position: absolute;
+    top: -38px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48px;
+    height: 48px;
+    background: #fffdf5;
+    border: 3px solid #2c3e50;
+    border-radius: 50%;
+    box-shadow: 2px 4px 0 #2c3e50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    z-index: 10;
+    pointer-events: none;
+    animation: mn-cat-bob 1.8s infinite ease-in-out;
+    transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes mn-cat-bob {
+    0%, 100% { margin-top: 0; }
+    50% { margin-top: -6px; }
+}
+
+@media (max-width: 600px) {
+    .mn-node-row {
+        transform: translateX(calc(sin(var(--i, 0) * 1.15) * 45px));
+    }
+}
+
+/* ==========================================================
+   СКРЫВАЕМ САЙДБАР TUTOR LMS ВНУТРИ УРОКОВ
+   ========================================================== */
+.tutor-course-single-sidebar-wrapper,
+.tutor-lesson-sidebar {
+    display: none !important;
+}
+.tutor-course-single-content-wrapper {
+    width: 100% !important;
+    max-width: 960px !important;
+    margin: 0 auto !important;
+}
