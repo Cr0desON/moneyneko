@@ -3,6 +3,7 @@
 
     var mapEl = document.getElementById('mn-interactive-map');
     var svgEl = document.getElementById('mn-map-svg');
+    var currentButton = document.getElementById('mn-map-current-button');
     if (!mapEl || !svgEl) { return; }
 
     // 1. Отрисовка извилистой тропинки между центрами кружков
@@ -11,7 +12,9 @@
         if (nodes.length < 2) { return; }
 
         var mapRect = mapEl.getBoundingClientRect();
-        svgEl.setAttribute('viewBox', '0 0 ' + mapRect.width + ' ' + mapRect.height);
+        var contentHeight = mapEl.scrollHeight;
+        svgEl.style.setProperty('--mn-map-content-height', contentHeight + 'px');
+        svgEl.setAttribute('viewBox', '0 0 ' + mapEl.clientWidth + ' ' + contentHeight);
         svgEl.innerHTML = '';
 
         for (var i = 0; i < nodes.length - 1; i++) {
@@ -19,9 +22,9 @@
             var r2 = nodes[i + 1].getBoundingClientRect();
 
             var x1 = r1.left + r1.width / 2 - mapRect.left;
-            var y1 = r1.top + r1.height / 2 - mapRect.top;
+            var y1 = r1.top + r1.height / 2 - mapRect.top + mapEl.scrollTop;
             var x2 = r2.left + r2.width / 2 - mapRect.left;
-            var y2 = r2.top + r2.height / 2 - mapRect.top;
+            var y2 = r2.top + r2.height / 2 - mapRect.top + mapEl.scrollTop;
 
             var midY = (y1 + y2) / 2;
             var d = 'M ' + x1 + ' ' + y1 + ' C ' + x1 + ' ' + midY + ', ' + x2 + ' ' + midY + ', ' + x2 + ' ' + y2;
@@ -42,20 +45,24 @@
         }
     }
 
+    function scrollToCurrentNode(behavior) {
+        var currentId = mapEl.dataset.currentNode;
+        var currentNodeEl = mapEl.querySelector('.mn-node[data-node-id="' + currentId + '"]');
+        if (currentNodeEl) {
+            var rect = currentNodeEl.getBoundingClientRect();
+            var mapRect = mapEl.getBoundingClientRect();
+            var nodeTop = rect.top - mapRect.top + mapEl.scrollTop;
+            var targetTop = nodeTop - (mapEl.clientHeight - currentNodeEl.offsetHeight) / 2;
+            mapEl.scrollTo({ top: Math.max(0, targetTop), behavior: behavior || 'auto' });
+        }
+    }
+
     // 2. Анимация перепрыгивания кота при возвращении из пройденного урока
-    function handleCatJumpAndScroll() {
+    function handleCatJump() {
         var currentId = mapEl.dataset.currentNode;
         var lastCatId = mapEl.dataset.lastCatNode;
         var currentNodeEl = mapEl.querySelector('.mn-node[data-node-id="' + currentId + '"]');
         var catToken = document.getElementById('mn-map-cat-token');
-
-        if (currentNodeEl) {
-            var rect = currentNodeEl.getBoundingClientRect();
-            // Скроллим только если активный кружок ушел ниже первого экрана (студент далеко продвинулся)
-            if (rect.top > window.innerHeight * 0.85) {
-                currentNodeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
 
         // Если кот сидел на старом узле, а теперь открылся новый — прыгаем!
         if (catToken && currentNodeEl && currentId && lastCatId && currentId !== lastCatId) {
@@ -95,6 +102,13 @@
 
     window.addEventListener('load', function () {
         drawPath();
-        handleCatJumpAndScroll();
+        scrollToCurrentNode('auto');
+        handleCatJump();
     });
+
+    if (currentButton) {
+        currentButton.addEventListener('click', function () {
+            scrollToCurrentNode('smooth');
+        });
+    }
 })();

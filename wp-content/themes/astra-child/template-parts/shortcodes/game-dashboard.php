@@ -15,7 +15,7 @@ if ( ! $last_cat_node && $current_node && $user_id ) {
 }
 ?>
 
-<div class="sketch-landing-wrapper">
+<div class="sketch-landing-wrapper mn-game-map-page">
     <div class="top-buttons-container">
         <a href="<?php echo esc_url( home_url( '/profile/' ) ); ?>" class="sketch-btn-profile">Профиль</a>
         <a href="<?php echo esc_url( home_url( '/доска-лидеров/' ) ); ?>" class="sketch-btn-leaderboard" id="mn-tour-leaderboard">Доска лидеров</a>
@@ -68,11 +68,12 @@ if ( ! $last_cat_node && $current_node && $user_id ) {
         <!-- SVG-слой для отрисовки тропинки между кружками -->
         <svg class="mn-map-svg" id="mn-map-svg"></svg>
 
+        <?php $map_doodle_icons = array( '🪙', '📈', '🧾', '🐷', '💳', '📊', '🧮', '🏦', '💰', '📉', '📒', '🏧' ); ?>
         <div class="mn-map-modules">
             <?php foreach ( $map_data['modules'] as $m_idx => $module ) : ?>
                 <div class="mn-map-module zone-<?php echo esc_attr( $module['zone'] ); ?>" 
                      <?php echo ( $m_idx === 0 ) ? 'id="mn-tour-first-module"' : ''; ?>>
-                    
+
                     <div class="mn-module-banner">
                         <span class="mn-module-num">Модуль <?php echo esc_html( $module['index'] ); ?>:</span>
                         <span class="mn-module-name"><?php echo esc_html( $module['title'] ); ?></span>
@@ -108,6 +109,13 @@ if ( ! $last_cat_node && $current_node && $user_id ) {
 
                                 </<?php echo $tag; ?>>
                                 <div class="mn-node-caption"><?php echo esc_html( $node['title'] ); ?></div>
+                                <?php if ( ( (int) $node['global_index'] + 1 ) % 3 === 0 ) : ?>
+                                    <?php
+                                    $doodle_index = intdiv( (int) $node['global_index'] + 1, 3 ) - 1;
+                                    $doodle_side  = ( $doodle_index % 2 === 0 ) ? 'left' : 'right';
+                                    ?>
+                                    <span class="mn-node-side-doodle side-<?php echo esc_attr( $doodle_side ); ?>" aria-hidden="true"><?php echo esc_html( $map_doodle_icons[ $doodle_index % count( $map_doodle_icons ) ] ); ?></span>
+                                <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
                     </div>
@@ -115,6 +123,11 @@ if ( ! $last_cat_node && $current_node && $user_id ) {
             <?php endforeach; ?>
         </div>
     </div>
+
+    <button type="button" class="mn-map-current-button" id="mn-map-current-button"
+            aria-label="Прокрутить к текущему уроку" <?php echo $current_node ? '' : 'disabled'; ?>>
+        🎯 К текущему уроку
+    </button>
 </div>
 
 <?php if ( is_user_logged_in() ) : ?>
