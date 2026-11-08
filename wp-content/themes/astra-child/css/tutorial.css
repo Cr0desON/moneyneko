@@ -1,0 +1,162 @@
+/* ==========================================================
+   ТУТОРИАЛ (Driver.js) — оформление в стиле «скетч / тетрадь»
+   Когда придут макеты с котом, достаточно править этот файл.
+   ========================================================== */
+
+/* ---------- Окно с текстом Гроша ---------- */
+.driver-popover.mn-tour-popover {
+    background-color: #fffdf5;
+    color: #2c3e50;
+    border: 3px solid #2c3e50;
+    border-radius: 15px 25px 15px 20px / 20px 15px 25px 15px;
+    box-shadow: 4px 6px 0 #2c3e50;
+    padding: 20px 22px 16px;
+    min-width: 280px;
+    max-width: 360px;
+}
+.driver-popover.mn-tour-popover,
+.driver-popover.mn-tour-popover * {
+    font-family: 'Balsamiq Sans', cursive, sans-serif;
+}
+
+/* Заголовок: аватар (пока эмодзи) + имя */
+.mn-tour-popover .driver-popover-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Caveat', cursive;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #1a252f;
+}
+.mn-tour-popover .mn-tour-cat {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    background: #fff;
+    border: 2px solid #2c3e50;
+    border-radius: 50% 40% 50% 40%;
+}
+
+.mn-tour-popover .driver-popover-title + .driver-popover-description {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #2c3e50;
+}
+
+/* Подвал: прогресс + кнопка шага */
+.mn-tour-popover .driver-popover-footer {
+    margin-top: 18px;
+}
+.mn-tour-popover .driver-popover-progress-text {
+    font-size: 14px;
+    font-weight: 700;
+    color: #7f8c8d;
+}
+
+/* Кнопка шага (как .game-btn) */
+.driver-popover.mn-tour-popover .driver-popover-footer button.driver-popover-next-btn {
+    background: #3498db;
+    color: #fff;
+    text-shadow: none;
+    border: 3px solid #2c3e50;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    box-shadow: 2px 4px 0 #2c3e50;
+    padding: 8px 20px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s, filter 0.1s;
+}
+.driver-popover.mn-tour-popover .driver-popover-footer button.driver-popover-next-btn:hover {
+    background: #3498db;
+    filter: brightness(1.08);
+}
+.driver-popover.mn-tour-popover .driver-popover-footer button.driver-popover-next-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #2c3e50;
+}
+
+/* Ссылка «Пропустить обучение» */
+.driver-popover.mn-tour-popover button.mn-tour-skip {
+    all: unset;
+    display: block;
+    box-sizing: border-box;
+    margin: 12px auto 0;
+    font-family: 'Balsamiq Sans', cursive, sans-serif;
+    font-size: 14px;
+    color: #7f8c8d;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+.driver-popover.mn-tour-popover button.mn-tour-skip:hover,
+.driver-popover.mn-tour-popover button.mn-tour-skip:focus-visible {
+    color: #2c3e50;
+}
+
+/* Стрелка окна под цвет бумаги */
+.mn-tour-popover .driver-popover-arrow { border-width: 8px; }
+.mn-tour-popover .driver-popover-arrow-side-left.driver-popover-arrow   { border-left-color: #fffdf5; }
+.mn-tour-popover .driver-popover-arrow-side-right.driver-popover-arrow  { border-right-color: #fffdf5; }
+.mn-tour-popover .driver-popover-arrow-side-top.driver-popover-arrow    { border-top-color: #fffdf5; }
+.mn-tour-popover .driver-popover-arrow-side-bottom.driver-popover-arrow { border-bottom-color: #fffdf5; }
+
+/* ---------- Кнопка «?» на странице игры (слева снизу) ---------- */
+.mn-tutorial-help {
+    position: fixed !important;
+    left: 30px !important;
+    bottom: 30px !important;            /* как у #ast-scroll-top (Astra: 30px) — кнопки на одной линии */
+    z-index: 99 !important;
+    width: 45px !important;
+    height: 45px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: #3498db !important;
+    color: #ffffff !important;
+    border: 2px solid #2c3e50 !important;
+    border-radius: 50% 40% 50% 40% !important;
+    box-shadow: 2px 4px 0px #2c3e50 !important;
+    font-family: system-ui, -apple-system, 'Segoe UI', Arial, sans-serif !important;
+    font-style: normal !important;      /* прямой знак вопроса, без курсива */
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    text-shadow: none !important;
+    cursor: pointer;
+    opacity: 0.55;                      /* приглушена, пока не навели курсор */
+    transition: all 0.15s ease !important;
+}
+
+/* Наведение: полная яркость, как у кнопки «наверх» */
+.mn-tutorial-help:hover,
+.mn-tutorial-help:focus-visible {
+    opacity: 1;
+    background-color: #2980b9 !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 2px 6px 0px #2c3e50 !important;
+}
+
+/* Клик: кнопка «продавливается» */
+.mn-tutorial-help:active {
+    opacity: 1;
+    transform: translateY(2px) !important;
+    box-shadow: 0px 1px 0px #2c3e50 !important;
+}
+
+.mn-tutorial-help:focus-visible { outline: 3px solid #f1c40f; outline-offset: 2px; }
+
+
+@media (max-width: 768px) {
+    .mn-tutorial-help { left: 12px; bottom: 12px; width: 44px; height: 44px; font-size: 28px; }
+    .driver-popover.mn-tour-popover { min-width: 240px; max-width: calc(100vw - 32px); }
+}

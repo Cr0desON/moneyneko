@@ -11,7 +11,7 @@ function moneyneko_limit_mood_points_max( $user_id, $points, $points_type, $reas
         // Если перевалили за 100, вычитаем излишек
         if ( $current_balance > 100 ) {
             $excess = $current_balance - 100;
-            gamipress_deduct_points_from_user( $user_id, $excess, 'mood-points' );
+            gamipress_deduct_points_to_user( $user_id, $excess, 'mood-points' );
         }
     }
 }

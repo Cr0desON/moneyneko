@@ -56,6 +56,8 @@ temp/
 # Composer/Node
 node_modules/
 vendor/
+!wp-content/themes/astra-child/css/vendor/
+!wp-content/themes/astra-child/js/vendor/
 
 # Дампы БД и архивы
 *.sql
