@@ -7,24 +7,23 @@ document.addEventListener('DOMContentLoaded', function() {
         return; // Останавливаем скрипт, чтобы страница не успела мигнуть
     }
 
-    // 2. Основная логика работы кнопок
-    setTimeout(function() {
-        const nextBtn = document.querySelector('.tutor-single-course-content-next a');
-        const completeBtn = document.querySelector('.tutor-topbar-mark-btn');
+    // Одна кнопка сначала сохраняет прогресс, затем открывает следующий узел или карту.
+    const nextBtn = document.querySelector('.tutor-single-course-content-next a, #mn-tutor-next-btn');
+    if (!nextBtn) return;
 
-        if (nextBtn && completeBtn) {
-            nextBtn.addEventListener('click', function(e) {
-                e.preventDefault(); // Останавливаем обычный клик
-                const nextUrl = nextBtn.href; // Запоминаем, куда ведет кнопка "Дальше"
+    const label = nextBtn.querySelector('.tutor-mr-8, .tutor-ml-8');
+    if (label) label.textContent = 'Далее';
+    else nextBtn.textContent = 'Далее';
+    nextBtn.setAttribute('aria-label', 'Далее');
 
-                sessionStorage.setItem('tutor_auto_redirect_url', nextUrl);
-                completeBtn.click(); // Нажимаем системную кнопку "Завершить"
-
-                // Подстраховка
-                setTimeout(function() {
-                    window.location.href = nextUrl;
-                }, 1500);
-            });
+    nextBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (window.MNFinish && typeof window.MNFinish.go === 'function') {
+            window.MNFinish.go();
+            return;
         }
-    }, 800);
+
+        const data = window.mnFinishData || window.mnTutorTopbar || {};
+        window.location.href = data.nextUrl || data.gameUrl || '/game/';
+    });
 });

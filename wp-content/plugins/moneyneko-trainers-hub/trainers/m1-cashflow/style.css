@@ -184,9 +184,9 @@
 /* ==============================================================
    ЖЕСТКОЕ СКРЫТИЕ СИСТЕМНОЙ КНОПКИ "ДАЛЬШЕ" И САЙДБАРА
    ============================================================== */
-.tutor-course-topic-single-footer .tutor-single-course-content-next,
-.tutor-single-course-content-next,
-#mn-tutor-next-btn {
+.mn-trainer-incomplete .tutor-course-topic-single-footer .tutor-single-course-content-next,
+.mn-trainer-incomplete .tutor-single-course-content-next,
+.mn-trainer-incomplete #mn-tutor-next-btn {
     display: none !important;
 }
 

@@ -209,7 +209,7 @@
             $('mn-m2-result-text').textContent = 'Таблица заполнена абсолютно верно. Теперь ты умеешь фиксировать свои расходы!';
 
             // КНОПКА "ПЕРЕЙТИ ДАЛЬШЕ"
-            retryBtn.textContent = 'Перейти дальше ➔';
+            retryBtn.textContent = 'Далее ➔';
             retryBtn.style.backgroundColor = '#48bb78';
             retryBtn.onclick = function () {
                 retryBtn.textContent = 'Сохраняем… ⏳';

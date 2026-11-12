@@ -15,7 +15,7 @@
         var d = window.mnFinishData || {};
         if (d.nextUrl) return d.nextUrl;
         var a = document.querySelector('.tutor-single-course-content-next a[href]:not([href="#"])');
-        return a ? a.href : '';
+        return a ? a.href : (d.gameUrl || '');
     }
 
     async function completeViaFetch(m) {

@@ -1048,6 +1048,18 @@ html, body {
     transform: scale(0.95) !important;
 }
 
+.mn-trainer-exit-link {
+    position: fixed !important;
+    top: 16px;
+    right: 16px;
+    z-index: 10000;
+    width: 40px;
+    height: 40px;
+    background: #f2f2f2 !important;
+    border: 2px solid #2b2b2b !important;
+    border-radius: 6px !important;
+}
+
 /* === КНОПКА "СОДЕРЖАНИЕ" — только косметика, display НЕ трогаем,
    его контролирует сам Tutor через свои tutor-d-* классы === */
 .tutor-course-topics-sidebar-offcanvas-toggler,

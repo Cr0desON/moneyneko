@@ -7,7 +7,13 @@ function moneyneko_enqueue_styles() {
     wp_enqueue_style( 'moneyneko-fonts', 'https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Balsamiq+Sans:wght@400;700&display=swap', array(), null );
 
     wp_enqueue_style( 'astra-parent-style', get_template_directory_uri() . '/style.css' );
-    wp_enqueue_style( 'astra-child-style', get_stylesheet_directory_uri() . '/style.css', array('astra-parent-style') );
+    $child_style_path = get_stylesheet_directory() . '/style.css';
+    wp_enqueue_style(
+        'astra-child-style',
+        get_stylesheet_directory_uri() . '/style.css',
+        array( 'astra-parent-style' ),
+        file_exists( $child_style_path ) ? (string) filemtime( $child_style_path ) : null
+    );
 
     // Интерактивная карта лекций (Duolingo-style)
     if ( is_user_logged_in() ) {

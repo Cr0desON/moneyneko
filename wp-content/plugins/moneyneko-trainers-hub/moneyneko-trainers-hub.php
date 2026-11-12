@@ -2,7 +2,7 @@
 /**
  * Plugin Name: MoneyNeko Trainers Hub
  * Description: Единый центр управления интерактивными тренажерами MoneyNeko. Оптимизирован для высокой скорости работы.
- * Version: 1.0.0
+ * Version: 1.0.2
  * Author: MoneyNeko
  */
 
@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'MN_HUB_VERSION', '1.0.0' );
+define( 'MN_HUB_VERSION', '1.0.2' );
 define( 'MN_HUB_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MN_HUB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -48,6 +48,70 @@ function mn_hub_add_to_tutor( $post_types ) {
     $post_types[] = 'mn_trainer';
     return $post_types;
 }
+
+/** Get neighboring course items for custom trainer posts. */
+function mn_hub_get_content_navigation( $content_id ) {
+    $empty = (object) array( 'previous_id' => 0, 'next_id' => 0 );
+    if ( ! function_exists( 'tutor_utils' ) ) {
+        return $empty;
+    }
+
+    $content_id = absint( $content_id );
+    if ( 'mn_trainer' !== get_post_type( $content_id ) ) {
+        return tutor_utils()->get_course_prev_next_contents_by_id( $content_id );
+    }
+
+    // Tutor's get_course_id_by_subcontent() does not map custom content types.
+    $course_id = tutor_utils()->get_course_id_by( 'lesson', $content_id );
+    if ( ! $course_id ) {
+        return $empty;
+    }
+
+    $topics_query = tutor_utils()->get_topics( $course_id );
+    $topics       = ( $topics_query && ! empty( $topics_query->posts ) ) ? $topics_query->posts : array();
+    $content_ids  = array();
+
+    foreach ( $topics as $topic ) {
+        $contents_query = tutor_utils()->get_course_contents_by_topic( $topic->ID, -1 );
+        if ( $contents_query && ! empty( $contents_query->posts ) ) {
+            foreach ( $contents_query->posts as $content ) {
+                $content_ids[] = (int) $content->ID;
+            }
+        }
+    }
+
+    $index = array_search( $content_id, $content_ids, true );
+    if ( false === $index ) {
+        return $empty;
+    }
+
+    return (object) array(
+        'previous_id' => isset( $content_ids[ $index - 1 ] ) ? $content_ids[ $index - 1 ] : 0,
+        'next_id'     => isset( $content_ids[ $index + 1 ] ) ? $content_ids[ $index + 1 ] : 0,
+    );
+}
+
+// CSS uses this state to keep the course's Next button hidden until the trainer is complete.
+add_filter( 'body_class', function ( $classes ) {
+    $post = get_post( get_queried_object_id() );
+    if ( ! $post ) {
+        return $classes;
+    }
+
+    $is_trainer = 'mn_trainer' === $post->post_type;
+    if ( 'lesson' === $post->post_type ) {
+        $is_trainer = false !== strpos( $post->post_content, '[mn_trainer' );
+    }
+    if ( ! $is_trainer ) {
+        return $classes;
+    }
+
+    $is_completed = function_exists( 'tutor_utils' )
+        && tutor_utils()->is_completed_lesson( $post->ID, get_current_user_id() );
+    $classes[] = $is_completed ? 'mn-trainer-completed' : 'mn-trainer-incomplete';
+
+    return $classes;
+}, 20 );
 
 // Добавляем красивую иконку со знаком вопроса в список уроков
 add_filter( 'tutor_course_content_icon', function( $icon, $post_type ) {
@@ -137,13 +201,14 @@ add_action( 'wp_enqueue_scripts', function () {
     $id      = get_the_ID();
     $next_id = 0;
     if ( function_exists( 'tutor_utils' ) ) {
-        $c       = tutor_utils()->get_course_prev_next_contents_by_id( $id );
+        $c       = mn_hub_get_content_navigation( $id );
         $next_id = $c->next_id ?? 0;
     }
 
     wp_register_script( 'mn-finish', MN_HUB_URL . 'assets/mn-finish.js', [], MN_HUB_VERSION, true );
     wp_localize_script( 'mn-finish', 'mnFinishData', [
         'nextUrl' => $next_id ? get_permalink( $next_id ) : '',
+        'gameUrl' => home_url( '/game/' ),
     ] );
     wp_enqueue_script( 'mn-finish' );
 }, 20 );
