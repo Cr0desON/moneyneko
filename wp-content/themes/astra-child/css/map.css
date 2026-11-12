@@ -3,18 +3,261 @@
    ========================================================== */
 
 .mn-game-map-page {
-    display: flex;
-    flex-direction: column;
-    height: min(920px, calc(100vh - 130px));
-    min-height: 640px;
-    padding-bottom: 76px;
+    --mn-ink: #2c2c2c;
+    --mn-paper: #fffef9;
+    display: grid !important;
+    grid-template-columns: clamp(148px, 24vw, 248px) minmax(0, 1fr);
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    max-width: none !important;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    margin: 0;
+    padding: 0 !important;
+    overflow: hidden;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #fff;
+    box-shadow: none !important;
+    color: var(--mn-ink);
+    font-family: 'Balsamiq Sans', cursive, sans-serif;
+    z-index: 50;
+}
+
+html:has(.mn-game-map-page),
+body:has(.mn-game-map-page) {
+    height: 100%;
     overflow: hidden;
 }
 
-.mn-game-map-page > .sketch-hero-section,
-.mn-game-map-page > .top-buttons-container,
-.mn-game-map-page > .sketch-bg-deco {
-    flex-shrink: 0;
+body:has(.mn-game-map-page) .mn-tutorial-help {
+    left: calc(clamp(148px, 24vw, 248px) + 18px) !important;
+}
+
+.mn-game-map-page::before {
+    display: none;
+}
+
+.mn-game-sidebar {
+    position: relative;
+    z-index: 4;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    padding: 28px 20px 20px;
+    border-right: 1px solid #ddd9cf;
+    background: #fff;
+    box-shadow: 3px 0 12px rgba(44, 44, 44, 0.035);
+}
+
+.mn-game-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 24px;
+}
+
+.mn-game-cat-avatar {
+    display: grid;
+    width: 68px;
+    height: 68px;
+    place-items: center;
+    overflow: hidden;
+    border: 2px solid var(--mn-ink);
+    border-radius: 50%;
+    background: #fff3d9;
+}
+
+.mn-game-cat-avatar .cat-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: none;
+}
+
+.mn-game-brand-name {
+    color: var(--mn-ink);
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.mn-game-sidebar-stats {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.mn-game-sidebar .mn-sidebar-stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--mn-ink);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-shadow: none;
+}
+
+.mn-sidebar-stat-icon {
+    display: inline-grid;
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    place-items: center;
+    font-size: 19px;
+}
+
+.mn-xp-icon {
+    border: 1px solid #947018;
+    border-radius: 50%;
+    background: #f9d66e;
+    color: #604700;
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.mn-game-sidebar .streak-badge,
+.mn-game-sidebar .progress-xp-badge {
+    margin: 0;
+    color: var(--mn-ink);
+    font-size: 15px;
+}
+
+.mn-game-sidebar .mood-progress-wrapper {
+    width: 100%;
+    margin: 3px 0 0;
+    text-align: left;
+}
+
+.mood-progress-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 5px;
+    color: #4e4b43;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.mn-game-sidebar .mood-progress-text {
+    margin: 0;
+    color: #706c63;
+    font-size: 12px;
+}
+
+.mn-game-sidebar .mood-progress-container {
+    width: 100%;
+    height: 10px;
+    border: 1px solid var(--mn-ink);
+    border-radius: 99px;
+    background: #f1f0eb;
+    box-shadow: none;
+}
+
+.mn-game-sidebar .mood-progress-fill {
+    border-radius: inherit;
+    background: linear-gradient(90deg, #f0b84a, #f5d876);
+    background-size: auto;
+}
+
+.mn-game-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 3px;
+}
+
+.mn-game-sidebar .mn-sidebar-link,
+.mn-game-sidebar .sketch-btn-profile,
+.mn-game-sidebar .sketch-btn-leaderboard {
+    position: static;
+    display: flex;
+    width: 100%;
+    min-height: 42px;
+    align-items: center;
+    gap: 11px;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 9px 11px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    box-shadow: none;
+    color: var(--mn-ink) !important;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: left;
+    text-decoration: none !important;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.mn-game-sidebar .mn-sidebar-link svg {
+    width: 21px;
+    height: 21px;
+    flex: 0 0 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.7;
+}
+
+.mn-game-sidebar .mn-sidebar-link:hover,
+.mn-game-sidebar .mn-sidebar-link:focus-visible {
+    background: #f6f1e7;
+}
+
+.mn-game-sidebar .mn-sidebar-link.is-active {
+    background: #f3e4c8;
+    color: #29251e !important;
+    font-weight: 700;
+}
+
+.mn-game-main {
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: var(--mn-paper);
+    background-image:
+        linear-gradient(to right, rgba(95, 91, 75, 0.09) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(95, 91, 75, 0.09) 1px, transparent 1px);
+    background-size: 18px 18px;
+}
+
+.mn-game-main-header {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    min-height: 68px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 28px;
+    border-bottom: 1px solid rgba(76, 72, 58, 0.12);
+    background: rgba(255, 254, 249, 0.88);
+}
+
+.mn-current-module-title {
+    max-width: min(70%, 560px);
+    padding: 8px 13px;
+    overflow: hidden;
+    border: 2px solid var(--mn-ink);
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 2px 3px 0 var(--mn-ink);
+    color: var(--mn-ink);
+    font-size: 17px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .mn-map-container {
@@ -23,8 +266,8 @@
     min-height: 0;
     width: 100%;
     max-width: none;
-    margin: 18px 0 0;
-    padding: 12px 0 36px;
+    margin: 0;
+    padding: 18px 0 36px;
     box-sizing: border-box;
     overflow-x: hidden;
     overflow-y: auto;
@@ -35,17 +278,16 @@
 }
 
 .mn-game-map-page .mn-map-current-button {
-    position: absolute;
+    position: static;
     z-index: 10;
-    left: 30px;
-    bottom: 24px;
-    border: 2px solid #2c3e50;
-    border-radius: 6px;
-    padding: 10px 18px;
+    flex: 0 0 auto;
+    border: 1.5px solid #2c3e50;
+    border-radius: 8px;
+    padding: 8px 12px;
     background: #fff;
     color: #2c3e50;
-    box-shadow: 2px 4px 0 #2c3e50;
-    font: 700 16px/1.2 'Balsamiq Sans', cursive, sans-serif;
+    box-shadow: 1px 2px 0 #2c3e50;
+    font: 700 13px/1.2 'Balsamiq Sans', cursive, sans-serif;
     cursor: pointer;
     transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
 }
@@ -55,7 +297,7 @@
 }
 
 .mn-game-map-page .mn-map-current-button:active {
-    transform: translateY(4px);
+    transform: translateY(2px);
     box-shadow: 0 0 0 #2c3e50;
 }
 
@@ -280,25 +522,184 @@
     50% { margin-top: -6px; }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) and (min-width: 521px) {
+    .mn-game-sidebar {
+        padding: 22px 10px 18px;
+    }
+
+    .mn-game-brand {
+        margin-bottom: 19px;
+    }
+
+    .mn-game-cat-avatar {
+        width: 58px;
+        height: 58px;
+    }
+
+    .mn-game-brand-name {
+        font-size: 15px;
+    }
+
+    .mn-game-sidebar-stats {
+        gap: 8px;
+        margin-bottom: 17px;
+    }
+
+    .mn-game-sidebar .mn-sidebar-stat,
+    .mn-game-sidebar .streak-badge,
+    .mn-game-sidebar .progress-xp-badge {
+        gap: 6px;
+        font-size: 13px;
+    }
+
+    .mn-game-sidebar-nav {
+        gap: 4px;
+    }
+
+    .mn-game-sidebar .mn-sidebar-link,
+    .mn-game-sidebar .sketch-btn-profile,
+    .mn-game-sidebar .sketch-btn-leaderboard {
+        min-height: 40px;
+        gap: 7px;
+        padding: 8px 6px;
+        font-size: 13px;
+    }
+
+    .mn-game-sidebar .mn-sidebar-link svg {
+        width: 19px;
+        height: 19px;
+        flex-basis: 19px;
+    }
+
+    .mn-game-main-header {
+        gap: 10px;
+        padding: 10px 16px;
+    }
+
+    .mn-current-module-title {
+        max-width: min(64%, 440px);
+        font-size: 15px;
+    }
+
+    .mn-game-map-page .mn-map-current-button {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 520px) {
     .mn-game-map-page {
-        height: min(880px, calc(100dvh - 88px));
-        min-height: 590px;
-        margin-top: 20px;
-        padding: 52px 12px 68px;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr);
+        min-height: 0;
+    }
+
+    .mn-game-sidebar {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-rows: auto auto;
+        gap: 8px 16px;
+        padding: 9px 12px 8px;
+        border-right: 0;
+        border-bottom: 1px solid #ddd9cf;
+        box-shadow: 0 3px 10px rgba(44, 44, 44, 0.035);
+    }
+
+    .mn-game-brand {
+        flex-direction: row;
+        gap: 8px;
+        margin: 0;
+    }
+
+    .mn-game-cat-avatar {
+        width: 42px;
+        height: 42px;
+    }
+
+    .mn-game-brand-name {
+        font-size: 14px;
+    }
+
+    .mn-game-sidebar-stats {
+        grid-template-columns: repeat(2, minmax(0, max-content));
+        align-content: center;
+        justify-content: end;
+        gap: 7px 12px;
+        margin: 0;
+    }
+
+    .mn-game-sidebar .mn-sidebar-stat,
+    .mn-game-sidebar .streak-badge,
+    .mn-game-sidebar .progress-xp-badge {
+        gap: 5px;
+        font-size: 12px;
+    }
+
+    .mn-sidebar-stat-icon {
+        width: 18px;
+        height: 18px;
+        flex-basis: 18px;
+        font-size: 16px;
+    }
+
+    .mn-xp-icon {
+        font-size: 8px;
+    }
+
+    .mn-game-sidebar .mood-progress-wrapper {
+        display: none;
+    }
+
+    .mn-game-sidebar-nav {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        gap: 5px;
+        margin: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .mn-game-sidebar-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .mn-game-sidebar .mn-sidebar-link,
+    .mn-game-sidebar .sketch-btn-profile,
+    .mn-game-sidebar .sketch-btn-leaderboard {
+        min-height: 36px;
+        justify-content: center;
+        gap: 6px;
+        padding: 6px 9px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .mn-game-sidebar .mn-sidebar-link svg {
+        width: 18px;
+        height: 18px;
+        flex-basis: 18px;
+    }
+
+    .mn-game-main-header {
+        min-height: 54px;
+        gap: 8px;
+        padding: 8px 12px;
+    }
+
+    .mn-current-module-title {
+        max-width: calc(100% - 125px);
+        padding: 6px 9px;
+        font-size: 14px;
+    }
+
+    .mn-game-map-page .mn-map-current-button {
+        padding: 7px 8px;
+        font-size: 11px;
     }
 
     .mn-map-container {
         width: 100%;
-        margin-top: 12px;
-        padding: 8px 0 28px;
-    }
-
-    .mn-game-map-page .mn-map-current-button {
-        left: 44px;
-        bottom: 16px;
-        padding: 8px 12px;
-        font-size: 13px;
+        padding: 10px 0 24px;
     }
 
     .mn-node-side-doodle {
@@ -316,6 +717,60 @@
 
     .mn-node-row {
         transform: translateX(calc(sin(var(--i, 0) * 1.15) * 45px));
+    }
+}
+
+@media (max-width: 600px) and (min-width: 521px) {
+    .mn-game-main-header {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .mn-current-module-title {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 420px) {
+    .mn-game-sidebar {
+        gap: 7px 8px;
+        padding-right: 8px;
+        padding-left: 8px;
+    }
+
+    .mn-game-brand-name {
+        display: none;
+    }
+
+    .mn-game-sidebar-stats {
+        grid-template-columns: repeat(2, minmax(0, max-content));
+        justify-content: space-between;
+        gap: 6px;
+    }
+
+    .mn-game-sidebar .mn-sidebar-link,
+    .mn-game-sidebar .sketch-btn-profile,
+    .mn-game-sidebar .sketch-btn-leaderboard {
+        gap: 4px;
+        padding-right: 5px;
+        padding-left: 5px;
+        font-size: 11px;
+    }
+
+    .mn-game-main-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .mn-current-module-title {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 520px) {
+    body:has(.mn-game-map-page) .mn-tutorial-help {
+        left: 12px !important;
+        bottom: 12px !important;
     }
 }
 
