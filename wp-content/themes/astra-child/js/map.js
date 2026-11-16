@@ -4,6 +4,10 @@
     var mapEl = document.getElementById('mn-interactive-map');
     var svgEl = document.getElementById('mn-map-svg');
     var currentButton = document.getElementById('mn-map-current-button');
+    var moduleTitleEl = document.querySelector('.mn-current-module-title');
+    // Пока карта сама возвращается к текущему уроку, не показываем стрелку снова.
+    // Она станет доступна лишь после следующей ручной прокрутки пользователя.
+    var currentButtonSuppressed = true;
     if (!mapEl || !svgEl) { return; }
 
     // 1. Отрисовка извилистой тропинки между центрами кружков
@@ -45,15 +49,95 @@
         }
     }
 
-    function scrollToCurrentNode(behavior) {
+    function getCurrentNode() {
         var currentId = mapEl.dataset.currentNode;
-        var currentNodeEl = mapEl.querySelector('.mn-node[data-node-id="' + currentId + '"]');
+        return currentId ? mapEl.querySelector('.mn-node[data-node-id="' + currentId + '"]') : null;
+    }
+
+    function scrollToCurrentNode(behavior) {
+        var currentNodeEl = getCurrentNode();
         if (currentNodeEl) {
             var rect = currentNodeEl.getBoundingClientRect();
             var mapRect = mapEl.getBoundingClientRect();
             var nodeTop = rect.top - mapRect.top + mapEl.scrollTop;
             var targetTop = nodeTop - (mapEl.clientHeight - currentNodeEl.offsetHeight) / 2;
             mapEl.scrollTo({ top: Math.max(0, targetTop), behavior: behavior || 'auto' });
+        }
+    }
+
+    // На телефоне кнопка показывает направление к текущему уроку и скрывается,
+    // когда этот урок уже виден в области карты.
+    function updateCurrentButtonState() {
+        if (!currentButton) { return; }
+
+        currentButton.classList.remove('is-visible', 'is-current-above', 'is-current-below');
+
+        if (!window.matchMedia('(max-width: 520px)').matches) {
+            currentButton.removeAttribute('tabindex');
+            currentButton.setAttribute('aria-label', 'Прокрутить к текущему уроку');
+            return;
+        }
+
+        if (currentButtonSuppressed) {
+            currentButton.setAttribute('tabindex', '-1');
+            currentButton.setAttribute('aria-label', 'Текущий урок на экране');
+            return;
+        }
+
+        var currentNodeEl = getCurrentNode();
+        if (!currentNodeEl || currentButton.disabled) {
+            currentButton.setAttribute('tabindex', '-1');
+            return;
+        }
+
+        var nodeRect = currentNodeEl.getBoundingClientRect();
+        var mapRect = mapEl.getBoundingClientRect();
+        var nodeCenter = nodeRect.top + nodeRect.height / 2;
+        var topEdge = mapRect.top + 20;
+        var bottomEdge = mapRect.bottom - 20;
+        var directionClass = '';
+        var directionLabel = '';
+
+        if (nodeCenter < topEdge) {
+            directionClass = 'is-current-above';
+            directionLabel = 'Текущий урок выше';
+        } else if (nodeRect.top >= bottomEdge) {
+            directionClass = 'is-current-below';
+            directionLabel = 'Текущий урок ниже';
+        }
+
+        if (directionClass) {
+            currentButton.classList.add('is-visible', directionClass);
+            currentButton.removeAttribute('tabindex');
+            currentButton.setAttribute('aria-label', directionLabel);
+        } else {
+            currentButton.setAttribute('tabindex', '-1');
+            currentButton.setAttribute('aria-label', 'Текущий урок на экране');
+        }
+    }
+
+    // Верхняя подпись следует за модулем, который пользователь прокрутил к
+    // верхней части видимой области карты.
+    function updateCurrentModuleTitle() {
+        if (!moduleTitleEl) { return; }
+
+        var modules = Array.from(mapEl.querySelectorAll('.mn-map-module[data-module-title]'));
+        if (!modules.length) { return; }
+
+        var mapTop = mapEl.getBoundingClientRect().top + 24;
+        var activeModule = modules[0];
+
+        for (var i = 0; i < modules.length; i++) {
+            if (modules[i].getBoundingClientRect().top <= mapTop) {
+                activeModule = modules[i];
+            } else {
+                break;
+            }
+        }
+
+        var title = activeModule.dataset.moduleTitle;
+        if (title && moduleTitleEl.textContent !== title) {
+            moduleTitleEl.textContent = title;
         }
     }
 
@@ -95,19 +179,46 @@
 
     // Автоматический пересчёт тропинки при повороте экрана или ресайзе
     if (window.ResizeObserver) {
-        new ResizeObserver(drawPath).observe(mapEl);
+        new ResizeObserver(function () {
+            drawPath();
+            updateCurrentButtonState();
+            updateCurrentModuleTitle();
+        }).observe(mapEl);
     } else {
-        window.addEventListener('resize', drawPath);
+        window.addEventListener('resize', function () {
+            drawPath();
+            updateCurrentButtonState();
+            updateCurrentModuleTitle();
+        });
     }
 
     window.addEventListener('load', function () {
         drawPath();
         scrollToCurrentNode('auto');
         handleCatJump();
+        updateCurrentButtonState();
+        updateCurrentModuleTitle();
     });
+
+    function markCurrentButtonAsUserControlled() {
+        currentButtonSuppressed = false;
+    }
+
+    mapEl.addEventListener('wheel', markCurrentButtonAsUserControlled, { passive: true });
+    mapEl.addEventListener('touchmove', markCurrentButtonAsUserControlled, { passive: true });
+    mapEl.addEventListener('pointerdown', markCurrentButtonAsUserControlled, { passive: true });
+
+    mapEl.addEventListener('scroll', function () {
+        if (!currentButtonSuppressed) {
+            updateCurrentButtonState();
+        }
+        updateCurrentModuleTitle();
+    }, { passive: true });
 
     if (currentButton) {
         currentButton.addEventListener('click', function () {
+            currentButtonSuppressed = true;
+            updateCurrentButtonState();
             scrollToCurrentNode('smooth');
         });
     }

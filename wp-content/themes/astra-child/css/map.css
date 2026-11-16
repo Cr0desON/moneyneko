@@ -6,7 +6,7 @@
     --mn-ink: #2c2c2c;
     --mn-paper: #fffef9;
     display: grid !important;
-    grid-template-columns: clamp(148px, 24vw, 248px) minmax(0, 1fr);
+    grid-template-columns: clamp(200px, 26vw, 320px) minmax(0, 1fr);
     position: fixed;
     inset: 0;
     width: 100vw;
@@ -32,10 +32,6 @@ body:has(.mn-game-map-page) {
     overflow: hidden;
 }
 
-body:has(.mn-game-map-page) .mn-tutorial-help {
-    left: calc(clamp(148px, 24vw, 248px) + 18px) !important;
-}
-
 .mn-game-map-page::before {
     display: none;
 }
@@ -46,7 +42,7 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
     display: flex;
     min-width: 0;
     flex-direction: column;
-    padding: 28px 20px 20px;
+    padding: 34px 28px 26px;
     border-right: 1px solid #ddd9cf;
     background: #fff;
     box-shadow: 3px 0 12px rgba(44, 44, 44, 0.035);
@@ -56,14 +52,14 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 7px;
-    margin-bottom: 24px;
+    gap: 11px;
+    margin-bottom: 36px;
 }
 
 .mn-game-cat-avatar {
     display: grid;
-    width: 68px;
-    height: 68px;
+    width: 116px;
+    height: 116px;
     place-items: center;
     overflow: hidden;
     border: 2px solid var(--mn-ink);
@@ -81,22 +77,22 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
 
 .mn-game-brand-name {
     color: var(--mn-ink);
-    font-size: 17px;
+    font-size: 22px;
     font-weight: 700;
 }
 
 .mn-game-sidebar-stats {
     display: grid;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 15px;
+    margin-bottom: 30px;
 }
 
 .mn-game-sidebar .mn-sidebar-stat {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 11px;
     color: var(--mn-ink);
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 700;
     line-height: 1.2;
     text-shadow: none;
@@ -104,11 +100,11 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
 
 .mn-sidebar-stat-icon {
     display: inline-grid;
-    width: 22px;
-    height: 22px;
-    flex: 0 0 22px;
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
     place-items: center;
-    font-size: 19px;
+    font-size: 25px;
 }
 
 .mn-xp-icon {
@@ -116,7 +112,7 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
     border-radius: 50%;
     background: #f9d66e;
     color: #604700;
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 800;
 }
 
@@ -124,7 +120,7 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
 .mn-game-sidebar .progress-xp-badge {
     margin: 0;
     color: var(--mn-ink);
-    font-size: 15px;
+    font-size: 18px;
 }
 
 .mn-game-sidebar .mood-progress-wrapper {
@@ -137,21 +133,21 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
     display: flex;
     justify-content: space-between;
     gap: 8px;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
     color: #4e4b43;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
 }
 
 .mn-game-sidebar .mood-progress-text {
     margin: 0;
     color: #706c63;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .mn-game-sidebar .mood-progress-container {
     width: 100%;
-    height: 10px;
+    height: 12px;
     border: 1px solid var(--mn-ink);
     border-radius: 99px;
     background: #f1f0eb;
@@ -167,8 +163,8 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
 .mn-game-sidebar-nav {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    margin-top: 3px;
+    gap: 8px;
+    margin-top: 5px;
 }
 
 .mn-game-sidebar .mn-sidebar-link,
@@ -177,18 +173,18 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
     position: static;
     display: flex;
     width: 100%;
-    min-height: 42px;
+    min-height: 54px;
     align-items: center;
-    gap: 11px;
+    gap: 14px;
     box-sizing: border-box;
     margin: 0;
-    padding: 9px 11px;
+    padding: 12px 14px;
     border: 0;
     border-radius: 9px;
     background: transparent;
     box-shadow: none;
     color: var(--mn-ink) !important;
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 600;
     line-height: 1.2;
     text-align: left;
@@ -197,9 +193,9 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
 }
 
 .mn-game-sidebar .mn-sidebar-link svg {
-    width: 21px;
-    height: 21px;
-    flex: 0 0 21px;
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
     fill: none;
     stroke: currentColor;
     stroke-linecap: round;
@@ -218,7 +214,47 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
     font-weight: 700;
 }
 
+/* Кнопка обучения — часть сайдбара, а не плавающий элемент поверх карты. */
+.mn-game-sidebar .mn-tutorial-help {
+    position: static !important;
+    z-index: auto !important;
+    display: inline-grid !important;
+    width: 52px !important;
+    height: 52px !important;
+    flex: 0 0 52px;
+    place-items: center;
+    align-self: flex-start;
+    margin: auto 0 0 !important;
+    padding: 0 !important;
+    border: 2px solid #d3bd8d !important;
+    border-radius: 50% !important;
+    background-color: #e5d1aa !important;
+    box-shadow: 0 2px 0 rgba(74, 59, 35, 0.22) !important;
+    color: #493b25 !important;
+    font-family: 'Balsamiq Sans', cursive, sans-serif !important;
+    font-size: 29px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    opacity: 0.78 !important;
+    transition: background-color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.mn-game-sidebar .mn-tutorial-help:hover,
+.mn-game-sidebar .mn-tutorial-help:focus-visible {
+    background-color: #f3e4c8 !important;
+    box-shadow: 0 3px 0 rgba(74, 59, 35, 0.25) !important;
+    color: #362b1b !important;
+    opacity: 1 !important;
+    transform: translateY(-1px) !important;
+}
+
+.mn-game-sidebar .mn-tutorial-help:active {
+    transform: translateY(1px) !important;
+    box-shadow: 0 1px 0 rgba(74, 59, 35, 0.25) !important;
+}
+
 .mn-game-main {
+    position: relative;
     display: flex;
     min-width: 0;
     min-height: 0;
@@ -238,7 +274,7 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
     min-height: 68px;
     flex: 0 0 auto;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 16px;
     padding: 12px 28px;
     border-bottom: 1px solid rgba(76, 72, 58, 0.12);
@@ -247,6 +283,7 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
 
 .mn-current-module-title {
     max-width: min(70%, 560px);
+    box-sizing: border-box;
     padding: 8px 13px;
     overflow: hidden;
     border: 2px solid var(--mn-ink);
@@ -256,6 +293,7 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
     color: var(--mn-ink);
     font-size: 17px;
     font-weight: 700;
+    text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -278,31 +316,38 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
 }
 
 .mn-game-map-page .mn-map-current-button {
-    position: static;
+    position: absolute;
+    right: 28px;
+    bottom: 28px;
     z-index: 10;
-    flex: 0 0 auto;
-    border: 1.5px solid #2c3e50;
-    border-radius: 8px;
-    padding: 8px 12px;
-    background: #fff;
-    color: #2c3e50;
-    box-shadow: 1px 2px 0 #2c3e50;
-    font: 700 13px/1.2 'Balsamiq Sans', cursive, sans-serif;
+    border: 2px solid #d3bd8d;
+    border-radius: 10px;
+    padding: 12px 18px;
+    background: #e5d1aa;
+    color: #493b25;
+    box-shadow: 0 3px 0 rgba(74, 59, 35, 0.22);
+    font: 700 16px/1.2 'Balsamiq Sans', cursive, sans-serif;
     cursor: pointer;
-    transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+    opacity: 0.78;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, opacity 0.15s ease;
 }
 
-.mn-game-map-page .mn-map-current-button:hover {
-    background: #f0f8ff;
+.mn-game-map-page .mn-map-current-button:hover,
+.mn-game-map-page .mn-map-current-button:focus-visible {
+    background: #f3e4c8;
+    box-shadow: 0 4px 0 rgba(74, 59, 35, 0.25);
+    color: #362b1b;
+    opacity: 1;
+    transform: translateY(-1px);
 }
 
 .mn-game-map-page .mn-map-current-button:active {
-    transform: translateY(2px);
-    box-shadow: 0 0 0 #2c3e50;
+    transform: translateY(1px);
+    box-shadow: 0 1px 0 rgba(74, 59, 35, 0.25);
 }
 
 .mn-game-map-page .mn-map-current-button:focus-visible {
-    outline: 3px solid #f4bd4f;
+    outline: 3px solid #f1c40f;
     outline-offset: 3px;
 }
 
@@ -315,10 +360,10 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
     position: absolute;
     top: 50%;
     display: block;
-    width: 54px;
-    height: 54px;
-    font-size: 48px !important;
-    line-height: 54px;
+    width: 66px;
+    height: 66px;
+    font-size: 58px !important;
+    line-height: 66px;
     text-align: center;
     opacity: 0.95;
     pointer-events: none;
@@ -524,7 +569,7 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
 
 @media (max-width: 900px) and (min-width: 521px) {
     .mn-game-sidebar {
-        padding: 22px 10px 18px;
+        padding: 24px 14px 20px;
     }
 
     .mn-game-brand {
@@ -532,12 +577,12 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
     }
 
     .mn-game-cat-avatar {
-        width: 58px;
-        height: 58px;
+        width: 82px;
+        height: 82px;
     }
 
     .mn-game-brand-name {
-        font-size: 15px;
+        font-size: 17px;
     }
 
     .mn-game-sidebar-stats {
@@ -549,7 +594,7 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
     .mn-game-sidebar .streak-badge,
     .mn-game-sidebar .progress-xp-badge {
         gap: 6px;
-        font-size: 13px;
+        font-size: 15px;
     }
 
     .mn-game-sidebar-nav {
@@ -559,16 +604,23 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
     .mn-game-sidebar .mn-sidebar-link,
     .mn-game-sidebar .sketch-btn-profile,
     .mn-game-sidebar .sketch-btn-leaderboard {
-        min-height: 40px;
+        min-height: 46px;
         gap: 7px;
         padding: 8px 6px;
-        font-size: 13px;
+        font-size: 15px;
     }
 
     .mn-game-sidebar .mn-sidebar-link svg {
         width: 19px;
         height: 19px;
         flex-basis: 19px;
+    }
+
+    .mn-game-sidebar .mn-tutorial-help {
+        width: 46px !important;
+        height: 46px !important;
+        flex-basis: 46px;
+        font-size: 26px !important;
     }
 
     .mn-game-main-header {
@@ -578,10 +630,14 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
 
     .mn-current-module-title {
         max-width: min(64%, 440px);
+        margin-right: auto;
+        margin-left: auto;
         font-size: 15px;
     }
 
     .mn-game-map-page .mn-map-current-button {
+        right: 18px;
+        bottom: 18px;
         padding: 8px 10px;
         font-size: 12px;
     }
@@ -680,6 +736,19 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
         flex-basis: 18px;
     }
 
+    .mn-game-sidebar .mn-tutorial-help {
+        position: fixed !important;
+        left: calc(12px + env(safe-area-inset-left)) !important;
+        bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+        z-index: 20 !important;
+        grid-column: auto;
+        width: 42px !important;
+        height: 42px !important;
+        flex-basis: 42px;
+        margin: 0 !important;
+        font-size: 24px !important;
+    }
+
     .mn-game-main-header {
         min-height: 54px;
         gap: 8px;
@@ -687,14 +756,50 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
     }
 
     .mn-current-module-title {
-        max-width: calc(100% - 125px);
+        max-width: calc(100% - 24px);
+        margin-right: auto;
+        margin-left: auto;
         padding: 6px 9px;
         font-size: 14px;
     }
 
     .mn-game-map-page .mn-map-current-button {
-        padding: 7px 8px;
-        font-size: 11px;
+        right: calc(14px + env(safe-area-inset-right));
+        bottom: calc(14px + env(safe-area-inset-bottom));
+        display: inline-grid;
+        width: 48px;
+        height: 48px;
+        place-items: center;
+        padding: 0;
+        border-radius: 50%;
+        font-size: 0;
+        line-height: 1;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(8px);
+    }
+
+    .mn-game-map-page .mn-map-current-button.is-visible {
+        opacity: 0.78;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    .mn-game-map-page .mn-map-current-button::before {
+        content: '↓';
+        font: 700 30px/1 'Balsamiq Sans', cursive, sans-serif;
+    }
+
+    .mn-game-map-page .mn-map-current-button.is-current-above::before {
+        content: '↑';
+    }
+
+    .mn-game-map-page .mn-map-current-button:disabled {
+        display: none;
+    }
+
+    .mn-map-current-button-label {
+        display: none;
     }
 
     .mn-map-container {
@@ -723,11 +828,11 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
 @media (max-width: 600px) and (min-width: 521px) {
     .mn-game-main-header {
         flex-wrap: wrap;
-        justify-content: flex-start;
+        justify-content: center;
     }
 
     .mn-current-module-title {
-        max-width: 100%;
+        max-width: calc(100% - 24px);
     }
 }
 
@@ -758,19 +863,13 @@ body:has(.mn-game-map-page) .mn-tutorial-help {
     }
 
     .mn-game-main-header {
-        align-items: flex-start;
-        flex-direction: column;
+        align-items: center;
+        flex-direction: row;
+        justify-content: center;
     }
 
     .mn-current-module-title {
-        max-width: 100%;
-    }
-}
-
-@media (max-width: 520px) {
-    body:has(.mn-game-map-page) .mn-tutorial-help {
-        left: 12px !important;
-        bottom: 12px !important;
+        max-width: calc(100% - 16px);
     }
 }
 

@@ -93,15 +93,16 @@ if ( ! $last_cat_node && $current_node && $user_id ) {
                 <span>Лидерборд</span>
             </a>
         </nav>
+
+        <?php if ( is_user_logged_in() ) : ?>
+            <!-- Повторно показывает обучение (js/tutorial.js). -->
+            <button type="button" id="mn-tutorial-help" class="mn-tutorial-help" title="Показать обучение" aria-label="Показать обучение">?</button>
+        <?php endif; ?>
     </aside>
 
     <main class="mn-game-main">
         <header class="mn-game-main-header">
             <div class="mn-current-module-title"><?php echo esc_html( $map_heading ); ?></div>
-            <button type="button" class="mn-map-current-button" id="mn-map-current-button"
-                    aria-label="Прокрутить к текущему уроку" <?php echo $current_node ? '' : 'disabled'; ?>>
-                🎯 К текущему уроку
-            </button>
         </header>
 
     <!-- ИНТЕРАКТИВНАЯ КАРТА (ЗМЕЙКА ВМЕСТО СЕТКИ МОДУЛЕЙ) -->
@@ -118,7 +119,13 @@ if ( ! $last_cat_node && $current_node && $user_id ) {
         <?php $map_doodle_icons = array( '🪙', '📈', '🧾', '🐷', '💳', '📊', '🧮', '🏦', '💰', '📉', '📒', '🏧' ); ?>
         <div class="mn-map-modules">
             <?php foreach ( $map_data['modules'] as $m_idx => $module ) : ?>
-                <div class="mn-map-module zone-<?php echo esc_attr( $module['zone'] ); ?>" 
+                <?php
+                $module_heading = trim( (string) $module['title'] );
+                $module_heading = preg_replace( '/^Модуль\s*\d+\s*[:–—-]\s*/u', '', $module_heading );
+                $module_heading = sprintf( 'Модуль %d: %s', (int) $module['index'], $module_heading );
+                ?>
+                <div class="mn-map-module zone-<?php echo esc_attr( $module['zone'] ); ?>"
+                     data-module-title="<?php echo esc_attr( $module_heading ); ?>"
                      <?php echo ( $m_idx === 0 ) ? 'id="mn-tour-first-module"' : ''; ?>>
 
                     <div class="mn-module-banner">
@@ -171,10 +178,10 @@ if ( ! $last_cat_node && $current_node && $user_id ) {
         </div>
     </div>
 
+    <button type="button" class="mn-map-current-button" id="mn-map-current-button"
+            aria-label="Прокрутить к текущему уроку" <?php echo $current_node ? '' : 'disabled'; ?>>
+        <span class="mn-map-current-button-label">К текущему уроку</span>
+    </button>
+
     </main>
 </div>
-
-<?php if ( is_user_logged_in() ) : ?>
-    <!-- Кнопка «?» — повторно показывает туториал (js/tutorial.js) -->
-    <button type="button" id="mn-tutorial-help" class="mn-tutorial-help" title="Показать обучение" aria-label="Показать обучение">?</button>
-<?php endif; ?>
