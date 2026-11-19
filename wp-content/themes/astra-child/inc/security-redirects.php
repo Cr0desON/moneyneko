@@ -104,3 +104,38 @@ add_action( 'admin_init', function () {
         exit;
     }
 } );
+
+// Ссылка «Авторизоваться» в форме регистрации Tutor LMS → наша страница входа.
+add_filter( 'tutor_dashboard_url', function ( $dashboard_url, $sub_url ) {
+    // Не меняем внутренние ссылки кабинета: /courses, /settings и т. п.
+    if ( '' !== $sub_url || ! function_exists( 'tutor_utils' ) ) {
+        return $dashboard_url;
+    }
+
+    $registration_page_id = (int) tutor_utils()->get_option( 'student_register_page' );
+
+    // Меняем только пустую ссылку кабинета, которую Tutor выводит на странице регистрации.
+    if ( $registration_page_id && is_page( $registration_page_id ) ) {
+        return home_url( '/login/' );
+    }
+
+    return $dashboard_url;
+}, 10, 2 );
+
+// Полностью запрещаем пользователям становиться преподавателями через Tutor LMS.
+add_filter( 'tutor_can_apply_for_instructor', '__return_false' );
+
+add_filter( 'registration_errors', function ( $errors ) {
+    $action = isset( $_POST['tutor_action'] )
+        ? sanitize_key( wp_unslash( $_POST['tutor_action'] ) )
+        : '';
+
+    if ( 'tutor_register_instructor' === $action ) {
+        $errors->add(
+            'mn_instructor_registration_disabled',
+            'Регистрация преподавателей отключена.'
+        );
+    }
+
+    return $errors;
+} );
