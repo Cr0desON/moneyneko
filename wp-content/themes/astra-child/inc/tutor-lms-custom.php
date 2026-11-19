@@ -56,3 +56,14 @@ add_filter( 'mn_is_protected_request', function ( $is_protected ) {
     }
     return $is_protected;
 } );
+
+// Кнопка возврата на главную под формой регистрации Tutor LMS.
+add_action( 'tutor_after_registration_form_wrap', function () {
+    ?>
+    <div class="tutor-flex tutor-justify-center tutor-mt-4">
+        <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="tutor-btn tutor-btn-link">
+            ← На главную
+        </a>
+    </div>
+    <?php
+} );
