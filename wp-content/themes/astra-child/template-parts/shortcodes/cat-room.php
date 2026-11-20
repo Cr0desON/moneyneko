@@ -6,25 +6,6 @@
     </header>
 
     <div class="mn-cat-room__scene">
-        <div class="mn-cat-room__window" aria-hidden="true">
-            <span class="mn-cat-room__cloud"></span>
-            <span class="mn-cat-room__horizon"></span>
-        </div>
-        <div class="mn-cat-room__bed" aria-hidden="true">
-            <span class="mn-cat-room__pillow"></span>
-            <span class="mn-cat-room__blanket"></span>
-        </div>
-        <div class="mn-cat-room__desk" aria-hidden="true">
-            <div class="mn-cat-room__monitor">
-                <span class="mn-cat-room__monitor-logo">moneyneko</span>
-                <span class="mn-cat-room__monitor-card"></span>
-                <span class="mn-cat-room__monitor-line mn-cat-room__monitor-line--one"></span>
-                <span class="mn-cat-room__monitor-line mn-cat-room__monitor-line--two"></span>
-            </div>
-            <span class="mn-cat-room__keyboard"></span>
-        </div>
-
-        <div class="mn-cat-room__rug" aria-hidden="true"></div>
         <div class="mn-cat-room__cat-wrap">
             <img
                 class="mn-cat-room__cat"
