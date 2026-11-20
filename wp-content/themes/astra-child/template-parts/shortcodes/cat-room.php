@@ -16,13 +16,11 @@
     </div>
 
     <div class="mn-cat-room__mood" aria-label="Настроение Гроша">
-        <div class="mn-cat-room__mood-score">
-            <span>Настроение Гроша</span>
-            <strong><?php echo esc_html( $mood_points ); ?><small>/100</small></strong>
-        </div>
+        <span class="mn-cat-room__mood-title">Настроение Гроша</span>
         <div class="mn-cat-room__progress" role="progressbar" aria-label="Настроение Гроша" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( $mood_points ); ?>">
             <span style="width: <?php echo esc_attr( $mood_points ); ?>%;"></span>
         </div>
+        <strong class="mn-cat-room__mood-value"><?php echo esc_html( $mood_points ); ?><small>/100</small></strong>
     </div>
 
     <div class="btn-container">
