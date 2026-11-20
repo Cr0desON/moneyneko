@@ -13,8 +13,10 @@
     font-family: 'Balsamiq Sans', cursive, sans-serif;
 }
 
-.mn-cat-room__header { margin-bottom: 22px; text-align: center; }
+.mn-cat-room__header { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 22px; text-align: center; }
 .mn-cat-room__header h1 { margin: 0; color: var(--mn-room-ink); font-size: clamp(30px, 5vw, 42px); }
+.mn-cat-room__title-paw { display: inline-flex; width: 34px; flex: 0 0 34px; color: #dfc19b; }
+.mn-cat-room__title-paw svg { width: 100%; height: auto; fill: currentColor; }
 
 .mn-cat-room__scene {
     position: relative;
@@ -63,6 +65,8 @@
 .mn-cat-room__progress { height: 20px; overflow: hidden; border: 2px solid #bc9c82; border-radius: 99px; background: #f5ead8; box-shadow: inset 0 1px 2px rgba(110, 71, 46, .15); }
 .mn-cat-room__progress span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #ef806e, #f7ca61 52%, #70bd83); transition: width .35s ease; }
 .mn-cat-room .btn-container { margin-top: 30px; padding-bottom: 4px; }
+.mn-cat-room .game-btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; }
+.mn-cat-room__button-paw { width: 19px; height: 19px; flex: 0 0 19px; fill: currentColor; }
 
 @media (min-width: 581px) {
     .mn-cat-room { margin: 20px auto; padding: 24px clamp(18px, 4vw, 40px) 20px; }
@@ -73,11 +77,15 @@
 
 @media (max-width: 580px) {
     .mn-cat-room { margin: 22px auto; padding: 28px 18px 26px; border-radius: 12px 25px 12px 22px; }
-    .mn-cat-room__header { margin-bottom: 24px; }
+    .mn-cat-room__header { gap: 8px; margin-bottom: 24px; }
+    .mn-cat-room__header h1 { font-size: clamp(21px, 7vw, 24px); white-space: nowrap; }
+    .mn-cat-room__title-paw { width: 20px; flex-basis: 20px; }
     .mn-cat-room__scene { aspect-ratio: 4 / 3; }
     .mn-cat-room__cat-wrap { bottom: 9%; left: 56.5%; width: clamp(72px, 22vw, 102px); }
     .mn-cat-room__mood { grid-template-columns: minmax(0, 1fr) auto; gap: 10px 12px; margin-top: 26px; padding: 13px 14px; }
     .mn-cat-room__mood-title { grid-column: 1 / -1; font-size: 16px; text-align: center; }
     .mn-cat-room__mood-value { font-size: 26px; }
     .mn-cat-room .btn-container { margin-top: 34px; padding: 0; }
+    .mn-cat-room .game-btn { gap: 7px; padding: 10px 22px; font-size: 1.05em; white-space: nowrap; }
+    .mn-cat-room__button-paw { width: 16px; height: 16px; flex-basis: 16px; }
 }
