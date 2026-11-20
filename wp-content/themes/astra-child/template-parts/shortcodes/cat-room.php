@@ -13,10 +13,12 @@
 
     <div class="mn-cat-room__scene">
         <div class="mn-cat-room__cat-wrap">
+            <span class="mn-cat-room__meow" role="status" aria-live="polite">Мяу!</span>
             <img
                 class="mn-cat-room__cat"
                 src="<?php echo esc_url( home_url( $cat_image_url ) ); ?>"
                 alt="Грош, настроение: <?php echo esc_attr( $mood_points ); ?> из 100"
+                draggable="false"
             >
         </div>
     </div>
@@ -36,3 +38,28 @@
         </a>
     </div>
 </section>
+
+<script>
+(function (room) {
+    if (!room) {
+        return;
+    }
+
+    var cat = room.querySelector('.mn-cat-room__cat');
+    var meow = room.querySelector('.mn-cat-room__meow');
+    var meowTimer;
+
+    if (!cat || !meow) {
+        return;
+    }
+
+    cat.addEventListener('click', function () {
+        window.clearTimeout(meowTimer);
+        meow.classList.add('is-visible');
+
+        meowTimer = window.setTimeout(function () {
+            meow.classList.remove('is-visible');
+        }, 1000);
+    });
+}(document.currentScript.previousElementSibling));
+</script>
