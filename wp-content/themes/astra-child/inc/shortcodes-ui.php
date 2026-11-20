@@ -69,7 +69,6 @@ if ( ! function_exists( 'custom_homepage_landing_render' ) ) {
         $mood_points = 50;
         $progress_points = 0;
         $streak = 0;
-        $cat_image_url = '/image/funcat.png';
 
         if ( is_user_logged_in() ) {
             $user_id = get_current_user_id();
@@ -83,9 +82,6 @@ if ( ! function_exists( 'custom_homepage_landing_render' ) ) {
             $streak = (int) get_user_meta( $user_id, '_mn_login_streak', true );
             if ( $streak === 0 ) $streak = 1;
 
-            if ( function_exists('moneyneko_get_dynamic_cat_image') ) {
-                $cat_image_url = moneyneko_get_dynamic_cat_image( $mood_points );
-            }
         }
 
         ob_start();
@@ -116,4 +112,26 @@ if ( ! function_exists( 'custom_moneyneko_header_render' ) ) {
         return ob_get_clean();
     }
     add_shortcode( 'custom_header', 'custom_moneyneko_header_render' );
+}
+
+// --- КОМНАТА ГРОША ---
+if ( ! function_exists( 'moneyneko_cat_room_render' ) ) {
+    function moneyneko_cat_room_render() {
+        $mood_points   = 50;
+        $cat_image_url = '/image/funcat.png';
+
+        if ( is_user_logged_in() && class_exists( 'GamiPress' ) ) {
+            $mood_points = (int) gamipress_get_user_points( get_current_user_id(), 'mood-points' );
+            $mood_points = max( 0, min( 100, $mood_points ) );
+        }
+
+        if ( function_exists( 'moneyneko_get_dynamic_cat_image' ) ) {
+            $cat_image_url = moneyneko_get_dynamic_cat_image( $mood_points );
+        }
+
+        ob_start();
+        include get_stylesheet_directory() . '/template-parts/shortcodes/cat-room.php';
+        return ob_get_clean();
+    }
+    add_shortcode( 'moneyneko_cat_room', 'moneyneko_cat_room_render' );
 }

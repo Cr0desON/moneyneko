@@ -34,12 +34,6 @@ if ( $current_module ) {
     $map_heading  = sprintf( 'Модуль %d: %s', (int) $current_module['index'], $module_title );
 }
 
-$cat_image_url = '/image/funcat.png';
-if ( is_user_logged_in() && function_exists( 'moneyneko_get_dynamic_cat_image' ) ) {
-    $cat_image_url = moneyneko_get_dynamic_cat_image( $mood_points );
-}
-
-
 // Если пользователь впервые на карте — ставим кота сразу на текущий узел
 if ( ! $last_cat_node && $current_node && $user_id ) {
     $last_cat_node = $current_node;
@@ -51,7 +45,7 @@ if ( ! $last_cat_node && $current_node && $user_id ) {
     <aside class="mn-game-sidebar" aria-label="Игровая навигация">
         <div class="mn-game-brand">
             <div class="mn-game-cat-avatar">
-                <img src="<?php echo esc_url( $cat_image_url ); ?>" alt="Грош, маскот MoneyNeko" class="cat-image" id="mn-tour-cat">
+                <img src="<?php echo esc_url( home_url( '/image/funcat.png' ) ); ?>" alt="Грош, маскот MoneyNeko" class="cat-image" id="mn-tour-cat">
             </div>
             <span class="mn-game-brand-name">MoneyNeko</span>
         </div>
@@ -68,15 +62,6 @@ if ( ! $last_cat_node && $current_node && $user_id ) {
                 </div>
             <?php endif; ?>
 
-            <div class="mood-progress-wrapper" id="mn-tour-mood" title="Настроение Гроша: <?php echo esc_attr( $mood_points ); ?>/100">
-                <div class="mood-progress-heading">
-                    <span>Настроение</span>
-                    <span class="mood-progress-text"><?php echo esc_html( $mood_points ); ?>/100</span>
-                </div>
-                <div class="mood-progress-container" role="progressbar" aria-label="Настроение Гроша" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( $mood_points ); ?>">
-                    <div class="mood-progress-fill" style="width: <?php echo esc_attr( $mood_points ); ?>%;"></div>
-                </div>
-            </div>
         </div>
 
         <nav class="mn-game-sidebar-nav" aria-label="Разделы">
@@ -91,6 +76,10 @@ if ( ! $last_cat_node && $current_node && $user_id ) {
             <a href="<?php echo esc_url( home_url( '/доска-лидеров/' ) ); ?>" class="mn-sidebar-link sketch-btn-leaderboard" id="mn-tour-leaderboard">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8m-4-4v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4v2a4 4 0 0 0 4 4m9-6h3v2a4 4 0 0 1-4 4"/></svg>
                 <span>Лидерборд</span>
+            </a>
+            <a href="<?php echo esc_url( home_url( '/cat-room/' ) ); ?>" class="mn-sidebar-link sketch-btn-cat-room" id="mn-tour-cat-room">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-7 9 7v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9Z"/><path d="M9 21v-6h6v6M8 11h.01M16 11h.01"/></svg>
+                <span>Комната кота</span>
             </a>
         </nav>
 
