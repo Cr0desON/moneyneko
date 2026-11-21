@@ -198,17 +198,11 @@ add_shortcode( 'mn_trainer_m3', function () {
 add_action( 'wp_enqueue_scripts', function () {
     if ( ! is_singular( [ 'lesson', 'mn_trainer' ] ) ) return;
 
-    $id      = get_the_ID();
-    $next_id = 0;
-    if ( function_exists( 'tutor_utils' ) ) {
-        $c       = mn_hub_get_content_navigation( $id );
-        $next_id = $c->next_id ?? 0;
-    }
-
-    wp_register_script( 'mn-finish', MN_HUB_URL . 'assets/mn-finish.js', [], MN_HUB_VERSION, true );
+    $finish_script_path = MN_HUB_PATH . 'assets/mn-finish.js';
+    $finish_script_version = file_exists( $finish_script_path ) ? (string) filemtime( $finish_script_path ) : MN_HUB_VERSION;
+    wp_register_script( 'mn-finish', MN_HUB_URL . 'assets/mn-finish.js', [], $finish_script_version, true );
     wp_localize_script( 'mn-finish', 'mnFinishData', [
-        'nextUrl' => $next_id ? get_permalink( $next_id ) : '',
-        'gameUrl' => home_url( '/game/' ),
+        'gameUrl' => home_url( '/главная/game/' ),
     ] );
     wp_enqueue_script( 'mn-finish' );
 }, 20 );

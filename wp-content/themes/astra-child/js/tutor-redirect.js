@@ -24,6 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const data = window.mnFinishData || window.mnTutorTopbar || {};
-        window.location.href = data.nextUrl || data.gameUrl || '/game/';
+        window.location.href = data.gameUrl || '/главная/game/';
     });
 });

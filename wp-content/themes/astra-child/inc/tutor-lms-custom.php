@@ -43,7 +43,7 @@ add_action( 'wp_enqueue_scripts', function () {
     );
 
     wp_localize_script( 'mn-tutor-topbar-buttons', 'mnTutorTopbar', array(
-        'gameUrl' => home_url( '/game/' ),
+        'gameUrl' => home_url( '/главная/game/' ),
         'isQuiz'  => is_singular( 'tutor_quiz' ),
         'isTrainer' => $is_trainer,
     ) );
