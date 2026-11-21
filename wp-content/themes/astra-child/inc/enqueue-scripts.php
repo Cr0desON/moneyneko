@@ -15,6 +15,21 @@ function moneyneko_enqueue_styles() {
         file_exists( $child_style_path ) ? (string) filemtime( $child_style_path ) : null
     );
 
+    if ( is_singular() ) {
+        $post = get_post();
+
+        if ( $post && has_shortcode( $post->post_content, 'moneyneko_cat_room' ) ) {
+            $cat_room_style_path = get_stylesheet_directory() . '/css/cat-room.css';
+
+            wp_enqueue_style(
+                'moneyneko-cat-room',
+                get_stylesheet_directory_uri() . '/css/cat-room.css',
+                array( 'astra-child-style' ),
+                file_exists( $cat_room_style_path ) ? (string) filemtime( $cat_room_style_path ) : null
+            );
+        }
+    }
+
     // Интерактивная карта лекций (Duolingo-style)
     if ( is_user_logged_in() ) {
         $dir = get_stylesheet_directory();
