@@ -906,3 +906,35 @@ body:has(.mn-game-map-page) {
 .tutor-iconic-btn[tutor-course-topics-sidebar-toggler] {
     display: none !important;
 }
+
+/* Скроллится содержимое выбранного раздела, общий сайдбар остается на месте. */
+.mn-app-main .mn-app-page-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 28px clamp(16px, 3vw, 40px) 36px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    scrollbar-color: #8bb9c7 transparent;
+    scrollbar-width: thin;
+}
+
+.mn-app-main .mn-app-page-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.mn-app-main .mn-app-page-content::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 10px;
+    background: #8bb9c7;
+    background-clip: padding-box;
+}
+
+@media (max-width: 520px) {
+    .mn-app-main .mn-app-page-content {
+        padding: 10px 8px calc(88px + env(safe-area-inset-bottom));
+    }
+}

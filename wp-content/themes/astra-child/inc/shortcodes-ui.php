@@ -1,6 +1,45 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+/** Wrap the map and its neighboring sections in one shared navigation shell. */
+if ( ! function_exists( 'moneyneko_render_app_page' ) ) {
+    function moneyneko_render_app_page( $active_page, $template_file, $template_vars = array() ) {
+        $allowed_pages = array( 'map', 'profile', 'leaderboard', 'cat-room' );
+        if ( ! in_array( $active_page, $allowed_pages, true ) ) {
+            return '';
+        }
+
+        $template_file = sanitize_file_name( $template_file );
+        $main_template_path = get_stylesheet_directory() . '/template-parts/shortcodes/' . $template_file;
+        if ( ! file_exists( $main_template_path ) ) {
+            return '';
+        }
+
+        $user_id        = get_current_user_id();
+        $progress_points = 0;
+        $streak           = 0;
+
+        if ( $user_id ) {
+            if ( class_exists( 'GamiPress' ) ) {
+                $progress_points = (int) gamipress_get_user_points( $user_id, 'progress-points' );
+            }
+
+            $streak = (int) get_user_meta( $user_id, '_mn_login_streak', true );
+            if ( 0 === $streak ) {
+                $streak = 1;
+            }
+        }
+
+        if ( is_array( $template_vars ) ) {
+            extract( $template_vars, EXTR_SKIP );
+        }
+
+        ob_start();
+        include get_stylesheet_directory() . '/template-parts/shortcodes/app-shell.php';
+        return ob_get_clean();
+    }
+}
+
 // --- ДОСКА ЛИДЕРОВ ---
 if ( ! function_exists( 'custom_leaderboard_render' ) ) {
     function custom_leaderboard_render( $atts ) {
@@ -23,10 +62,11 @@ if ( ! function_exists( 'custom_leaderboard_render' ) ) {
         $users = $users_query->get_results();
         $current_id = get_current_user_id(); // Получаем ID здесь, чтобы передать в HTML
 
-        ob_start();
-        // Подключаем наш чистый HTML-шаблон
-        include get_stylesheet_directory() . '/template-parts/shortcodes/leaderboard.php';
-        return ob_get_clean();
+        return moneyneko_render_app_page( 'leaderboard', 'leaderboard.php', array(
+            'users'      => $users,
+            'meta_key'   => $meta_key,
+            'current_id' => $current_id,
+        ) );
     }
     add_shortcode( 'custom_leaderboard', 'custom_leaderboard_render' );
 }
@@ -34,12 +74,9 @@ if ( ! function_exists( 'custom_leaderboard_render' ) ) {
 // --- ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ ---
 if ( ! function_exists( 'custom_user_profile_render' ) ) {
     function custom_user_profile_render() {
-        ob_start();
-
         if ( ! is_user_logged_in() ) {
             // Если гость — подгружаем HTML для гостя
-            include get_stylesheet_directory() . '/template-parts/shortcodes/profile-guest.php';
-            return ob_get_clean();
+            return moneyneko_render_app_page( 'profile', 'profile-guest.php' );
         }
 
         // Логика для авторизованного: вычисления
@@ -56,9 +93,13 @@ if ( ! function_exists( 'custom_user_profile_render' ) ) {
         ) );
         $top_users = $top_users_query->get_results();
 
-        // Подгружаем HTML для авторизованного юзера
-        include get_stylesheet_directory() . '/template-parts/shortcodes/profile-user.php';
-        return ob_get_clean();
+        return moneyneko_render_app_page( 'profile', 'profile-user.php', array(
+            'current_user' => $current_user,
+            'user_id'      => $user_id,
+            'meta_key'     => $meta_key,
+            'user_points'  => $user_points,
+            'top_users'    => $top_users,
+        ) );
     }
     add_shortcode( 'custom_user_profile', 'custom_user_profile_render' );
 }
@@ -66,27 +107,7 @@ if ( ! function_exists( 'custom_user_profile_render' ) ) {
 // --- ИГРОВОЙ ДАШБОРД (Страница Игры) ---
 if ( ! function_exists( 'custom_homepage_landing_render' ) ) {
     function custom_homepage_landing_render() {
-        $mood_points = 50;
-        $progress_points = 0;
-        $streak = 0;
-
-        if ( is_user_logged_in() ) {
-            $user_id = get_current_user_id();
-
-            if ( class_exists( 'GamiPress' ) ) {
-                $progress_points = (int) gamipress_get_user_points( $user_id, 'progress-points' );
-                $mood_points = (int) gamipress_get_user_points( $user_id, 'mood-points' );
-                $mood_points = max( 0, min( 100, $mood_points ) ); // Лимит 0-100
-            }
-
-            $streak = (int) get_user_meta( $user_id, '_mn_login_streak', true );
-            if ( $streak === 0 ) $streak = 1;
-
-        }
-
-        ob_start();
-        include get_stylesheet_directory() . '/template-parts/shortcodes/game-dashboard.php';
-        return ob_get_clean();
+        return moneyneko_render_app_page( 'map', 'game-dashboard.php' );
     }
     add_shortcode( 'custom_homepage', 'custom_homepage_landing_render' );
 }
@@ -129,9 +150,10 @@ if ( ! function_exists( 'moneyneko_cat_room_render' ) ) {
             $cat_image_url = moneyneko_get_dynamic_cat_image( $mood_points );
         }
 
-        ob_start();
-        include get_stylesheet_directory() . '/template-parts/shortcodes/cat-room.php';
-        return ob_get_clean();
+        return moneyneko_render_app_page( 'cat-room', 'cat-room.php', array(
+            'mood_points'   => $mood_points,
+            'cat_image_url' => $cat_image_url,
+        ) );
     }
     add_shortcode( 'moneyneko_cat_room', 'moneyneko_cat_room_render' );
 }

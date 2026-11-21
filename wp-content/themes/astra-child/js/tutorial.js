@@ -32,7 +32,7 @@
         return;
     }
 
-    var PAGES      = ['game', 'leaderboard', 'module', 'profile'];
+    var PAGES      = ['game', 'leaderboard', 'module', 'profile', 'cat-room'];
     var REPLAY_KEY = 'mn_tutorial_replay'; // sessionStorage: JSON-массив страниц, где повтор уже показан
     var FLOW_KEY   = 'mn_tutorial_flow';   // sessionStorage: «ушли показывать другую страницу и вернёмся»
     var FLOW_TTL   = 30 * 60 * 1000;       // забываем незавершённый переход через 30 минут
@@ -99,9 +99,10 @@
 
     function detectPage() {
         if (cfg.page) { return cfg.page; }
-        if (document.querySelector('.sketch-landing-wrapper')) { return 'game'; }
+        if (document.querySelector('.mn-cat-room'))                { return 'cat-room'; }
         if (document.querySelector('.lb-card'))                { return 'leaderboard'; }
         if (document.querySelector('.sketch-profile'))         { return 'profile'; }
+        if (document.querySelector('.sketch-landing-wrapper')) { return 'game'; }
         return '';
     }
 
@@ -180,7 +181,7 @@
                 step.element = el;
 
                 // Шаг-переход: подсвеченная ссылка кликабельна, кнопка в окошке ведёт по ней же
-                if (def.go && el.href) {
+                if (def.go && el.href && !opts.localOnly) {
                     var onLeave = function () { leave(def, index); };
                     step.popover.onNextClick = function () {
                         onLeave();
@@ -306,13 +307,19 @@
     function init() {
         var page = detectPage();
 
-        // Кнопка «?» на странице игры: включаем повторный показ на всю вкладку и запускаем тур
+        // На карте «?» запускает полный маршрут туториала, на остальных разделах — их тур.
         var helpBtn = document.getElementById('mn-tutorial-help');
         if (helpBtn) {
             helpBtn.addEventListener('click', function () {
+                var currentPage = detectPage() || 'game';
                 setFlow(null);
-                setReplay([]);
-                startTour('game', true);
+                if (currentPage === 'game') {
+                    setReplay([]);
+                    startTour('game', true);
+                } else {
+                    setReplay(null);
+                    startTour(currentPage, true, { localOnly: true });
+                }
             });
         }
 

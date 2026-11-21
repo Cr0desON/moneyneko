@@ -69,6 +69,14 @@ window.mnTutorialSteps = {
             btn: 'Перейти'
         },
         {
+            selector: ['#mn-tour-cat-room', '.sketch-btn-cat-room'],
+            side: 'right',
+            go: true,
+            back: true,
+            text: 'В комнате кота можно увидеть его настроение и немного с ним пообщаться.',
+            btn: 'Заглянуть'
+        },
+        {
             selector: ['#mn-tour-first-module', '.sketch-module.mod-1'],
             side: 'top',
             text: 'А вот и самое главное! Здесь находятся короткие уроки, каждый займет не больше 5 минут. ' +
@@ -123,6 +131,22 @@ window.mnTutorialSteps = {
             go: true,
             text: 'С лидербордом разобрались, можем идти дальше',
             btn: 'Продолжить'
+        }
+    ],
+
+    // Комната Гроша
+    'cat-room': [
+        {
+            selector: ['.mn-cat-room__cat'],
+            side: 'top',
+            text: 'Это Грош! Нажми на него, и он ответит мяуканьем.',
+            btn: 'Попробую!'
+        },
+        {
+            selector: ['.mn-cat-room__mood'],
+            side: 'top',
+            text: 'Здесь можно посмотреть, как чувствует себя Грош. Его настроение меняется вместе с твоими успехами.',
+            btn: 'Понятно!'
         }
     ],
 

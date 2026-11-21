@@ -30,8 +30,22 @@ function moneyneko_enqueue_styles() {
         }
     }
 
+    // Общая оболочка карты, профиля, лидерборда и комнаты кота.
+    $has_app_shell = false;
+    if ( is_singular() ) {
+        $post = get_post();
+        if ( $post ) {
+            foreach ( array( 'custom_homepage', 'custom_user_profile', 'custom_leaderboard', 'moneyneko_cat_room' ) as $app_shortcode ) {
+                if ( has_shortcode( $post->post_content, $app_shortcode ) ) {
+                    $has_app_shell = true;
+                    break;
+                }
+            }
+        }
+    }
+
     // Интерактивная карта лекций (Duolingo-style)
-    if ( is_user_logged_in() ) {
+    if ( is_user_logged_in() || $has_app_shell ) {
         $dir = get_stylesheet_directory();
         $uri = get_stylesheet_directory_uri();
 
@@ -42,12 +56,14 @@ function moneyneko_enqueue_styles() {
             file_exists( $dir . '/css/map.css' ) ? (string) filemtime( $dir . '/css/map.css' ) : '1.0.0'
         );
 
-        wp_enqueue_script(
-            'mn-map-script',
-            $uri . '/js/map.js',
-            array(),
-            file_exists( $dir . '/js/map.js' ) ? (string) filemtime( $dir . '/js/map.js' ) : '1.0.0',
-            true
-        );
+        if ( is_user_logged_in() ) {
+            wp_enqueue_script(
+                'mn-map-script',
+                $uri . '/js/map.js',
+                array(),
+                file_exists( $dir . '/js/map.js' ) ? (string) filemtime( $dir . '/js/map.js' ) : '1.0.0',
+                true
+            );
+        }
     }
 }
