@@ -707,11 +707,21 @@ body:has(.mn-game-map-page) {
     }
 
     .mn-game-sidebar-nav {
-        grid-column: 1 / -1;
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 30;
         flex-direction: row;
-        gap: 5px;
+        gap: 4px;
         margin: 0;
-        overflow-x: auto;
+        padding: 6px max(8px, env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+        border-top: 1px solid #ddd9cf;
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 -4px 14px rgba(44, 44, 44, 0.08);
+        box-sizing: border-box;
+        overflow: visible;
+        backdrop-filter: blur(10px);
         scrollbar-width: none;
     }
 
@@ -722,12 +732,23 @@ body:has(.mn-game-map-page) {
     .mn-game-sidebar .mn-sidebar-link,
     .mn-game-sidebar .sketch-btn-profile,
     .mn-game-sidebar .sketch-btn-leaderboard {
-        min-height: 36px;
+        width: auto;
+        min-width: 0;
+        min-height: 56px;
+        flex: 1 1 0;
+        flex-direction: column;
         justify-content: center;
-        gap: 6px;
-        padding: 6px 9px;
-        font-size: 12px;
-        white-space: nowrap;
+        gap: 3px;
+        padding: 5px 2px;
+        font-size: 11px;
+        line-height: 1.1;
+        text-align: center;
+        white-space: normal;
+    }
+
+    .mn-game-sidebar .mn-sidebar-link span {
+        max-width: 100%;
+        overflow-wrap: anywhere;
     }
 
     .mn-game-sidebar .mn-sidebar-link svg {
@@ -739,7 +760,7 @@ body:has(.mn-game-map-page) {
     .mn-game-sidebar .mn-tutorial-help {
         position: fixed !important;
         left: calc(12px + env(safe-area-inset-left)) !important;
-        bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+        bottom: calc(80px + env(safe-area-inset-bottom)) !important;
         z-index: 20 !important;
         grid-column: auto;
         width: 42px !important;
@@ -765,7 +786,7 @@ body:has(.mn-game-map-page) {
 
     .mn-game-map-page .mn-map-current-button {
         right: calc(14px + env(safe-area-inset-right));
-        bottom: calc(14px + env(safe-area-inset-bottom));
+        bottom: calc(80px + env(safe-area-inset-bottom));
         display: inline-grid;
         width: 48px;
         height: 48px;
@@ -804,7 +825,7 @@ body:has(.mn-game-map-page) {
 
     .mn-map-container {
         width: 100%;
-        padding: 10px 0 24px;
+        padding: 10px 0 calc(88px + env(safe-area-inset-bottom));
     }
 
     .mn-node-side-doodle {
@@ -856,10 +877,10 @@ body:has(.mn-game-map-page) {
     .mn-game-sidebar .mn-sidebar-link,
     .mn-game-sidebar .sketch-btn-profile,
     .mn-game-sidebar .sketch-btn-leaderboard {
-        gap: 4px;
-        padding-right: 5px;
-        padding-left: 5px;
-        font-size: 11px;
+        gap: 3px;
+        padding-right: 2px;
+        padding-left: 2px;
+        font-size: clamp(9px, 2.8vw, 11px);
     }
 
     .mn-game-main-header {
