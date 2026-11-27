@@ -11,11 +11,10 @@
         return { form: form, btn: btn };
     }
 
-    function getNextUrl() {
+    function getGameUrl() {
         var d = window.mnFinishData || {};
-        if (d.nextUrl) return d.nextUrl;
-        var a = document.querySelector('.tutor-single-course-content-next a[href]:not([href="#"])');
-        return a ? a.href : '';
+        var topbar = window.mnTutorTopbar || {};
+        return d.gameUrl || topbar.gameUrl || '/главная/game/';
     }
 
     async function completeViaFetch(m) {
@@ -37,7 +36,7 @@
         if (busy) return;
         busy = true;
 
-        var url = getNextUrl();
+        var url = getGameUrl();
         var m = markControls();
 
         if (m) {

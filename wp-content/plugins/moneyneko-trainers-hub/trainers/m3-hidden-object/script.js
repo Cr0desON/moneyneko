@@ -159,7 +159,7 @@
             $('mn3-result-text').textContent = 'Потрясающе! Все чеки найдены и распределены правильно.';
             $('mn3-summary-box').style.display = 'block'; 
             
-            retryBtn.textContent = 'Перейти дальше ➔';
+            retryBtn.textContent = 'Далее ➔';
             retryBtn.style.background = '#4caf50';
 
             retryBtn.onclick = function () {

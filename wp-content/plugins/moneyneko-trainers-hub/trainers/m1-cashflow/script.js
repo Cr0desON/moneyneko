@@ -246,19 +246,13 @@
                 $('mn-m1-result-score').textContent = 'Абсолютно верно!';
                 $('mn-m1-result-text').textContent = `Доходы минус Расходы = ${state.totalIncome - state.totalExpense} ₽. Это отличный результат!`;
 
-                retryBtn.textContent = 'Перейти дальше ➔';
+                retryBtn.textContent = 'Далее ➔';
                 retryBtn.style.backgroundColor = '#48bb78';
                 retryBtn.onclick = function () {
-                    const nextLink = document.querySelector('.tutor-single-course-content-next a');
-                    const markBtn  = document.querySelector('.tutor-topbar-mark-btn');
-
-                    if (nextLink) {
-                        nextLink.click();
-                    } else if (markBtn) {
-                        markBtn.click();
+                    if (window.MNFinish && typeof window.MNFinish.go === 'function') {
+                        window.MNFinish.go();
                     } else {
-                        alert('Отличная работа! Теперь нажмите кнопку завершения урока в верхней или нижней части экрана.');
-                        $('mn-m1-result').style.display = 'none';
+                        alert('Не удалось перейти дальше. Обновите страницу и попробуйте ещё раз.');
                     }
                 };
             } else {
