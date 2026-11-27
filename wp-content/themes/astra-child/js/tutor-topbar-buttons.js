@@ -20,8 +20,30 @@
         header.querySelectorAll('a[href*="/courses/"]').forEach(function (link) {
             if (window.mnTutorTopbar && mnTutorTopbar.gameUrl) {
                 link.setAttribute('href', mnTutorTopbar.gameUrl);
+                link.setAttribute('aria-label', 'Вернуться на карту');
+                link.setAttribute('title', 'На карту');
             }
         });
+
+        if (window.mnTutorTopbar && mnTutorTopbar.gameUrl) {
+            header.querySelectorAll('.tutor-icon-times').forEach(function (icon) {
+                var link = icon.closest('a');
+                if (link) link.setAttribute('href', mnTutorTopbar.gameUrl);
+            });
+        }
+
+        if (window.mnTutorTopbar && (mnTutorTopbar.isQuiz || mnTutorTopbar.isTrainer)) {
+            header.querySelectorAll('.tutor-icon-previous').forEach(function (icon) {
+                var link = icon.closest('a');
+                icon.classList.remove('tutor-icon-previous');
+                icon.classList.add('tutor-icon-times');
+                if (link && mnTutorTopbar.gameUrl) {
+                    link.setAttribute('href', mnTutorTopbar.gameUrl);
+                    link.setAttribute('aria-label', 'Вернуться на карту');
+                    link.setAttribute('title', 'На карту');
+                }
+            });
+        }
 
         var togglers = header.querySelectorAll(
             '.tutor-course-topics-sidebar-offcanvas-toggler, [tutor-course-topics-sidebar-offcanvas-toggler]'

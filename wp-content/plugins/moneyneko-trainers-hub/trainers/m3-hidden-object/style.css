@@ -6,7 +6,7 @@
 .mn3-phase-hidden { display: none; }
 
 /* Скрываем ТОЛЬКО кнопку "Дальше" у Tutor LMS */
-.tutor-single-course-content-next {
+.mn-trainer-incomplete .tutor-single-course-content-next {
     display: none !important;
 }
 

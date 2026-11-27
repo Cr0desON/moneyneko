@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  *    пользователи видят туториал автоматически (старые пользователи его не получат,
  *    но могут вызвать кнопкой «?» на странице игры);
  *  - в _mn_tutorial_seen хранится список страниц, на которых туториал уже пройден
- *    или пропущен (game, leaderboard, module, profile) — работает на любом устройстве;
+ *    или пропущен (game, leaderboard, module, profile, cat-room) — работает на любом устройстве;
  *  - тексты и шаги лежат в js/tutorial-steps.js, логика — в js/tutorial.js.
  */
 
@@ -18,7 +18,7 @@ const MN_TUTORIAL_SEEN_META    = '_mn_tutorial_seen';
 
 /** Ключи страниц, у которых есть свой туториал. */
 function mn_tutorial_pages() {
-    return array( 'game', 'leaderboard', 'module', 'profile' );
+    return array( 'game', 'leaderboard', 'module', 'profile', 'cat-room' );
 }
 
 /** Новому пользователю включаем туториал. */

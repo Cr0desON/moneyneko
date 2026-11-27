@@ -3,9 +3,67 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 add_action( 'wp_enqueue_scripts', 'moneyneko_enqueue_styles' );
 function moneyneko_enqueue_styles() {
-    //Подключаем шрифты  для всего сайта
+    // Подключаем шрифты для всего сайта
     wp_enqueue_style( 'moneyneko-fonts', 'https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Balsamiq+Sans:wght@400;700&display=swap', array(), null );
 
     wp_enqueue_style( 'astra-parent-style', get_template_directory_uri() . '/style.css' );
-    wp_enqueue_style( 'astra-child-style', get_stylesheet_directory_uri() . '/style.css', array('astra-parent-style') );
+    $child_style_path = get_stylesheet_directory() . '/style.css';
+    wp_enqueue_style(
+        'astra-child-style',
+        get_stylesheet_directory_uri() . '/style.css',
+        array( 'astra-parent-style' ),
+        file_exists( $child_style_path ) ? (string) filemtime( $child_style_path ) : null
+    );
+
+    if ( is_singular() ) {
+        $post = get_post();
+
+        if ( $post && has_shortcode( $post->post_content, 'moneyneko_cat_room' ) ) {
+            $cat_room_style_path = get_stylesheet_directory() . '/css/cat-room.css';
+
+            wp_enqueue_style(
+                'moneyneko-cat-room',
+                get_stylesheet_directory_uri() . '/css/cat-room.css',
+                array( 'astra-child-style' ),
+                file_exists( $cat_room_style_path ) ? (string) filemtime( $cat_room_style_path ) : null
+            );
+        }
+    }
+
+    // Общая оболочка карты, профиля, лидерборда и комнаты кота.
+    $has_app_shell = false;
+    if ( is_singular() ) {
+        $post = get_post();
+        if ( $post ) {
+            foreach ( array( 'custom_homepage', 'custom_user_profile', 'custom_leaderboard', 'moneyneko_cat_room' ) as $app_shortcode ) {
+                if ( has_shortcode( $post->post_content, $app_shortcode ) ) {
+                    $has_app_shell = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    // Интерактивная карта лекций (Duolingo-style)
+    if ( is_user_logged_in() || $has_app_shell ) {
+        $dir = get_stylesheet_directory();
+        $uri = get_stylesheet_directory_uri();
+
+        wp_enqueue_style(
+            'mn-map-style',
+            $uri . '/css/map.css',
+            array( 'astra-child-style' ),
+            file_exists( $dir . '/css/map.css' ) ? (string) filemtime( $dir . '/css/map.css' ) : '1.0.0'
+        );
+
+        if ( is_user_logged_in() ) {
+            wp_enqueue_script(
+                'mn-map-script',
+                $uri . '/js/map.js',
+                array(),
+                file_exists( $dir . '/js/map.js' ) ? (string) filemtime( $dir . '/js/map.js' ) : '1.0.0',
+                true
+            );
+        }
+    }
 }

@@ -976,6 +976,15 @@ body .tutor-course-lesson-single-footer .tutor-btn-done {
     display: none !important;
 }
 
+/* Внизу урока оставляем одну кнопку продолжения: прохождение завершается через «Далее». */
+.tutor-course-topic-single-footer .tutor-single-course-content-prev {
+    display: none !important;
+}
+
+.tutor-course-topic-single-footer {
+    justify-content: flex-end !important;
+}
+
 /* ==============================================================
    ИСПРАВЛЕНИЕ МОБИЛЬНОЙ ВЕРСТКИ СТРАНИЦ ОБУЧЕНИЯ (Tutor LMS)
    ============================================================== */
@@ -1046,6 +1055,18 @@ html, body {
 .tutor-icon-times:hover {
     background-color: #e0e0e0 !important;
     transform: scale(0.95) !important;
+}
+
+.mn-trainer-exit-link {
+    position: fixed !important;
+    top: 16px;
+    right: 16px;
+    z-index: 10000;
+    width: 40px;
+    height: 40px;
+    background: #f2f2f2 !important;
+    border: 2px solid #2b2b2b !important;
+    border-radius: 6px !important;
 }
 
 /* === КНОПКА "СОДЕРЖАНИЕ" — только косметика, display НЕ трогаем,

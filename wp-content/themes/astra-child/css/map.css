@@ -1,0 +1,940 @@
+/* ==========================================================
+   ИНТЕРАКТИВНАЯ КАРТА (Duolingo-style в тетрадном скетче)
+   ========================================================== */
+
+.mn-game-map-page {
+    --mn-ink: #2c2c2c;
+    --mn-paper: #fffef9;
+    display: grid !important;
+    grid-template-columns: clamp(200px, 26vw, 320px) minmax(0, 1fr);
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    max-width: none !important;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    margin: 0;
+    padding: 0 !important;
+    overflow: hidden;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #fff;
+    box-shadow: none !important;
+    color: var(--mn-ink);
+    font-family: 'Balsamiq Sans', cursive, sans-serif;
+    z-index: 50;
+}
+
+html:has(.mn-game-map-page),
+body:has(.mn-game-map-page) {
+    height: 100%;
+    overflow: hidden;
+}
+
+.mn-game-map-page::before {
+    display: none;
+}
+
+.mn-game-sidebar {
+    position: relative;
+    z-index: 4;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    padding: 34px 28px 26px;
+    border-right: 1px solid #ddd9cf;
+    background: #fff;
+    box-shadow: 3px 0 12px rgba(44, 44, 44, 0.035);
+}
+
+.mn-game-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 11px;
+    margin-bottom: 36px;
+}
+
+.mn-game-cat-avatar {
+    display: grid;
+    width: 116px;
+    height: 116px;
+    place-items: center;
+    overflow: hidden;
+    border: 2px solid var(--mn-ink);
+    border-radius: 50%;
+    background: #fff3d9;
+}
+
+.mn-game-cat-avatar .cat-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: none;
+}
+
+.mn-game-brand-name {
+    color: var(--mn-ink);
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.mn-game-sidebar-stats {
+    display: grid;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.mn-game-sidebar .mn-sidebar-stat {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    color: var(--mn-ink);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-shadow: none;
+}
+
+.mn-sidebar-stat-icon {
+    display: inline-grid;
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+    place-items: center;
+    font-size: 25px;
+}
+
+.mn-xp-icon {
+    border: 1px solid #947018;
+    border-radius: 50%;
+    background: #f9d66e;
+    color: #604700;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.mn-game-sidebar .streak-badge,
+.mn-game-sidebar .progress-xp-badge {
+    margin: 0;
+    color: var(--mn-ink);
+    font-size: 18px;
+}
+
+.mn-game-sidebar .mood-progress-wrapper {
+    width: 100%;
+    margin: 3px 0 0;
+    text-align: left;
+}
+
+.mood-progress-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 7px;
+    color: #4e4b43;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.mn-game-sidebar .mood-progress-text {
+    margin: 0;
+    color: #706c63;
+    font-size: 14px;
+}
+
+.mn-game-sidebar .mood-progress-container {
+    width: 100%;
+    height: 12px;
+    border: 1px solid var(--mn-ink);
+    border-radius: 99px;
+    background: #f1f0eb;
+    box-shadow: none;
+}
+
+.mn-game-sidebar .mood-progress-fill {
+    border-radius: inherit;
+    background: linear-gradient(90deg, #f0b84a, #f5d876);
+    background-size: auto;
+}
+
+.mn-game-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.mn-game-sidebar .mn-sidebar-link,
+.mn-game-sidebar .sketch-btn-profile,
+.mn-game-sidebar .sketch-btn-leaderboard {
+    position: static;
+    display: flex;
+    width: 100%;
+    min-height: 54px;
+    align-items: center;
+    gap: 14px;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 12px 14px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    box-shadow: none;
+    color: var(--mn-ink) !important;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: left;
+    text-decoration: none !important;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.mn-game-sidebar .mn-sidebar-link svg {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.7;
+}
+
+.mn-game-sidebar .mn-sidebar-link:hover,
+.mn-game-sidebar .mn-sidebar-link:focus-visible {
+    background: #f6f1e7;
+}
+
+.mn-game-sidebar .mn-sidebar-link.is-active {
+    background: #f3e4c8;
+    color: #29251e !important;
+    font-weight: 700;
+}
+
+/* Кнопка обучения — часть сайдбара, а не плавающий элемент поверх карты. */
+.mn-game-sidebar .mn-tutorial-help {
+    position: static !important;
+    z-index: auto !important;
+    display: inline-grid !important;
+    width: 52px !important;
+    height: 52px !important;
+    flex: 0 0 52px;
+    place-items: center;
+    align-self: flex-start;
+    margin: auto 0 0 !important;
+    padding: 0 !important;
+    border: 2px solid #d3bd8d !important;
+    border-radius: 50% !important;
+    background-color: #e5d1aa !important;
+    box-shadow: 0 2px 0 rgba(74, 59, 35, 0.22) !important;
+    color: #493b25 !important;
+    font-family: 'Balsamiq Sans', cursive, sans-serif !important;
+    font-size: 29px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    opacity: 0.78 !important;
+    transition: background-color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.mn-game-sidebar .mn-tutorial-help:hover,
+.mn-game-sidebar .mn-tutorial-help:focus-visible {
+    background-color: #f3e4c8 !important;
+    box-shadow: 0 3px 0 rgba(74, 59, 35, 0.25) !important;
+    color: #362b1b !important;
+    opacity: 1 !important;
+    transform: translateY(-1px) !important;
+}
+
+.mn-game-sidebar .mn-tutorial-help:active {
+    transform: translateY(1px) !important;
+    box-shadow: 0 1px 0 rgba(74, 59, 35, 0.25) !important;
+}
+
+.mn-game-main {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: var(--mn-paper);
+    background-image:
+        linear-gradient(to right, rgba(95, 91, 75, 0.09) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(95, 91, 75, 0.09) 1px, transparent 1px);
+    background-size: 18px 18px;
+}
+
+.mn-game-main-header {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    min-height: 68px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 12px 28px;
+    border-bottom: 1px solid rgba(76, 72, 58, 0.12);
+    background: rgba(255, 254, 249, 0.88);
+}
+
+.mn-current-module-title {
+    max-width: min(70%, 560px);
+    box-sizing: border-box;
+    padding: 8px 13px;
+    overflow: hidden;
+    border: 2px solid var(--mn-ink);
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 2px 3px 0 var(--mn-ink);
+    color: var(--mn-ink);
+    font-size: 17px;
+    font-weight: 700;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mn-map-container {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 18px 0 36px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    scrollbar-color: #8bb9c7 transparent;
+    scrollbar-width: thin;
+}
+
+.mn-game-map-page .mn-map-current-button {
+    position: absolute;
+    right: 28px;
+    bottom: 28px;
+    z-index: 10;
+    border: 2px solid #d3bd8d;
+    border-radius: 10px;
+    padding: 12px 18px;
+    background: #e5d1aa;
+    color: #493b25;
+    box-shadow: 0 3px 0 rgba(74, 59, 35, 0.22);
+    font: 700 16px/1.2 'Balsamiq Sans', cursive, sans-serif;
+    cursor: pointer;
+    opacity: 0.78;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.mn-game-map-page .mn-map-current-button:hover,
+.mn-game-map-page .mn-map-current-button:focus-visible {
+    background: #f3e4c8;
+    box-shadow: 0 4px 0 rgba(74, 59, 35, 0.25);
+    color: #362b1b;
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+.mn-game-map-page .mn-map-current-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 0 rgba(74, 59, 35, 0.25);
+}
+
+.mn-game-map-page .mn-map-current-button:focus-visible {
+    outline: 3px solid #f1c40f;
+    outline-offset: 3px;
+}
+
+.mn-game-map-page .mn-map-current-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.mn-node-side-doodle {
+    position: absolute;
+    top: 50%;
+    display: block;
+    width: 66px;
+    height: 66px;
+    font-size: 58px !important;
+    line-height: 66px;
+    text-align: center;
+    opacity: 0.95;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 1px rgba(44, 62, 80, 0.12));
+}
+
+.mn-node-side-doodle.side-left {
+    left: calc(50% + 220px);
+    transform: translateY(-50%) rotate(-9deg);
+}
+
+.mn-node-side-doodle.side-right {
+    right: calc(50% + 220px);
+    transform: translateY(-50%) rotate(8deg);
+}
+
+.mn-map-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.mn-map-container::-webkit-scrollbar-track {
+    margin: 12px 0;
+    border-radius: 10px;
+    background: rgba(44, 62, 80, 0.07);
+}
+
+.mn-map-container::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    border-radius: 10px;
+    background: #8bb9c7;
+}
+
+.mn-map-container::-webkit-scrollbar-thumb:hover {
+    background: #5c91a3;
+}
+
+/* SVG-тропинка на заднем плане */
+.mn-map-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--mn-map-content-height, 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Путь идет СНИЗУ ВВЕРХ (Модуль 1 внизу, финал наверху) */
+.mn-map-modules,
+.mn-nodes-path {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 36px;
+    position: relative;
+    z-index: 2;
+}
+
+.mn-map-modules {
+    width: min(100%, 720px);
+    margin: 0 auto;
+    padding-top: 40px;
+    padding-bottom: 28px;
+}
+
+.mn-map-module {
+    width: 100%;
+    padding: 24px 22px;
+    border-radius: 22px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Плашка названия модуля */
+.mn-module-banner {
+    background: #fffdf5;
+    border: 2px solid #2c3e50;
+    border-radius: 15px 24px 16px 20px / 18px 15px 22px 16px;
+    box-shadow: 3px 4px 0 #2c3e50;
+    padding: 12px 18px;
+    margin: 0 auto 14px;
+    max-width: 440px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 19px;
+    color: #2c3e50;
+}
+
+/* МАТЕМАТИКА ЗМЕЙКИ: автоматический сдвиг влево-вправо по синусоиде */
+.mn-node-row {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(calc(sin(var(--i, 0) * 1.15) * 75px));
+}
+
+/* Кружок узла (базовый скетч-стиль) */
+.mn-node {
+    position: relative;
+    width: 78px;
+    height: 78px;
+    border-radius: 50% 45% 52% 48% / 48% 52% 45% 50%;
+    border: 3px solid #2c3e50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    user-select: none;
+}
+
+.mn-node-icon {
+    font-size: 32px;
+    line-height: 1;
+}
+
+/* Сейф (Босс модуля) крупнее и квадратнее */
+.mn-node.type-quiz {
+    width: 86px;
+    height: 80px;
+    border-radius: 14px;
+}
+
+/* Статус 1: Пройден (Зеленый) */
+.mn-node.status-completed {
+    background-color: #6ab04c;
+    box-shadow: 0 6px 0 #2c3e50;
+    cursor: pointer;
+}
+
+/* Статус 2: Текущий активный (Яркий, с пульсацией) */
+.mn-node.status-current {
+    background-color: #badc58;
+    box-shadow: 0 7px 0 #2c3e50, 0 0 0 8px rgba(186, 220, 88, 0.35);
+    cursor: pointer;
+}
+
+/* Статус 3: Закрыт под замок (Серый, некликабельный) */
+.mn-node.status-locked {
+    background-color: #bdc3c7;
+    box-shadow: 0 5px 0 #7f8c8d;
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+.mn-node.status-locked .mn-node-icon {
+    opacity: 1;
+}
+
+.mn-node.status-completed:hover,
+.mn-node.status-current:hover {
+    transform: translateY(-2px);
+}
+
+.mn-node.status-completed:active,
+.mn-node.status-current:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #2c3e50;
+}
+
+/* Подпись под кружком */
+.mn-node-caption {
+    margin-top: 8px;
+    max-width: 150px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #2c3e50;
+    background: rgba(255, 253, 245, 0.94);
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+    padding: 2px 8px;
+    border-radius: 8px;
+}
+
+/* Фишка кота Гроша на текущем узле */
+.mn-map-cat-token {
+    position: absolute;
+    top: -38px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48px;
+    height: 48px;
+    background: #fffdf5;
+    border: 3px solid #2c3e50;
+    border-radius: 50%;
+    box-shadow: 2px 4px 0 #2c3e50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    z-index: 10;
+    pointer-events: none;
+    animation: mn-cat-bob 1.8s infinite ease-in-out;
+    transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes mn-cat-bob {
+    0%, 100% { margin-top: 0; }
+    50% { margin-top: -6px; }
+}
+
+@media (max-width: 900px) and (min-width: 521px) {
+    .mn-game-sidebar {
+        padding: 24px 14px 20px;
+    }
+
+    .mn-game-brand {
+        margin-bottom: 19px;
+    }
+
+    .mn-game-cat-avatar {
+        width: 82px;
+        height: 82px;
+    }
+
+    .mn-game-brand-name {
+        font-size: 17px;
+    }
+
+    .mn-game-sidebar-stats {
+        gap: 8px;
+        margin-bottom: 17px;
+    }
+
+    .mn-game-sidebar .mn-sidebar-stat,
+    .mn-game-sidebar .streak-badge,
+    .mn-game-sidebar .progress-xp-badge {
+        gap: 6px;
+        font-size: 15px;
+    }
+
+    .mn-game-sidebar-nav {
+        gap: 4px;
+    }
+
+    .mn-game-sidebar .mn-sidebar-link,
+    .mn-game-sidebar .sketch-btn-profile,
+    .mn-game-sidebar .sketch-btn-leaderboard {
+        min-height: 46px;
+        gap: 7px;
+        padding: 8px 6px;
+        font-size: 15px;
+    }
+
+    .mn-game-sidebar .mn-sidebar-link svg {
+        width: 19px;
+        height: 19px;
+        flex-basis: 19px;
+    }
+
+    .mn-game-sidebar .mn-tutorial-help {
+        width: 46px !important;
+        height: 46px !important;
+        flex-basis: 46px;
+        font-size: 26px !important;
+    }
+
+    .mn-game-main-header {
+        gap: 10px;
+        padding: 10px 16px;
+    }
+
+    .mn-current-module-title {
+        max-width: min(64%, 440px);
+        margin-right: auto;
+        margin-left: auto;
+        font-size: 15px;
+    }
+
+    .mn-game-map-page .mn-map-current-button {
+        right: 18px;
+        bottom: 18px;
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 520px) {
+    .mn-game-map-page {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr);
+        min-height: 0;
+    }
+
+    .mn-game-sidebar {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-rows: auto auto;
+        gap: 8px 16px;
+        padding: 9px 12px 8px;
+        border-right: 0;
+        border-bottom: 1px solid #ddd9cf;
+        box-shadow: 0 3px 10px rgba(44, 44, 44, 0.035);
+    }
+
+    .mn-game-brand {
+        flex-direction: row;
+        gap: 8px;
+        margin: 0;
+    }
+
+    .mn-game-cat-avatar {
+        width: 42px;
+        height: 42px;
+    }
+
+    .mn-game-brand-name {
+        font-size: 14px;
+    }
+
+    .mn-game-sidebar-stats {
+        grid-template-columns: repeat(2, minmax(0, max-content));
+        align-content: center;
+        justify-content: end;
+        gap: 7px 12px;
+        margin: 0;
+    }
+
+    .mn-game-sidebar .mn-sidebar-stat,
+    .mn-game-sidebar .streak-badge,
+    .mn-game-sidebar .progress-xp-badge {
+        gap: 5px;
+        font-size: 12px;
+    }
+
+    .mn-sidebar-stat-icon {
+        width: 18px;
+        height: 18px;
+        flex-basis: 18px;
+        font-size: 16px;
+    }
+
+    .mn-xp-icon {
+        font-size: 8px;
+    }
+
+    .mn-game-sidebar .mood-progress-wrapper {
+        display: none;
+    }
+
+    .mn-game-sidebar-nav {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 30;
+        flex-direction: row;
+        gap: 4px;
+        margin: 0;
+        padding: 6px max(8px, env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+        border-top: 1px solid #ddd9cf;
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 -4px 14px rgba(44, 44, 44, 0.08);
+        box-sizing: border-box;
+        overflow: visible;
+        backdrop-filter: blur(10px);
+        scrollbar-width: none;
+    }
+
+    .mn-game-sidebar-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .mn-game-sidebar .mn-sidebar-link,
+    .mn-game-sidebar .sketch-btn-profile,
+    .mn-game-sidebar .sketch-btn-leaderboard {
+        width: auto;
+        min-width: 0;
+        min-height: 56px;
+        flex: 1 1 0;
+        flex-direction: column;
+        justify-content: center;
+        gap: 3px;
+        padding: 5px 2px;
+        font-size: 11px;
+        line-height: 1.1;
+        text-align: center;
+        white-space: normal;
+    }
+
+    .mn-game-sidebar .mn-sidebar-link span {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .mn-game-sidebar .mn-sidebar-link svg {
+        width: 18px;
+        height: 18px;
+        flex-basis: 18px;
+    }
+
+    .mn-game-sidebar .mn-tutorial-help {
+        position: fixed !important;
+        left: calc(12px + env(safe-area-inset-left)) !important;
+        bottom: calc(80px + env(safe-area-inset-bottom)) !important;
+        z-index: 20 !important;
+        grid-column: auto;
+        width: 42px !important;
+        height: 42px !important;
+        flex-basis: 42px;
+        margin: 0 !important;
+        font-size: 24px !important;
+    }
+
+    .mn-game-main-header {
+        min-height: 54px;
+        gap: 8px;
+        padding: 8px 12px;
+    }
+
+    .mn-current-module-title {
+        max-width: calc(100% - 24px);
+        margin-right: auto;
+        margin-left: auto;
+        padding: 6px 9px;
+        font-size: 14px;
+    }
+
+    .mn-game-map-page .mn-map-current-button {
+        right: calc(14px + env(safe-area-inset-right));
+        bottom: calc(80px + env(safe-area-inset-bottom));
+        display: inline-grid;
+        width: 48px;
+        height: 48px;
+        place-items: center;
+        padding: 0;
+        border-radius: 50%;
+        font-size: 0;
+        line-height: 1;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(8px);
+    }
+
+    .mn-game-map-page .mn-map-current-button.is-visible {
+        opacity: 0.78;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    .mn-game-map-page .mn-map-current-button::before {
+        content: '↓';
+        font: 700 30px/1 'Balsamiq Sans', cursive, sans-serif;
+    }
+
+    .mn-game-map-page .mn-map-current-button.is-current-above::before {
+        content: '↑';
+    }
+
+    .mn-game-map-page .mn-map-current-button:disabled {
+        display: none;
+    }
+
+    .mn-map-current-button-label {
+        display: none;
+    }
+
+    .mn-map-container {
+        width: 100%;
+        padding: 10px 0 calc(88px + env(safe-area-inset-bottom));
+    }
+
+    .mn-node-side-doodle {
+        width: 42px;
+        height: 42px;
+        font-size: 38px !important;
+        line-height: 42px;
+    }
+
+    .mn-node-side-doodle.side-left { left: calc(50% + 132px); }
+    .mn-node-side-doodle.side-right { right: calc(50% + 132px); }
+
+    .mn-map-module { padding: 20px 10px; }
+    .mn-module-banner { max-width: 90%; font-size: 16px; }
+
+    .mn-node-row {
+        transform: translateX(calc(sin(var(--i, 0) * 1.15) * 45px));
+    }
+}
+
+@media (max-width: 600px) and (min-width: 521px) {
+    .mn-game-main-header {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .mn-current-module-title {
+        max-width: calc(100% - 24px);
+    }
+}
+
+@media (max-width: 420px) {
+    .mn-game-sidebar {
+        gap: 7px 8px;
+        padding-right: 8px;
+        padding-left: 8px;
+    }
+
+    .mn-game-brand-name {
+        display: none;
+    }
+
+    .mn-game-sidebar-stats {
+        grid-template-columns: repeat(2, minmax(0, max-content));
+        justify-content: space-between;
+        gap: 6px;
+    }
+
+    .mn-game-sidebar .mn-sidebar-link,
+    .mn-game-sidebar .sketch-btn-profile,
+    .mn-game-sidebar .sketch-btn-leaderboard {
+        gap: 3px;
+        padding-right: 2px;
+        padding-left: 2px;
+        font-size: clamp(9px, 2.8vw, 11px);
+    }
+
+    .mn-game-main-header {
+        align-items: center;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .mn-current-module-title {
+        max-width: calc(100% - 16px);
+    }
+}
+
+/* ==========================================================
+   СКРЫВАЕМ САЙДБАР И КНОПКУ ЕГО ОТКРЫТИЯ ВНУТРИ УРОКОВ TUTOR LMS
+   ========================================================== */
+.tutor-course-single-sidebar-wrapper,
+.tutor-lesson-sidebar,
+.tutor-topbar-sidebar-toggle,
+.tutor-course-topic-sidebar-toggler,
+[tutor-Toggle-course-sidebar],
+[data-tutor-toggle-course-sidebar],
+.tutor-iconic-btn[tutor-course-topics-sidebar-toggler] {
+    display: none !important;
+}
+
+/* Скроллится содержимое выбранного раздела, общий сайдбар остается на месте. */
+.mn-app-main .mn-app-page-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 28px clamp(16px, 3vw, 40px) 36px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    scrollbar-color: #8bb9c7 transparent;
+    scrollbar-width: thin;
+}
+
+.mn-app-main .mn-app-page-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.mn-app-main .mn-app-page-content::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 10px;
+    background: #8bb9c7;
+    background-clip: padding-box;
+}
+
+@media (max-width: 520px) {
+    .mn-app-main .mn-app-page-content {
+        padding: 10px 8px calc(88px + env(safe-area-inset-bottom));
+    }
+}
